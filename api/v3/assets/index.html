@@ -14,6 +14,7 @@
         <a href="#topic-Pagination">Pagination</a>
         <a href="#topic-Placing-Orders">Placing Orders</a>
         <a href="#topic-Sub-Accounts">Sub Accounts</a>
+        <a href="#topic-Error-Codes">Error Codes</a>
         <a href="#authentication">Authentication</a>
         <h5>Rest API</h5>
         <section>
@@ -234,7 +235,7 @@
         <div class="panel">
           <div class="doc-row">
             <div class="doc-copy">
-              <p>The V3-Alpha API is available on an invite-only basis at this time. Later releases will be made publicly available to the community.</p>
+              <p>The V3-Beta API is available on an invite-only basis at this time. Later releases will be made publicly available to the community.</p>
             </div>
           </div>
         </div>
@@ -244,11 +245,11 @@
             <div class="doc-copy">
               <blockquote>
                 <p>
-                  <strong>Warning</strong>: The V3-Alpha or other pre-release API versions are not for production use.</p>
+                  <strong>Warning</strong>: The V3-Beta or other pre-release API versions are not for production use.</p>
               </blockquote>
-              <p> The V3-Alpha release will be subject to breaking changes, potentially without notice, until the final API is released. Pre-release APIs should only be used for testing and review.</p>
-              <p>The V3-Alpha API will operate against production (live-site) data and accounts and we recommend using test accounts and small-value transactions to validate your implementation.</p>
-              <p>By using the V3-Alpha API you understand and agree that issues may be encountered without warning, affecting your use of the website and API. Bittrex provides no warranties, either express or implied, as to the suitability or usability of pre-release APIs. Bittrex will not be liable for any loss, whether such loss is direct, indirect, special or consequential, suffered by any party as a result of their use of the V3-Alpha API or other pre-release APIs. </p>
+              <p> The V3-Beta release will be subject to breaking changes, potentially without notice, until the final API is released. Pre-release APIs should only be used for testing and review.</p>
+              <p>The V3-Beta API will operate against production (live-site) data and accounts and we recommend using test accounts and small-value transactions to validate your implementation.</p>
+              <p>By using the V3-Beta API you understand and agree that issues may be encountered without warning, affecting your use of the website and API. Bittrex provides no warranties, either express or implied, as to the suitability or usability of pre-release APIs. Bittrex will not be liable for any loss, whether such loss is direct, indirect, special or consequential, suffered by any party as a result of their use of the V3-Beta API or other pre-release APIs. </p>
             </div>
           </div>
         </div>
@@ -404,6 +405,68 @@
                   <p>When enabled, authentication mechanism will need to be modified which is shown under <code>Api-subaccount-ID</code> under Authentication with with examples.</p>
                 </li>
               </ul>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Error-Codes" data-traverse-target="topic-Error-Codes">Error Codes</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <h3 id="overview-">
+                <strong>Overview</strong>:</h3>
+              <p> If an error occurs during the processing of an API request, the Bittrex API will return an error to the caller. The general flow of information to check is:</p>
+              <ul>
+                <li>
+                  <p>status code of the response.</p>
+                </li>
+                <li>
+                  <p>error code and other information in the response body (JSON)</p>
+                </li>
+              </ul>
+              <h3 id="http-status-codes">
+                <strong>HTTP Status Codes</strong>
+              </h3>
+              <div style='overflow-x:auto;'>
+                <table>
+                  <tbody>
+                    <tr>
+                      <th>Status Code</th>
+                      <th>Description</th>
+                    </tr>
+                    <tr>
+                      <td>400 - Bad Request</td>
+                      <td>The request was malformed, often due to a missing or invalid parameter. See the error code and response data for more details.</td>
+                    </tr>
+                    <tr>
+                      <td>401 - Unauthorized</td>
+                      <td>The request failed to authenticate (example: a valid api key was not included in your request header)</td>
+                    </tr>
+                    <tr>
+                      <td>403 - Forbidden</td>
+                      <td> The provided api key is not authorized to perform the requested operation (example: attempting to trade with an api key not authorized to make trades)</td>
+                    </tr>
+                    <tr>
+                      <td>404 - Not Found</td>
+                      <td>The requested resource does not exist.</td>
+                    </tr>
+                    <tr>
+                      <td>409 - Conflict</td>
+                      <td>The request parameters were valid but the request failed due to an operational error. (example: INSUFFICIENT_FUNDS) </td>
+                      <tr>
+                        <td>429 - Too Many Requests</td>
+                        <td>Too many requests hit the API too quickly. Please make sure to implement exponential backoff with your requests.</td>
+                      </tr>
+                      <tr>
+                        <td>501 - Not Implemented</td>
+                        <td>The service requested has not yet been implemented.</td>
+                      </tr>
+                      <tr>
+                        <td>503 - Service Unavailable</td>
+                        <td>The request parameters were valid but the request failed because the resource is temporarily unavailable (example: CURRENCY_OFFLINE)</td>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -3000,7 +3063,7 @@
                 <h5>Request Content-Types:
                   <span>application/json</span>
                 </h5>
- <h5>Request Body Example For Limit Order</h5>
+                 <h5>Request Body Example For Limit Order</h5>
                                 <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
                   <span class="hljs-attr">&quot;marketName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
                   <span class="hljs-attr">&quot;direction&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
