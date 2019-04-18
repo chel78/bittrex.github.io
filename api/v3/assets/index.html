@@ -14,6 +14,7 @@
         <a href="#topic-Placing-Orders">Placing Orders</a>
         <a href="#topic-Sub-Accounts">Sub Accounts</a>
         <a href="#topic-Error-Codes">Error Codes</a>
+        <a href="#topic-Known-Issues">Known Issues</a>
         <a href="#authentication">Authentication</a>
         <h5>Rest API</h5>
         <section>
@@ -458,6 +459,16 @@
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Known-Issues" data-traverse-target="topic-Known-Issues">Known Issues</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <ul>
+                <li>Deposits from before 1/1/2019 are not returned by GET /deposits/closed.</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -3054,7 +3065,7 @@
                 <h5>Request Content-Types:
                   <span>application/json</span>
                 </h5>
-                 <h5>Request Body Example For Limit Order</h5>
+                  <h5>Request Body Example For Limit Order</h5>
                                 <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
                   <span class="hljs-attr">&quot;marketSymbol&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
                   <span class="hljs-attr">&quot;direction&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
