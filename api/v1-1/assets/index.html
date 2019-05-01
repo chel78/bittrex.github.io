@@ -134,15 +134,16 @@
               </blockquote>
               <hr>
               <h3 id="socket-connections">Socket Connections</h3>
-              <p> Websocket connections may occasionally need to be recycled. If, for example, you&#39;re maintinaing local order book state, and you stop receiving updates even though you know trade activity is occurring, it may be time to resynchronize.</p>
-              <p> Because v1.1 websocket nonces are server-specific, it&#39;s crucial to maintain state on a per-connection basis. For example, to resychronize the BTC-ETH market order book:</p>
+              <p> Websocket connections may occasionally need to be recycled. If, for example, you&#39;re maintinaing local order book state, and you stop receiving updates even though you know trade activity is occurring, or if the nonces your receive are not sequential, it may be time to resynchronize.</p>
+              <p> For example, to resychronize the BTC-ETH market order book:</p>
               <ol>
                 <li>Drop existing websocket connections and flush accumulated data and state (e.g. market nonces).</li>
                 <li>Re-establish websocket connection.</li>
-                <li>Subscribe to BTC-ETH market deltas, cache received data keyed by nonce.</li>
-                <li>Query BTC-ETH market state.</li>
-                <li>Apply cached deltas sequentially, starting with nonces greater than that received in step 4.</li>
+                <li>Subscribe to BTC-ETH market deltas, cache received data keyed by nonce</li>
+                <li>Query BTC-ETH market state</li>
+                <li>Apply cached deltas sequentially, starting with nonces greater than that received in step 4</li>
               </ol>
+              <p> As of 3/1/2019, websocket nonces are no longer server-specific. This means that for increased reliability, you can create multiple websocket connections and de-duplicate messages across them based on the nonces you receive. Using multiple connections allows you to decrease the chance that a network disruption on a single connection will result in the need to resynchronize. </p>
             </div>
           </div>
         </div>
