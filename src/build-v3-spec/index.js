@@ -194,6 +194,26 @@ function requestExamples(json) {
                     "x-btx-request-example": "https://api.bittrex.com/v3/subaccounts/{subaccountId}"
                 }
             },
+            "/transfers/sent": {
+                "get": {
+                    "x-btx-request-example": "https://api.bittrex.com/v3/transfers/sent"
+                }
+            },
+            "/transfers/received": {
+                "get": {
+                    "x-btx-request-example": "https://api.bittrex.com/v3/transfers/received"
+                }
+            },
+            "/transfers/{transferId}": {
+                "get": {
+                    "x-btx-request-example": "https://api.bittrex.com/v3/transfers/{transferId}"
+                }
+            },
+            "/transfers": {
+                "post": {
+                    "x-btx-request-example": "https://api.bittrex.com/v3/transfers"
+                }
+            },
             "/ping": {
                 "get": {
                     "x-btx-request-example": "https://api.bittrex.com/v3/ping"
