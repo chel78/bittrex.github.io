@@ -134,16 +134,15 @@
               </blockquote>
               <hr>
               <h3 id="socket-connections">Socket Connections</h3>
-              <p> Websocket connections may occasionally need to be recycled. If, for example, you&#39;re maintinaing local order book state, and you stop receiving updates even though you know trade activity is occurring, or if the nonces your receive are not sequential, it may be time to resynchronize.</p>
-              <p> For example, to resychronize the BTC-ETH market order book:</p>
+              <p> Websocket connections may occasionally need to be recycled. If, for example, you&#39;re maintinaing local order book state, and you stop receiving updates even though you know trade activity is occurring, it may be time to resynchronize.</p>
+              <p> Because v1.1 websocket nonces are server-specific, it&#39;s crucial to maintain state on a per-connection basis. For example, to resychronize the BTC-ETH market order book:</p>
               <ol>
                 <li>Drop existing websocket connections and flush accumulated data and state (e.g. market nonces).</li>
                 <li>Re-establish websocket connection.</li>
-                <li>Subscribe to BTC-ETH market deltas, cache received data keyed by nonce</li>
-                <li>Query BTC-ETH market state</li>
-                <li>Apply cached deltas sequentially, starting with nonces greater than that received in step 4</li>
+                <li>Subscribe to BTC-ETH market deltas, cache received data keyed by nonce.</li>
+                <li>Query BTC-ETH market state.</li>
+                <li>Apply cached deltas sequentially, starting with nonces greater than that received in step 4.</li>
               </ol>
-              <p> As of 3/1/2019, websocket nonces are no longer server-specific. This means that for increased reliability, you can create multiple websocket connections and de-duplicate messages across them based on the nonces you receive. Using multiple connections allows you to decrease the chance that a network disruption on a single connection will result in the need to resynchronize. </p>
             </div>
           </div>
         </div>
@@ -180,26 +179,28 @@
                   </li>
                 </ol>
                 <h4 id="rest-message">REST Message</h4>
-                <p> The <code>message</code> value is obtained by concatenating the full request URL including any query-string parameters, your public API Key, and a user-generated nonce (we recommend a UNIX-style timestamp in epoch millisecond format). Below are sample values for the message and secret as well as the HMAC yielded if you&#39;ve done everything correctly:</p> <pre><code class="hljs lang-markdown"> message: https://api.bittrex.com/api/v1.1/path/call?param=value&amp;apikey=0123456789&amp;nonce=1542020339856
+                <p> The <code>message</code> value is obtained by concatenating the full request URL including any query-string parameters, your public API Key, and a user-generated nonce (we recommend a UNIX-style timestamp in epoch millisecond format). Below are sample values for the message and secret as well as the HMAC yielded if you&#39;ve done everything correctly:</p> <pre><code class="hljs language-markdown"> message: https://api.bittrex.com/api/v1.1/path/call?param=value&amp;apikey=0123456789&amp;nonce=1542020339856
  secret: ABCDEFGHIJ 
  hash: FC70DD6467C916FBAA14EB89942644F9CF3F4CBF179923EE677413DC2E1CF2D8C5AA60C85A0A0BB3174960B8AA4FCFB0BC20CDE19BF21D567C671811C52CE631
 </code></pre>
                 <h4 id="websocket-message">Websocket Message</h4>
                 <p> The <code>message</code> value is obtained by calling the Websocket
-                  <a href="#method-GetAuthContext"><code>GetAuthContext</code></a> API. Below are sample values for the message and secret as well as the HMAC yielded if you&#39;ve done everything correctly.</p> <pre><code class="hljs lang-markdown"> message: top-secret-and-totally-fake
+                  <a href="#method-GetAuthContext"><code>GetAuthContext</code></a> API. Below are sample values for the message and secret as well as the HMAC yielded if you&#39;ve done everything correctly.</p> <pre><code class="hljs language-markdown"> message: top-secret-and-totally-fake
  secret: ABCDEFGHIJ
  hash: 77FF28CAEDCD944F5E6F0F5DD16B1FFDFC7D5A589B7F2DE4CF722F81EE5580652FA3C85D1EDDE9F497F5B6C792A93DBDBFB9E649D3F9FD7AEBC304C41AA68061
 </code></pre> </section>
               <section class="swagger-security-definition-properties"> </section>
             </div>
             <div class="doc-examples">
-              <section> <pre><code class="hljs lang-javascript"><span class="hljs-keyword">const</span> Crypto = <span class="hljs-built_in">require</span>(<span class="hljs-string">'crypto'</span>);
-<span class="hljs-keyword">const</span> message = <span class="hljs-string">'https://api.bittrex.com/api/v1.1/path/call?param=value&amp;apikey=0123456789&amp;nonce=1542020339856'</span>;
-<span class="hljs-keyword">const</span> secret = <span class="hljs-string">'ABCDEFGHIJ'</span>;
-<span class="hljs-keyword">const</span> signature = Crypto.createHmac(<span class="hljs-string">'sha512'</span>, secret)
-        .update(message)
-        .digest(<span class="hljs-string">'hex'</span>);
-</code></pre> </section>
+              <section>
+                <p><code>javascript
+          const Crypto = require(&#39;crypto&#39;);
+          const message = &#39;https://api.bittrex.com/api/v1.1/path/call?param=value&amp;apikey=0123456789&amp;nonce=1542020339856&#39;;
+          const secret = &#39;ABCDEFGHIJ&#39;;
+          const signature = Crypto.createHmac(&#39;sha512&#39;, secret)
+                  .update(message)
+                  .digest(&#39;hex&#39;);</code></p>
+              </section>
             </div>
           </div>
         </div>
@@ -261,7 +262,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -341,7 +342,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -438,7 +439,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -512,7 +513,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -615,7 +616,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -733,7 +734,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -834,7 +835,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -927,6 +928,20 @@
                     <p>the rate at which to place the order</p>
                   </div>
                 </div>
+                <div class="prop-row prop-group">
+                  <div class="prop-name">
+                    <div class="prop-title">timeInForce:
+                      <span class="prop-type">
+                        <span class="json-property-type">string</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </span>
+                    </div>
+                    <div class="prop-subtitle"> in query </div>
+                  </div>
+                  <div class="prop-value">
+                    <p>[IOC ,GTC]</p>
+                  </div>
+                </div>
               </section>
             </div>
             <div class="doc-examples">
@@ -958,7 +973,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: {
@@ -1043,6 +1058,20 @@
                     <p>the rate at which to place the order</p>
                   </div>
                 </div>
+                <div class="prop-row prop-group">
+                  <div class="prop-name">
+                    <div class="prop-title">timeInForce:
+                      <span class="prop-type">
+                        <span class="json-property-type">string</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </span>
+                    </div>
+                    <div class="prop-subtitle"> in query </div>
+                  </div>
+                  <div class="prop-value">
+                    <p>[IOC ,GTC]</p>
+                  </div>
+                </div>
               </section>
             </div>
             <div class="doc-examples">
@@ -1074,7 +1103,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: {
@@ -1160,7 +1189,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: {
@@ -1248,7 +1277,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -1335,7 +1364,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -1432,7 +1461,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: {
@@ -1527,7 +1556,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -1662,7 +1691,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: {
@@ -1751,7 +1780,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -1855,7 +1884,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -1956,7 +1985,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -2056,7 +2085,7 @@
                 <h5>Response Example
                   <span>(200 OK)</span>
                 </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: [
@@ -2606,7 +2635,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: <span class="hljs-string">&quot;any&quot;</span>
@@ -2640,7 +2669,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Currency&quot;</span>: <span class="hljs-string">&quot;VTC&quot;</span>,
   <span class="hljs-attr">&quot;Address&quot;</span>: <span class="hljs-string">&quot;Vy5SKeKGXUHKS2WVpJ76HYuKAu3URastUo&quot;</span>
 }
@@ -2701,7 +2730,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Currency&quot;</span>: <span class="hljs-string">&quot;DOGE&quot;</span>,
   <span class="hljs-attr">&quot;Balance&quot;</span>: <span class="hljs-number">4.21549076</span>,
   <span class="hljs-attr">&quot;Available&quot;</span>: <span class="hljs-number">4.21549076</span>,
@@ -2792,7 +2821,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Currency&quot;</span>: <span class="hljs-string">&quot;BTC&quot;</span>,
   <span class="hljs-attr">&quot;CurrencyLong&quot;</span>: <span class="hljs-string">&quot;Bitcoin&quot;</span>,
   <span class="hljs-attr">&quot;CoinType&quot;</span>: <span class="hljs-string">&quot;BITCOIN&quot;</span>,
@@ -2903,7 +2932,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;OrderUuid&quot;</span>: <span class="hljs-string">&quot;fd97d393-e9b9-4dd1-9dbf-f288fc72a185&quot;</span>,
   <span class="hljs-attr">&quot;Exchange&quot;</span>: <span class="hljs-string">&quot;BTC-LTC&quot;</span>,
   <span class="hljs-attr">&quot;TimeStamp&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>,
@@ -2983,7 +3012,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;MarketCurrency&quot;</span>: <span class="hljs-string">&quot;LTC&quot;</span>,
   <span class="hljs-attr">&quot;BaseCurrency&quot;</span>: <span class="hljs-string">&quot;BTC&quot;</span>,
   <span class="hljs-attr">&quot;MarketCurrencyLong&quot;</span>: <span class="hljs-string">&quot;Litecoin&quot;</span>,
@@ -3031,7 +3060,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Bid&quot;</span>: <span class="hljs-number">2.05670368</span>,
   <span class="hljs-attr">&quot;Ask&quot;</span>: <span class="hljs-number">3.35579531</span>,
   <span class="hljs-attr">&quot;Last&quot;</span>: <span class="hljs-number">3.35579531</span>
@@ -3137,7 +3166,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;MarketName&quot;</span>: <span class="hljs-string">&quot;BTC-LTC&quot;</span>,
   <span class="hljs-attr">&quot;High&quot;</span>: <span class="hljs-number">0.0135</span>,
   <span class="hljs-attr">&quot;Low&quot;</span>: <span class="hljs-number">0.012</span>,
@@ -3270,7 +3299,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Uuid&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>,
   <span class="hljs-attr">&quot;OrderUuid&quot;</span>: <span class="hljs-string">&quot;8925d746-bc9f-4684-b1aa-e507467aaa99&quot;</span>,
   <span class="hljs-attr">&quot;Exchange&quot;</span>: <span class="hljs-string">&quot;BTC-LTC&quot;</span>,
@@ -3346,7 +3375,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;buy&quot;</span>: [
     {
       <span class="hljs-attr">&quot;quantity&quot;</span>: <span class="hljs-number">12.37</span>,
@@ -3391,7 +3420,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;quantity&quot;</span>: <span class="hljs-number">12.37</span>,
   <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-number">32.55412402</span>
 }
@@ -3454,7 +3483,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Id&quot;</span>: <span class="hljs-number">319435</span>,
   <span class="hljs-attr">&quot;TimeStamp&quot;</span>: <span class="hljs-string">&quot;2014-07-09T03:21:20.08&quot;</span>,
   <span class="hljs-attr">&quot;Quantity&quot;</span>: <span class="hljs-number">0.30802438</span>,
@@ -3520,7 +3549,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Id&quot;</span>: <span class="hljs-number">1</span>,
   <span class="hljs-attr">&quot;Amount&quot;</span>: <span class="hljs-number">2.12345678</span>,
   <span class="hljs-attr">&quot;Currency&quot;</span>: <span class="hljs-string">&quot;BTC&quot;</span>,
@@ -3607,7 +3636,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;PaymentUuid&quot;</span>: <span class="hljs-string">&quot;b52c7a5c-90c6-4c6e-835c-e16df12708b1&quot;</span>,
   <span class="hljs-attr">&quot;Currency&quot;</span>: <span class="hljs-string">&quot;BTC&quot;</span>,
   <span class="hljs-attr">&quot;Amount&quot;</span>: <span class="hljs-number">17</span>,
@@ -3634,7 +3663,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;message&quot;</span>: <span class="hljs-string">&quot;&apos;&apos;&quot;</span>,
   <span class="hljs-attr">&quot;result&quot;</span>: {
@@ -3662,7 +3691,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Nonce&quot;</span>: <span class="hljs-string">&quot;int&quot;</span>,
   <span class="hljs-attr">&quot;Delta&quot;</span>: {
     <span class="hljs-attr">&quot;Uuid&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>,
@@ -3700,21 +3729,21 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;MarketName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;Nonce&quot;</span>: <span class="hljs-string">&quot;int&quot;</span>,
   <span class="hljs-attr">&quot;Buys&quot;</span>: [
     {
       <span class="hljs-attr">&quot;Type&quot;</span>: <span class="hljs-string">&quot;int&quot;</span>,
-      <span class="hljs-attr">&quot;Balance&quot;</span>: <span class="hljs-string">&quot;decimal&quot;</span>,
-      <span class="hljs-attr">&quot;Available&quot;</span>: <span class="hljs-string">&quot;decimal&quot;</span>
+      <span class="hljs-attr">&quot;Rate&quot;</span>: <span class="hljs-string">&quot;decimal&quot;</span>,
+      <span class="hljs-attr">&quot;Quantity&quot;</span>: <span class="hljs-string">&quot;decimal&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;Sells&quot;</span>: [
     {
       <span class="hljs-attr">&quot;Type&quot;</span>: <span class="hljs-string">&quot;int&quot;</span>,
-      <span class="hljs-attr">&quot;Balance&quot;</span>: <span class="hljs-string">&quot;decimal&quot;</span>,
-      <span class="hljs-attr">&quot;Available&quot;</span>: <span class="hljs-string">&quot;decimal&quot;</span>
+      <span class="hljs-attr">&quot;Rate&quot;</span>: <span class="hljs-string">&quot;decimal&quot;</span>,
+      <span class="hljs-attr">&quot;Quantity&quot;</span>: <span class="hljs-string">&quot;decimal&quot;</span>
     }
   ],
   <span class="hljs-attr">&quot;Fills&quot;</span>: [
@@ -3748,7 +3777,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Deltas&quot;</span>: [
     {
       <span class="hljs-attr">&quot;MarketName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
@@ -3780,7 +3809,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;AccountUuid&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>,
   <span class="hljs-attr">&quot;Nonce&quot;</span>: <span class="hljs-string">&quot;int&quot;</span>,
   <span class="hljs-attr">&quot;Type&quot;</span>: <span class="hljs-string">&quot;int&quot;</span>,
@@ -3828,7 +3857,7 @@
             <div class="doc-examples">
               <section>
                 <h5>Example</h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
   <span class="hljs-attr">&quot;Nonce&quot;</span>: <span class="hljs-string">&quot;int&quot;</span>,
   <span class="hljs-attr">&quot;Delta&quot;</span>: {
     <span class="hljs-attr">&quot;MarketName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,

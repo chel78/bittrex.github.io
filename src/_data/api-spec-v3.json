@@ -1111,7 +1111,7 @@
         "tags": [
           "Transfers"
         ],
-        "description": "List sent transfers._(NOTE: This API is limited to partners and not available for traders.)_\r\nPagination and the sort order of the results are in inverse order of the Executed field.",
+        "description": "List received transfers._(NOTE: This API is limited to partners and not available for traders.)_\r\nPagination and the sort order of the results are in inverse order of the Executed field.",
         "operationId": "Transfers_ListReceived",
         "consumes": [],
         "produces": [
