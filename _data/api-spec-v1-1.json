@@ -385,6 +385,12 @@
                         "in": "query",
                         "description": "the rate at which to place the order",
                         "required": true
+                    },            {
+                        "name": "timeInForce",
+                        "type": "string",
+                        "in": "query",
+                        "description": "[IOC ,GTC]",
+                        "required": false
                     }
                 ],
                 "x-btx-authenticated": true,
@@ -432,6 +438,12 @@
                         "in": "query",
                         "description": "the rate at which to place the order",
                         "required": true
+                    },            {
+                        "name": "timeInForce",
+                        "type": "string",
+                        "in": "query",
+                        "description": "[IOC ,GTC]",
+                        "required": false
                     }
                 ],
                 "responses": {
@@ -1872,10 +1884,10 @@
                                 "Type": {
                                     "type": "int"
                                 },
-                                "Balance": {
+                                "Rate": {
                                     "type": "decimal"
                                 },
-                                "Available": {
+                                "Quantity": {
                                     "type": "decimal"
                                 }
                             }
@@ -1890,10 +1902,10 @@
                                 "Type": {
                                     "type": "int"
                                 },
-                                "Balance": {
+                                "Rate": {
                                     "type": "decimal"
                                 },
-                                "Available": {
+                                "Quantity": {
                                     "type": "decimal"
                                 }
                             }
