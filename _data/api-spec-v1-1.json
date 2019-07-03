@@ -135,15 +135,13 @@
                     "Public"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "market",
-                        "type": "string",
-                        "in": "query",
-                        "description": "a string literal for the market (ex: BTC-LTC)",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "market",
+                    "type": "string",
+                    "in": "query",
+                    "description": "a string literal for the market (ex: BTC-LTC)",
+                    "required": true
+                }],
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/public/getticker?market=BTC-LTC",
                 "responses": {
                     "200": {
@@ -219,15 +217,13 @@
                     "Public"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "market",
-                        "type": "string",
-                        "in": "query",
-                        "description": "a string literal for the market (ex: BTC-LTC)",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "market",
+                    "type": "string",
+                    "in": "query",
+                    "description": "a string literal for the market (ex: BTC-LTC)",
+                    "required": true
+                }],
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/public/getmarketsummary?market=btc-ltc",
                 "responses": {
                     "200": {
@@ -265,8 +261,7 @@
                     "Public"
                 ],
                 "security": null,
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "market",
                         "type": "string",
                         "in": "query",
@@ -318,15 +313,13 @@
                     "Public"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "market",
-                        "type": "string",
-                        "in": "query",
-                        "description": "a string literal for the market (ex: BTC-LTC)",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "market",
+                    "type": "string",
+                    "in": "query",
+                    "description": "a string literal for the market (ex: BTC-LTC)",
+                    "required": true
+                }],
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/public/getmarkethistory?market=BTC-DOGE",
                 "responses": {
                     "200": {
@@ -364,8 +357,7 @@
                     "Market"
                 ],
                 "security": null,
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "market",
                         "type": "string",
                         "in": "query",
@@ -385,7 +377,7 @@
                         "in": "query",
                         "description": "the rate at which to place the order",
                         "required": true
-                    },            {
+                    }, {
                         "name": "timeInForce",
                         "type": "string",
                         "in": "query",
@@ -417,8 +409,7 @@
                 "security": null,
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/market/selllimit?apikey=API_KEY&market=BTC-LTC&quantity=1.2&rate=1.3",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "market",
                         "type": "string",
                         "in": "query",
@@ -438,7 +429,7 @@
                         "in": "query",
                         "description": "the rate at which to place the order",
                         "required": true
-                    },            {
+                    }, {
                         "name": "timeInForce",
                         "type": "string",
                         "in": "query",
@@ -466,15 +457,13 @@
                     "Market"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "type": "string",
-                        "in": "query",
-                        "description": "uuid of buy or sell order",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "uuid",
+                    "type": "string",
+                    "in": "query",
+                    "description": "uuid of buy or sell order",
+                    "required": true
+                }],
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/market/cancel?apikey=API_KEY&uuid=ORDER_UUID",
                 "responses": {
@@ -497,15 +486,13 @@
                     "Market"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "market",
-                        "type": "string",
-                        "in": "query",
-                        "description": "a string literal for the market (ie. BTC-LTC)",
-                        "required": false
-                    }
-                ],
+                "parameters": [{
+                    "name": "market",
+                    "type": "string",
+                    "in": "query",
+                    "description": "a string literal for the market (ie. BTC-LTC)",
+                    "required": false
+                }],
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/market/getopenorders?apikey=API_KEY&market=BTC-LTC",
                 "responses": {
@@ -583,15 +570,13 @@
                     "Account"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "currency",
-                        "type": "string",
-                        "in": "query",
-                        "required": true,
-                        "description": "a string literal for the currency (ie. BTC)"
-                    }
-                ],
+                "parameters": [{
+                    "name": "currency",
+                    "type": "string",
+                    "in": "query",
+                    "required": true,
+                    "description": "a string literal for the currency (ie. BTC)"
+                }],
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/account/getbalance?apikey=API_KEY&currency=BTC",
                 "responses": {
@@ -627,15 +612,13 @@
                     "Account"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "currency",
-                        "type": "string",
-                        "in": "query",
-                        "description": "a string literal for the currency (ie. BTC)",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "currency",
+                    "type": "string",
+                    "in": "query",
+                    "description": "a string literal for the currency (ie. BTC)",
+                    "required": true
+                }],
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/account/getdepositaddress?apikey=API_KEY&currency=BTC",
                 "responses": {
@@ -674,8 +657,7 @@
                     "Account"
                 ],
                 "security": null,
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "currency",
                         "type": "string",
                         "in": "query",
@@ -726,15 +708,13 @@
                     "Account"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "type": "string",
-                        "in": "query",
-                        "description": "the uuid of the buy or sell order",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "uuid",
+                    "type": "string",
+                    "in": "query",
+                    "description": "the uuid of the buy or sell order",
+                    "required": true
+                }],
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/account/getorder&uuid=0cb4c4e4-bdc7-4e13-8c13-430e587d2cc1",
                 "responses": {
@@ -773,15 +753,13 @@
                     "Account"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "market",
-                        "type": "string",
-                        "in": "query",
-                        "description": "a string literal for the market (ie. BTC-LTC). If omitted, will return for all markets",
-                        "required": false
-                    }
-                ],
+                "parameters": [{
+                    "name": "market",
+                    "type": "string",
+                    "in": "query",
+                    "description": "a string literal for the market (ie. BTC-LTC). If omitted, will return for all markets",
+                    "required": false
+                }],
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/account/getorderhistory",
                 "responses": {
@@ -820,15 +798,13 @@
                     "Account"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "currency",
-                        "type": "string",
-                        "in": "query",
-                        "description": "a string literal for the currency (ie. BTC). If omitted, will return for all currencies",
-                        "required": false
-                    }
-                ],
+                "parameters": [{
+                    "name": "currency",
+                    "type": "string",
+                    "in": "query",
+                    "description": "a string literal for the currency (ie. BTC). If omitted, will return for all currencies",
+                    "required": false
+                }],
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/account/getwithdrawalhistory",
                 "responses": {
@@ -867,14 +843,12 @@
                     "Account"
                 ],
                 "security": null,
-                "parameters": [
-                    {
-                        "name": "currency",
-                        "in": "query",
-                        "description": "a string literal for the currency (ie. BTC). If omitted, will return for all currencies",
-                        "required": false
-                    }
-                ],
+                "parameters": [{
+                    "name": "currency",
+                    "in": "query",
+                    "description": "a string literal for the currency (ie. BTC). If omitted, will return for all currencies",
+                    "required": false
+                }],
                 "x-btx-authenticated": true,
                 "x-btx-request-example": "https://api.bittrex.com/api/v1.1/account/getdeposithistory?currency=BTC",
                 "responses": {
@@ -912,15 +886,13 @@
             "deprecated": false,
             "tags": [],
             "security": null,
-            "parameters": [
-                {
-                    "name": "apiKey",
-                    "type": "string",
-                    "in": "",
-                    "description": "a valid API key for your account",
-                    "required": true
-                }
-            ],
+            "parameters": [{
+                "name": "apiKey",
+                "type": "string",
+                "in": "",
+                "description": "a valid API key for your account",
+                "required": true
+            }],
             "x-btx-request-example": "https://socket.bittrex.com/signalr",
             "responses": {
                 "Success": {
@@ -938,8 +910,7 @@
             "deprecated": false,
             "tags": [],
             "security": null,
-            "parameters": [
-                {
+            "parameters": [{
                     "name": "apiKey",
                     "in": "",
                     "description": "a valid API key for your account",
@@ -965,13 +936,13 @@
                 "Balance Callback": {
                     "description": "",
                     "schema": {
-                        "$ref":"#/definitions/Balance Delta - uB"
+                        "$ref": "#/definitions/Balance Delta - uB"
                     }
                 },
                 "Order Callback": {
                     "description": "",
                     "schema": {
-                        "$ref":"#/definitions/Order Delta - uO"
+                        "$ref": "#/definitions/Order Delta - uO"
                     }
                 }
             }
@@ -983,15 +954,13 @@
             "deprecated": false,
             "tags": [],
             "security": null,
-            "parameters": [
-                {
-                    "name": "market",
-                    "type": "string",
-                    "in": "",
-                    "description": "the market identifier (e.g. BTC-ETH)",
-                    "required": true
-                }
-            ],
+            "parameters": [{
+                "name": "market",
+                "type": "string",
+                "in": "",
+                "description": "the market identifier (e.g. BTC-ETH)",
+                "required": true
+            }],
             "x-btx-request-example": "https://socket.bittrex.com/signalr",
             "responses": {
                 "Success": {
@@ -1074,15 +1043,13 @@
             "deprecated": false,
             "tags": [],
             "security": null,
-            "parameters": [
-                {
-                    "name": "market",
-                    "type": "string",
-                    "in": "",
-                    "description": "the market identifier (e.g. BTC-ETH)",
-                    "required": true
-                }
-            ],
+            "parameters": [{
+                "name": "market",
+                "type": "string",
+                "in": "",
+                "description": "the market identifier (e.g. BTC-ETH)",
+                "required": true
+            }],
             "x-btx-request-example": "https://socket.bittrex.com/signalr",
             "responses": {
                 "Success": {
@@ -1152,15 +1119,13 @@
             "deprecated": false,
             "tags": [],
             "security": null,
-            "parameters": [
-                {
-                    "name": "marketName",
-                    "type": "string",
-                    "in": "",
-                    "description": "the market identifier (e.g. BTC-ETH)",
-                    "required": true
-                }
-            ],
+            "parameters": [{
+                "name": "marketName",
+                "type": "string",
+                "in": "",
+                "description": "the market identifier (e.g. BTC-ETH)",
+                "required": true
+            }],
             "x-btx-request-example": "https://socket.bittrex.com/signalr",
             "responses": {
                 "Success": {
@@ -1411,12 +1376,25 @@
                     "example": 0.00002950
                 },
                 "IsConditional": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
                 },
-                "Condition": {},
-                "ConditionTarget": {},
+                "Condition": {
+                    "type": "string",
+                    "example": ""
+                },
+                "ConditionTarget": {
+                    "type": "number",
+                    "example": 0
+                },
                 "ImmediateOrCancel": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
+                },
+                "Closed": {
+                    "format": "date-time",
+                    "type": "string",
+                    "example": "2014-02-13T00:00:00"
                 }
             }
         },
@@ -1460,6 +1438,18 @@
                     "format": "date-time",
                     "type": "string",
                     "example": "2014-02-13T00:00:00"
+                },
+                "Notice": {
+                    "type": "string",
+                    "example": "BTC-LTC"
+                },
+                "IsSponsored": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "LogoUrl": {
+                    "type": "string",
+                    "example": "https://storage.blob.core.windows.net/public/8637ccad-9e7f-45ac-8f03-a41b440e3911.png"
                 }
             }
         },
@@ -2109,6 +2099,7 @@
         },
 
         "Minified JSON Keys": {
-            "description": "```\n`A` = `Ask`\n`a` = `Available`\n`B` = `Bid`\n`b` = `Balance`\n`C` = `Closed`\n`c` = `Currency`\n`CI` = `CancelInitiated`\n`D` = `Deltas`\n`d` = `Delta`\n`DT` = `OrderDeltaType`\n`E` = `Exchange`\n`e` = `ExchangeDeltaType`\n`F` = `FillType`\n`FI` = `FillId`\n`f` = `Fills`\n`G` = `OpenBuyOrders`\n`g` = `OpenSellOrders`\n`H` = `High`\n`h` = `AutoSell`\n`I` = `Id`\n`i` = `IsOpen`\n`J` = `Condition`\n`j` = `ConditionTarget`\n`K` = `ImmediateOrCancel`\n`k` = `IsConditional`\n`L` = `Low`\n`l` = `Last`\n`M` = `MarketName`\n`m` = `BaseVolume`\n`N` = `Nonce`\n`n` = `CommissionPaid`\n`O` = `Orders`\n`o` = `Order`\n`OT` = `OrderType`\n`OU` = `OrderUuid`\n`P` = `Price`\n`p` = `CryptoAddress`\n`PD` = `PrevDay`\n`PU` = `PricePerUnit`\n`Q` = `Quantity`\n`q` = `QuantityRemaining`\n`R` = `Rate`\n`r` = `Requested`\n`S` = `Sells`\n`s` = `Summaries`\n`T` = `TimeStamp`\n`t` = `Total`\n`TY` = `Type`\n`U` = `Uuid`\n`u` = `Updated`\n`V` = `Volume`\n`W` = `AccountId`\n`w` = `AccountUuid`\n`X` = `Limit`\n`x` = `Created`\n`Y` = `Opened`\n`y` = `State`\n`Z` = `Buys`\n`z` = `Pending`\n```\n"        }
+            "description": "```\n`A` = `Ask`\n`a` = `Available`\n`B` = `Bid`\n`b` = `Balance`\n`C` = `Closed`\n`c` = `Currency`\n`CI` = `CancelInitiated`\n`D` = `Deltas`\n`d` = `Delta`\n`DT` = `OrderDeltaType`\n`E` = `Exchange`\n`e` = `ExchangeDeltaType`\n`F` = `FillType`\n`FI` = `FillId`\n`f` = `Fills`\n`G` = `OpenBuyOrders`\n`g` = `OpenSellOrders`\n`H` = `High`\n`h` = `AutoSell`\n`I` = `Id`\n`i` = `IsOpen`\n`J` = `Condition`\n`j` = `ConditionTarget`\n`K` = `ImmediateOrCancel`\n`k` = `IsConditional`\n`L` = `Low`\n`l` = `Last`\n`M` = `MarketName`\n`m` = `BaseVolume`\n`N` = `Nonce`\n`n` = `CommissionPaid`\n`O` = `Orders`\n`o` = `Order`\n`OT` = `OrderType`\n`OU` = `OrderUuid`\n`P` = `Price`\n`p` = `CryptoAddress`\n`PD` = `PrevDay`\n`PU` = `PricePerUnit`\n`Q` = `Quantity`\n`q` = `QuantityRemaining`\n`R` = `Rate`\n`r` = `Requested`\n`S` = `Sells`\n`s` = `Summaries`\n`T` = `TimeStamp`\n`t` = `Total`\n`TY` = `Type`\n`U` = `Uuid`\n`u` = `Updated`\n`V` = `Volume`\n`W` = `AccountId`\n`w` = `AccountUuid`\n`X` = `Limit`\n`x` = `Created`\n`Y` = `Opened`\n`y` = `State`\n`Z` = `Buys`\n`z` = `Pending`\n```\n"
         }
+    }
 }

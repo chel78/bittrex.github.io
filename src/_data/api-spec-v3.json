@@ -1024,7 +1024,7 @@
         "tags": [
           "Transfers"
         ],
-        "description": "List sent transfers._(NOTE: This API is limited to partners and not available for traders.)_\r\nPagination and the sort order of the results are in inverse order of the Executed field.",
+        "description": "List sent transfers.(NOTE: This API is limited to partners and not available for traders.)\r\nPagination and the sort order of the results are in inverse order of the Executed field.",
         "operationId": "Transfers_ListSent",
         "consumes": [],
         "produces": [
@@ -1034,7 +1034,7 @@
           {
             "name": "toSubaccountId",
             "in": "query",
-            "description": "",
+            "description": "filter transfers to a sub account id (optional)",
             "required": false,
             "type": "string",
             "format": "uuid"
@@ -1042,14 +1042,14 @@
           {
             "name": "toMasterAccount",
             "in": "query",
-            "description": "",
+            "description": "filter transfers to master account (optional)",
             "required": false,
             "type": "boolean"
           },
           {
             "name": "currencySymbol",
             "in": "query",
-            "description": "",
+            "description": "filter by currency (optional)",
             "required": false,
             "type": "string"
           },
@@ -1111,7 +1111,7 @@
         "tags": [
           "Transfers"
         ],
-        "description": "List received transfers._(NOTE: This API is limited to partners and not available for traders.)_\r\nPagination and the sort order of the results are in inverse order of the Executed field.",
+        "description": "List received transfers.(NOTE: This API is limited to partners and not available for traders.)\r\nPagination and the sort order of the results are in inverse order of the Executed field.",
         "operationId": "Transfers_ListReceived",
         "consumes": [],
         "produces": [
@@ -1121,7 +1121,7 @@
           {
             "name": "fromSubaccountId",
             "in": "query",
-            "description": "",
+            "description": "filter transfers from a sub account id (optional)",
             "required": false,
             "type": "string",
             "format": "uuid"
@@ -1129,14 +1129,14 @@
           {
             "name": "fromMasterAccount",
             "in": "query",
-            "description": "",
+            "description": "filter transfers from master account (optional)",
             "required": false,
             "type": "boolean"
           },
           {
             "name": "currencySymbol",
             "in": "query",
-            "description": "",
+            "description": "filter by currency (optional)",
             "required": false,
             "type": "string"
           },
@@ -1198,7 +1198,7 @@
         "tags": [
           "Transfers"
         ],
-        "description": "Retrieve information on the specified transfer._(NOTE: This API is limited to partners and not available for traders.)_\r\n",
+        "description": "Retrieve information on the specified transfer.(NOTE: This API is limited to partners and not available for traders.)",
         "operationId": "Transfers_Get",
         "consumes": [],
         "produces": [
@@ -1230,7 +1230,7 @@
         "tags": [
           "Transfers"
         ],
-        "description": "Executes a new transfer._(NOTE: This API is limited to partners and not available for traders.)_\r\n",
+        "description": "Executes a new transfer.(NOTE: This API is limited to partners and not available for traders.)",
         "operationId": "Transfers_Create",
         "consumes": [
           "application/json"

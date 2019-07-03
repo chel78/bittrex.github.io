@@ -275,7 +275,10 @@
       <span class="hljs-attr">&quot;MarketName&quot;</span>: <span class="hljs-string">&quot;BTC-LTC&quot;</span>,
       <span class="hljs-attr">&quot;IsActive&quot;</span>: <span class="hljs-literal">true</span>,
       <span class="hljs-attr">&quot;IsRestricted&quot;</span>: <span class="hljs-literal">false</span>,
-      <span class="hljs-attr">&quot;Created&quot;</span>: <span class="hljs-string">&quot;2014-02-13T00:00:00&quot;</span>
+      <span class="hljs-attr">&quot;Created&quot;</span>: <span class="hljs-string">&quot;2014-02-13T00:00:00&quot;</span>,
+      <span class="hljs-attr">&quot;Notice&quot;</span>: <span class="hljs-string">&quot;BTC-LTC&quot;</span>,
+      <span class="hljs-attr">&quot;IsSponsored&quot;</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-attr">&quot;LogoUrl&quot;</span>: <span class="hljs-string">&quot;https://storage.blob.core.windows.net/public/8637ccad-9e7f-45ac-8f03-a41b440e3911.png&quot;</span>
     }
   ]
 }
@@ -1899,8 +1902,11 @@
       <span class="hljs-attr">&quot;Commission&quot;</span>: <span class="hljs-number">0.00004921</span>,
       <span class="hljs-attr">&quot;Price&quot;</span>: <span class="hljs-number">0.01968424</span>,
       <span class="hljs-attr">&quot;PricePerUnit&quot;</span>: <span class="hljs-number">0.0000295</span>,
-      <span class="hljs-attr">&quot;IsConditional&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-      <span class="hljs-attr">&quot;ImmediateOrCancel&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+      <span class="hljs-attr">&quot;IsConditional&quot;</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-attr">&quot;Condition&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,
+      <span class="hljs-attr">&quot;ConditionTarget&quot;</span>: <span class="hljs-number">0</span>,
+      <span class="hljs-attr">&quot;ImmediateOrCancel&quot;</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-attr">&quot;Closed&quot;</span>: <span class="hljs-string">&quot;2014-02-13T00:00:00&quot;</span>
     }
   ]
 }
@@ -2913,17 +2919,23 @@
                   </dt>
                   <dt data-property-name="Condition">
                     <span class="json-property-name">Condition:</span>
-                    <span class="json-property-type">object</span>
+                    <span class="json-property-type">string</span>
                     <span class="json-property-range" title="Value limits"></span>
                   </dt>
                   <dt data-property-name="ConditionTarget">
                     <span class="json-property-name">ConditionTarget:</span>
-                    <span class="json-property-type">object</span>
+                    <span class="json-property-type">number</span>
                     <span class="json-property-range" title="Value limits"></span>
                   </dt>
                   <dt data-property-name="ImmediateOrCancel">
                     <span class="json-property-name">ImmediateOrCancel:</span>
                     <span class="json-property-type">boolean</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                  </dt>
+                  <dt data-property-name="Closed">
+                    <span class="json-property-name">Closed:</span>
+                    <span class="json-property-type">string</span>
+                    <span class="json-property-format">(date-time)</span>
                     <span class="json-property-range" title="Value limits"></span>
                   </dt>
                 </dl>
@@ -2943,8 +2955,11 @@
   <span class="hljs-attr">&quot;Commission&quot;</span>: <span class="hljs-number">0.00004921</span>,
   <span class="hljs-attr">&quot;Price&quot;</span>: <span class="hljs-number">0.01968424</span>,
   <span class="hljs-attr">&quot;PricePerUnit&quot;</span>: <span class="hljs-number">0.0000295</span>,
-  <span class="hljs-attr">&quot;IsConditional&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-  <span class="hljs-attr">&quot;ImmediateOrCancel&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+  <span class="hljs-attr">&quot;IsConditional&quot;</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">&quot;Condition&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,
+  <span class="hljs-attr">&quot;ConditionTarget&quot;</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">&quot;ImmediateOrCancel&quot;</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">&quot;Closed&quot;</span>: <span class="hljs-string">&quot;2014-02-13T00:00:00&quot;</span>
 }
 </code></pre>
                 <!-- </div> -->
@@ -3006,6 +3021,21 @@
                     <span class="json-property-format">(date-time)</span>
                     <span class="json-property-range" title="Value limits"></span>
                   </dt>
+                  <dt data-property-name="Notice">
+                    <span class="json-property-name">Notice:</span>
+                    <span class="json-property-type">string</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                  </dt>
+                  <dt data-property-name="IsSponsored">
+                    <span class="json-property-name">IsSponsored:</span>
+                    <span class="json-property-type">boolean</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                  </dt>
+                  <dt data-property-name="LogoUrl">
+                    <span class="json-property-name">LogoUrl:</span>
+                    <span class="json-property-type">string</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                  </dt>
                 </dl>
               </section>
             </div>
@@ -3021,7 +3051,10 @@
   <span class="hljs-attr">&quot;MarketName&quot;</span>: <span class="hljs-string">&quot;BTC-LTC&quot;</span>,
   <span class="hljs-attr">&quot;IsActive&quot;</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">&quot;IsRestricted&quot;</span>: <span class="hljs-literal">false</span>,
-  <span class="hljs-attr">&quot;Created&quot;</span>: <span class="hljs-string">&quot;2014-02-13T00:00:00&quot;</span>
+  <span class="hljs-attr">&quot;Created&quot;</span>: <span class="hljs-string">&quot;2014-02-13T00:00:00&quot;</span>,
+  <span class="hljs-attr">&quot;Notice&quot;</span>: <span class="hljs-string">&quot;BTC-LTC&quot;</span>,
+  <span class="hljs-attr">&quot;IsSponsored&quot;</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">&quot;LogoUrl&quot;</span>: <span class="hljs-string">&quot;https://storage.blob.core.windows.net/public/8637ccad-9e7f-45ac-8f03-a41b440e3911.png&quot;</span>
 }
 </code></pre>
                 <!-- </div> -->
