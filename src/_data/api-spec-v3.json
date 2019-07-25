@@ -2045,7 +2045,6 @@
             "description": "time in force (always present, matches the field in NewOrder)",
             "enum": [
               "GOOD_TIL_CANCELLED",
-              "GOOD_TIL_DATE",
               "IMMEDIATE_OR_CANCEL",
               "FILL_OR_KILL",
               "POST_ONLY_GOOD_TIL_CANCELLED",
@@ -2154,7 +2153,6 @@
             "description": "time in force",
             "enum": [
               "GOOD_TIL_CANCELLED",
-              "GOOD_TIL_DATE",
               "IMMEDIATE_OR_CANCEL",
               "FILL_OR_KILL",
               "POST_ONLY_GOOD_TIL_CANCELLED",
@@ -2164,7 +2162,7 @@
           },
           "expiresAt": {
             "format": "date-time",
-            "description": "time when this order should expire (optional, required for TimeInForce.GOOD_TIL_DATE and TimeInForce.POST_ONLY_GOOD_TIL_DATE)",
+            "description": "time when this order should expire (optional, required for TimeInForce.POST_ONLY_GOOD_TIL_DATE)",
             "type": "string"
           },
           "clientOrderId": {
