@@ -148,6 +148,11 @@ function requestExamples(json) {
                     "x-btx-request-example": "https://api.bittrex.com/v3/markets/{marketSymbol}/trades"
                 }
             },
+            "/markets/tickers": {
+                "get": {
+                    "x-btx-request-example": "https://api.bittrex.com/v3/markets/tickers"
+                }
+            },
             "/markets/{marketSymbol}/ticker": {
                 "get": {
                     "x-btx-request-example": "https://api.bittrex.com/v3/markets/{marketSymbol}/ticker"
