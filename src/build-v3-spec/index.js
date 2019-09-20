@@ -8,6 +8,12 @@ function spectacleTopics(json) {
             "Pre-Release Warning": {
                 "description": "> **Warning**: The v3-Beta or other pre-release API versions are not for production use.\n\n The v3-Beta release will be subject to breaking changes, potentially without notice, until the final API is released. Pre-release APIs should only be used for testing and review.\n\nThe v3-Beta API will operate against production (live-site) data and accounts and we recommend using test accounts and small-value transactions to validate your implementation.\n\nBy using the v3-Beta API you understand and agree that issues may be encountered without warning, affecting your use of the website and API. Bittrex provides no warranties, either express or implied, as to the suitability or usability of pre-release APIs. Bittrex will not be liable for any loss, whether such loss is direct, indirect, special or consequential, suffered by any party as a result of their use of the v3-Beta API or other pre-release APIs. "
             },
+            "Change Log": {
+               "description": "__08/08/2019__\n\n - Get all tickers: You can now use the v3 API to retrieve the bid/ask/last for all markets at once by getting v3/markets/ticker instead of querying each market individually.\n\n - Currency logos: When getting currency information from v3/currencies the response will now include a URL for an image containing the currency's logo. \n\n__06/26/2019__ \n\n - Ceiling Sell orders have been added to the V3 API Beta. This option allows you to instruct the system to sell enough of the base currency to increase your account balance of the quote currency by the specified amount. \n\nTo see all of the recent changes, please visit the [change list](https://bittrex.zendesk.com/hc/en-us/sections/200567324-Changelist)."
+            },
+            "Known Issues": {
+                "description": " - Deposits from before 1/1/2019 are not returned by GET /deposits/closed.\n\n -  The `baseVolume` under GET /markets/summaries and GET /markets/{marketSymbol}/candles is actually the quote volume."
+            },
             "Getting Started": {
                 "description": "Keep the following in mind when developing against the Bittrex API: \n - Enable 2FA on your account. API Keys cannot be generated unless 2FA is enabled and extended verification is done on the account.\n - All REST requests must be sent to `https://api.bittrex.com/v3` using the `application/json` content type. Non-HTTPS requests will be redirected to HTTPS, possibly causing functional or performance issues with your application."
             },
@@ -25,9 +31,6 @@ function spectacleTopics(json) {
             },
             "Error Codes": {
                 "description": "### __Overview__:\n\n If an error occurs during the processing of an API request, the Bittrex API will return an error to the caller. The general flow of information to check is:\n\n - status code of the response.\n\n - error code and other information in the response body (JSON)\n\n### __HTTP Status Codes__\n\n<div style='overflow-x:auto;'><table><tbody><tr><th>Status Code</th><th>Description</th></tr><tr><td>400 - Bad Request</td><td>The request was malformed, often due to a missing or invalid parameter. See the error code and response data for more details.</td></tr><tr><td>401 - Unauthorized</td><td>The request failed to authenticate (example: a valid api key was not included in your request header)</td></tr><tr><td>403 - Forbidden</td><td> The provided api key is not authorized to perform the requested operation (example: attempting to trade with an api key not authorized to make trades)</td></tr><tr><td>404 - Not Found</td><td>The requested resource does not exist.</td></tr><tr><td>409 - Conflict</td><td>The request parameters were valid but the request failed due to an operational error. (example: INSUFFICIENT_FUNDS) </td><tr><td>429 - Too Many Requests</td><td>Too many requests hit the API too quickly. Please make sure to implement exponential backoff with your requests.</td></tr><tr><td>501 - Not Implemented</td><td>The service requested has not yet been implemented.</td></tr><tr><td>503 - Service Unavailable</td><td>The request parameters were valid but the request failed because the resource is temporarily unavailable (example: CURRENCY_OFFLINE)</td></tr></tbody></table></div>\n\n"
-            },
-            "Known Issues": {
-                "description": " - Deposits from before 1/1/2019 are not returned by GET /deposits/closed."
             }
         }
     });
