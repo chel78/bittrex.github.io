@@ -8,6 +8,7 @@
         <h5>Topics</h5>
         <a href="#introduction">Introduction</a>
         <a href="#topic-Pre-Release-Warning">Pre-Release Warning</a>
+        <a href="#topic-Change-Log">Change Log</a>
         <a href="#topic-Getting-Started">Getting Started</a>
         <a href="#topic-Best-Practices">Best Practices</a>
         <a href="#topic-Pagination">Pagination</a>
@@ -268,6 +269,32 @@
             </div>
           </div>
         </div>
+        <h1 id="topic-Change-Log" data-traverse-target="topic-Change-Log">Change Log</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>
+                <strong>08/08/2019</strong>
+              </p>
+              <ul>
+                <li>
+                  <p>Get all tickers: You can now use the v3 API to retrieve the bid/ask/last for all markets at once by getting v3/markets/ticker instead of querying each market individually.</p>
+                </li>
+                <li>
+                  <p>Currency logos: When getting currency information from v3/currencies the response will now include a URL for an image containing the currency&#39;s logo. </p>
+                </li>
+              </ul>
+              <p>
+                <strong>06/26/2019</strong>
+              </p>
+              <ul>
+                <li>Ceiling Sell orders have been added to the V3 API Beta. This option allows you to instruct the system to sell enough of the base currency to increase your account balance of the quote currency by the specified amount. </li>
+              </ul>
+              <p>To see all of the recent changes, please visit the
+                <a href="https://bittrex.zendesk.com/hc/en-us/sections/200567324-Changelist">change list</a>.</p>
+            </div>
+          </div>
+        </div>
         <h1 id="topic-Getting-Started" data-traverse-target="topic-Getting-Started">Getting Started</h1>
         <div class="panel">
           <div class="doc-row">
@@ -495,7 +522,12 @@
           <div class="doc-row">
             <div class="doc-copy">
               <ul>
-                <li>Deposits from before 1/1/2019 are not returned by GET /deposits/closed.</li>
+                <li>
+                  <p>Deposits from before 1/1/2019 are not returned by GET /deposits/closed.</p>
+                </li>
+                <li>
+                  <p>Currently the <code>baseVolume</code> under GET /markets/summaries and GET /markets/{marketSymbol}/candles is actually the quote volume.</p>
+                </li>
               </ul>
             </div>
           </div>
@@ -5607,7 +5639,7 @@
                     <span class="json-property-required"></span>
                   </dt>
                   <dd>
-                    <p>base volume within the last 24 hours</p>
+                    <p>the quote volume within the last 24 hours</p>
                   </dd>
                   <dt data-property-name="percentChange" class="has-description">
                     <span class="json-property-name">percentChange:</span>
@@ -5992,7 +6024,7 @@
                     <span class="json-property-required"></span>
                   </dt>
                   <dd>
-                    <p>base volume</p>
+                    <p>quote volume</p>
                   </dd>
                 </dl>
               </section>
