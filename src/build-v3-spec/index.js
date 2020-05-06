@@ -46,7 +46,7 @@ function siteDescription(json) {
         "info": {
             "version": "v3",
             "title": "Bittrex API",
-            "description": "Bittrex provides a simple and powerful API consisting of REST endpoints for transactional operations .\n\n Access to and use of the API is governed by our Terms of Service.\n If you are a user of Bittrex.com, the applicable Terms of Service are available [here](https://support.bittrex.com/hc/en-us/articles/360000560871).\n If you are a user of Bittrex International, the applicable Terms of Service are available [here](https://support.bittrex.com/hc/en-us/articles/360001411486).\n\n If you have any API questions, feedback, or recommendations please post a question via our [Github page](https://github.com/Bittrex/bittrex.github.io/issues)."
+            "description": "Bittrex provides a simple and powerful API consisting of REST endpoints for transactional operations .\n\n Access to and use of the API is governed by our Terms of Service.\n If you are a user of Bittrex.com, the applicable Terms of Service are available [here](https://bittrex.com/home/terms).\n If you are a user of Bittrex Global, the applicable Terms of Service are available [here](https://global.bittrex.com/home/terms).\n\n If you have any API questions, feedback, or recommendations please post a question via our [Github page](https://github.com/Bittrex/bittrex.github.io/issues)."
         }
     });
 }
