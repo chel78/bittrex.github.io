@@ -14,14 +14,14 @@
   {{#if tags}}
     <!-- <section class="operation-tags row"> -->
       <!-- <div class="doc-copy"> -->
-      <div class="operation-tags">
+    <div class="operation-tags">
         {{#if x-btx-authenticated}}
-          <a class="label alert" href="#authentication" title="Requires a properly signed request. Click for more.">Authenticated</a>
+        <a class="label alert" href="#topic-Authentication" title="Requires a properly signed request. Click for more.">Authenticated</a>
         {{/if}}
         {{#each tags}}
-          <a class="label" href="#tag-{{htmlId .}}">{{.}}</a><!--{{#unless @last}}, {{/unless}}-->
+        <a class="label" href="#tag-{{htmlId .}}">{{.}}</a><!--{{#unless @last}}, {{/unless}}-->
         {{/each}}
-      </div>
+    </div>
       <!-- </div> -->
     <!-- </section> -->
   {{/if}}

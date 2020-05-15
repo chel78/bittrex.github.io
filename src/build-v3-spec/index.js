@@ -3,42 +3,633 @@ var R = require('ramda'),
 
 function spectacleTopics(json) {
     console.log('Adding Spectacle topics...');
-    return _.assign({}, json, {
-        'x-spectacle-topics': {
-            "Pre-Release Warning": {
-                "description": "> **Warning**: The v3-Beta or other pre-release API versions are not for production use.\n\n The v3-Beta release will be subject to breaking changes, potentially without notice, until the final API is released. Pre-release APIs should only be used for testing and review.\n\nThe v3-Beta API will operate against production (live-site) data and accounts and we recommend using test accounts and small-value transactions to validate your implementation.\n\nBy using the v3-Beta API you understand and agree that issues may be encountered without warning, affecting your use of the website and API. Bittrex provides no warranties, either express or implied, as to the suitability or usability of pre-release APIs. Bittrex will not be liable for any loss, whether such loss is direct, indirect, special or consequential, suffered by any party as a result of their use of the v3-Beta API or other pre-release APIs. "
-            },
-            "Change Log": {
-               "description": "__01/27/2020__ \n\n - Conditional orders (e.g. stop loss) have been added to the V3 API Beta. See the new Placing Conditinal Orders section below for additional information.\n\n - Historical candles are now available in the API\n\n - The functionality of the existing candles endpoint has been duplicated into a candles/.../recent endpoint. The existing one will be retired in a future release. \n\nTo see all of the recent changes, please visit the [change list](https://bittrex.zendesk.com/hc/en-us/sections/200567324-Changelist)."
-            },
-            "Known Issues": {
-                "description": "- The trigger price shown on the website for trailing stop orders does not update automatically. The see the updated trigger price, refresh the page or query the api.\n\n- A conditional order cancelled via OCO will not automatically be removed from the list of open conditional orders on the website despite being cancelled. Refreshing the page will correct the issue.\n\n- The `baseVolume` under GET /markets/summaries and GET /markets/{marketSymbol}/candles is actually the quote volume. baseVolume will be removed in a future release. Use quoteVolume instead."
-            },
-            "Getting Started": {
-                "description": "Keep the following in mind when developing against the Bittrex API: \n - Enable 2FA on your account. API Keys cannot be generated unless 2FA is enabled and extended verification is done on the account.\n - All REST requests must be sent to `https://api.bittrex.com/v3` using the `application/json` content type. Non-HTTPS requests will be redirected to HTTPS, possibly causing functional or performance issues with your application."
-            },
-            "Best Practices": {
-                "description": "### Call Limits\n The Bittrex API employs call limits on all endpoints to ensure the efficiency and availability of the platform for all customers. In general, API users are permitted to make a maximum of 60 API calls per minute. Calls after the limit will fail, with the limit resetting at the start of the next minute.\n\n __Note: Corporate and high-volume accounts may contact customer support for additional information to ensure that they may continue operating at an optimal level.__"
-            },
-            "Pagination": {
-                "description": "### Overview\n Several Bittrex API resources support bulk fetches via 'list' API methods. For example, you can list deposits, list closed orders, and list withdrawals. These list API methods share a common structure, using at least these three parameters: `pageSize, nextPageToken and previousPageToken.` These parameters, if necessary are specified as query parameters on the HTTP request.\n\n ### Arguments:\n\n\n\n - __pageSize(optional)__: A limit on the number of objects to be returned between 1 and 200, defaults to 100\n - __nextPageToken(optional)__: The id of the last item on the current page. This is used for defining the starting point of the next page. For instance, if you make a list request and receive 100 objects ending with objFoo, your subsequent call can include `nextPageToken=objFoo's id` in order to fetch the next page of the list starting after objFoo.\n\n - __previousPageToken(optional)__: The id of the first item on the current page. This is used for defining the ending point of the previous page. For instance, if you make a list request and receive 100 objects starting with objBar, your subsequent call can include `previousPageToken=objBar's id` in order to fetch the previous page of the list.\n\n\n ### Examples:\n\nList withdrawals, in reverse chronological order, up to maximum of 20 withdrawals, starting at the most recent withdrawal created:\n\n`https://api.bittrex.com/v3/withdrawals?pageSize=20`\n\nList withdrawals, in reverse chronological order, up to maximum of 10 withdrawals, starting after the withdrawal with ID of `940af3c3-665d-4432-a12e-cdf8fd99ab3b`\n\n`https://api.bittrex.com/v3/withdrawals?pageSize=10&nextPageToken=940af3c3-665d-4432-a12e-cdf8fd99ab3b`\n\n List withdrawals, in reverse chronological order, up to a maximum of 10 withdrawals, ending before the withdrawal with ID of `0d990dd2-4103-4d57-8e80-047e886537db`: \n\n`https://api.bittrex.com/v3/withdrawals?pageSize=10&previousPageToken=0d990dd2-4103-4d57-8e80-047e886537db`\n\n"
-            },
-            "Placing Orders": {
-                "description": "### __Order Types__:\n\n - __Market Order__ : • An order to buy or sell a specified quantity of an asset immediately at the best available price. The market order will consume available orders on the book as it executes. Consequently, especially for large orders, the average price at which the order is filled will deviate from the last-traded price or current quote.\n\n - __Limit Order__ : An order to trade a specified quantity of an asset at a specified price. A buy order will only be filled at or below the limit price and a sell order will only be filled at or above the limit price.\n\n - __Ceiling Order__ : A market or limit order that allows you to specify the amount of quote currency you want to spend (or receive, if selling) instead of the quantity of the market currency (e.g. buy $100 USD of BTC at the current market BTC price)\n\n - __Good-Til-Cancelled Order__ : The order remains in force until it is explicitly cancelled either by the user or by Bittrex \n\n - __Immediate-Or-Cancel Order__ : The order will be filled immediately as much as possible and then cancelled.\n\n - __Fill-or-Kill__ : The order will be filled immediately and completely, or it is cancelled without being filled at all.\n\n - __Post Only__ : This option allows market makers to ensure that their orders are making it to the order book instead of matching with a pre-existing order. Note: If the order is not a maker order, you will return an error and the order will be cancelled\n\n - __Conditional Order__ : A directive for the system to place an order on your behalf when the price on the market moves past a given threshold. These are treated separately from orders. Refer to the Placing Conditional Orders section for more information. \n\n\n ### __Order types and time in force__ : \n\n The following table shows which time in force options apply to which order types.\n\n\n<div style='overflow-x:auto;'><table><tbody><tr><th>timeInForce</th><th>LIMIT</th><th>MARKET</th><th>CEILING_LIMIT</th><th>CEILING_MARKET</th></tr><tr><td>GOOD_TIL_CANCELLED</td><td>BUY OR SELL</td><td>NOT ALLOWED</td><td>NOT ALLOWED</td><td>NOT ALLOWED</td></tr><tr><td>IMMEDIATE_OR_CANCEL</td><td>BUY OR SELL</td><td>BUY OR SELL</td><td>BUY OR SELL</td><td>BUY OR SELL</td></tr><tr><td>FILL_OR_KILL</td><td>BUY OR SELL</td><td>BUY OR SELL</td><td>BUY OR SELL</td><td>BUY OR SELL</td></tr><tr><td>POST_ONLY_GOOD_TIL_CANCELLED</td><td>BUY OR SELL</td><td>NOT ALLOWED</td><td>NOT ALLOWED</td><td>NOT ALLOWED</td></tr></tbody></table></div> \n\n\n ### __clientOrderId__: \n\nAn optional UUID which is generated by the user to to keep a track of the order. If the outcome of placing an order is not known (for example due to a client-side crash that occurred while placing the order), the same order can be safely placed again using the same UUID as the clientOrderId. If the order was received and processed the first time, the API will return an error that includes the existing order's id instead of creating a second order. This protection is in place for 24 hours after an order is placed. Although clientOrderIds which are more than 24 hours old are no longer checked against new orders, they remain associated with their orders as metadata and may be retrieved by clients.\n\n"
-            },
+
+    var topics = {
+        "Pre-Release Warning": {
+            "description": "The v3-Beta APIs operate against production (live-site) data and accounts. We recommend testing with small-value transactions to validate your implementation.\n\nThe REST portions of the v3-Beta API are now stable with the exception of the items listed in the [Upcoming Breaking Changes](#topic-Upcoming-Breaking-Changes) section. There are currently no plans to make any further breaking changes to the REST portions of the v3 API other than those listed.\n\nThe newly released websocket portions of the v3-Beta are subject to breaking changes, potentially without notice, until the final API is released. These APIs should only be used for testing and review. By using the v3-Beta APIs you understand and agree that issues may be encountered without warning, affecting your use of the website and API."
+        },
+        "Upcoming Breaking Changes": {
+            "description": "The following breaking changes will be made on or after __05/27/2020__: <table><tr><th>Change</th><th>Mitigation</th></tr><tbody><tr><td>Historical candles endpoint will no longer allow you to specify more portions of the date parameters than are necessary for the selected candle interval.</td><td>Specify only year for day candles. Specify only year and month for hour candles.</td></tr><tr><td>GET /candles endpoint will be removed</td><td>Use GET /candles/{interval}/recent instead. The response schema is the same as the old endpoint.</td></tr><tr><td>The BaseVolume property on MarketSummary and Candle responses will be removed</td><td>The BaseVolume property has been reporting quote volume. If quote volume is desired, use the QuoteVolume property. If base volume is desired, use the Volume property. </td></tr><tr><td>Successful cancel withdrawal response will change from 204 with no content in the response body to a 200 with the cancelled withdrawal in the response body. </td><td>Accept any 2XX response as success </td></tr></tbody></table>"
+        },
+        "Change Log": {
+            "description": "__05/15/2020__ \n\n- v3 socket is now in public beta\n- May now trigger ceiling orders from conditional orders\n-Order object now includes the order's OCO partner (if applicable)\n- May now get whitelisted withdrawal addresses from `/withdrawals/whitelistAddresses`\n-Balance object now has an updatedAt timestamp\n-Markets and currencies now indicate if they are prohibited from use by US customers\n-You can now get your accountId from the account endpoint\n-Deposit object now includes whether a deposit source was blockchain, wire transfer, or credit card\n\n__01/27/2020__ \n\n - Conditional orders (e.g. stop loss) have been added to the V3 API Beta. See the new Placing Conditinal Orders section below for additional information.\n\n - Historical candles are now available in the API\n\n - The functionality of the existing candles endpoint has been duplicated into a candles/.../recent endpoint. The existing one will be retired in a future release. \n\nTo see all of the recent changes, please visit the [change list](https://bittrex.zendesk.com/hc/en-us/sections/200567324-Changelist)."
+        },
+        "Known Issues": {
+            "description": "- The trigger price shown on the website for trailing stop orders does not update automatically. The see the updated trigger price, refresh the page or query the api.\n\n- A conditional order cancelled via OCO will not automatically be removed from the list of open conditional orders on the website despite being cancelled. Refreshing the page will correct the issue.\n\n- The `baseVolume` under GET /markets/summaries and GET /markets/{marketSymbol}/candles is actually the quote volume. baseVolume will be removed in a future release. Use quoteVolume instead."
+        },
+        "REST API Overview": {
+            "description": "This section provides an overview of key concepts to understand when working with the Bittrex v3 REST API. \nKeep in mind the following: \n - Enable 2FA on your account. API Keys cannot be generated unless 2FA is enabled and extended verification is done on the account.\n - All REST requests must be sent to `https://api.bittrex.com/v3` using the `application/json` content type. Non-HTTPS requests will be redirected to HTTPS, possibly causing functional or performance issues with your application."
+        },
+        "Best Practices": {
+            "description": "### Call Limits\n The Bittrex API employs call limits on all endpoints to ensure the efficiency and availability of the platform for all customers. In general, API users are permitted to make a maximum of 60 API calls per minute. Calls after the limit will fail, with the limit resetting at the start of the next minute.\n\n __Note: Corporate and high-volume accounts may contact customer support for additional information to ensure that they may continue operating at an optimal level.__",
+            "childOf": "REST API Overview"
+        },
+        "Authentication": {
+            "description": "### Overview\n In order to properly sign an authenticated request for the Bittrex v3 API, the following headers must be included:\n\n- `Api-Key`\n\n- `Api-Timestamp`\n\n- `Api-Content-Hash`\n\n- `Api-Signature`\n\n- `Api-Subaccount-Id (optional)`\n\n\nThe following sections are instructions for properly populating these headers.\n\n---\n #### Api-Key\nPopulate this header with your API key.\n\nExample Value:\n\n`4894xxxxxxxx407e827d05xxxxxxxxxx`\n\n---\n #### Api-Timestamp\nPopulate this header with the current time as a UNIX timestamp, in epoch-millisecond format.\n\nSample JS Code Snippet:\n\n``` javascript\nvar timestamp = new Date().getTime();\n```\n\nExample Value:\n\n`1542323450016`\n\n---\n #### Api-Content-Hash\nPopulate this header with a SHA512 hash of the request contents, Hex-encoded. If there are no request contents, populate this header with a SHA512 hash of an empty string.\n\nSample JS Code Snippet:\n\n``` javascript\nvar contentHash = CryptoJS.SHA512(content).toString(CryptoJS.enc.Hex);\n```\n\nExample Value:\n\n``` markdown\ncf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\n```\n\n---\n #### Api-Subaccount-Id (Only for subaccount feature) \n(NOTE: This functionality is limited to partners and unavailable to general traders.)\n\nIf you wish to make a request on behalf of a subaccount, you will need to:\n\n1. Authenticate using all 4 of the headers above referring to your master account.\n2. Populate the Api-Subaccount-Id header with the UUID of the subaccount you wish to impersonate for this request. The specified subaccount *must* be a subaccount of the master account used to authenticate the request.\n3. Include the Api-Subaccount-Id header at the end of the pre-signed signature, as indicated in the next section.\n\nExample Value:\n\n`x111x11x-8968-48ac-b956-x1x11x111111`\n\n---\n #### Api-Signature\nCreate a pre-sign string formed from the following items and concatenating them together:\n1. Contents of your `Api-Timestamp` header\n2. The full URI you are using to make the request (including query string)\n3. The HTTP method of the request, in all caps (GET, POST, DELETE, etc.)  \n4. Contents of your `Api-Content-Hash` header \n5. Content of your `Api-Subaccount-Id` header (or an empty string if not present) \n\n\nOnce you have created this pre-sign string, sign it via HmacSHA512, using your API secret as the signing secret. Hex-encode the result of this operation and populate the `Api-Signature` header with it.\n\n\nSample JS Code Snippet:\n\n``` javascript\nvar uri = 'https://api.bittrex.com/v3/balances';\nvar preSign = [timestamp, uri, method, contentHash, subaccountId].join('');\nvar signature = CryptoJS.HmacSHA512(preSign, apiSecret).toString(CryptoJS.enc.Hex);\n```\n\nExample Pre-Signed Value (no subaccount)\n\n``` markdown\n1542323450016https://api.bittrex.com/v3/balancesGETcf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\n```\n\nExample Pre-Signed Value (with subaccount)\n\n``` markdown\n1542323450016https://api.bittrex.com/v3/balancesGETcf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3ex111x11x-8968-48ac-b956-x1x11x111111\n```\n\nExample Post-Signed Value:\n\n``` markdown\n939047623f0efbe10bfbb32f18e5d8885b2a91be3c3cea82adf0dd2d20892b20bcb6a10a91fec3afcedcc009f2b2a86c5366974cfadcf671fe0490582568f51f\n```\n\n\n",
+            "childOf": "REST API Overview"
+        },
+        "Pagination": {
+            "description": "### Overview\n Several Bittrex API resources support bulk fetches via 'list' API methods. For example, you can list deposits, list closed orders, and list withdrawals. These list API methods share a common structure, using at least these three parameters: `pageSize, nextPageToken and previousPageToken.` These parameters, if necessary are specified as query parameters on the HTTP request.\n\n ### Arguments:\n\n\n\n - __pageSize(optional)__: A limit on the number of objects to be returned between 1 and 200, defaults to 100\n - __nextPageToken(optional)__: The id of the last item on the current page. This is used for defining the starting point of the next page. For instance, if you make a list request and receive 100 objects ending with objFoo, your subsequent call can include `nextPageToken=objFoo's id` in order to fetch the next page of the list starting after objFoo.\n\n - __previousPageToken(optional)__: The id of the first item on the current page. This is used for defining the ending point of the previous page. For instance, if you make a list request and receive 100 objects starting with objBar, your subsequent call can include `previousPageToken=objBar's id` in order to fetch the previous page of the list.\n\n\n ### Examples:\n\nList withdrawals, in reverse chronological order, up to maximum of 20 withdrawals, starting at the most recent withdrawal created:\n\n`https://api.bittrex.com/v3/withdrawals?pageSize=20`\n\nList withdrawals, in reverse chronological order, up to maximum of 10 withdrawals, starting after the withdrawal with ID of `940af3c3-665d-4432-a12e-cdf8fd99ab3b`\n\n`https://api.bittrex.com/v3/withdrawals?pageSize=10&nextPageToken=940af3c3-665d-4432-a12e-cdf8fd99ab3b`\n\n List withdrawals, in reverse chronological order, up to a maximum of 10 withdrawals, ending before the withdrawal with ID of `0d990dd2-4103-4d57-8e80-047e886537db`: \n\n`https://api.bittrex.com/v3/withdrawals?pageSize=10&previousPageToken=0d990dd2-4103-4d57-8e80-047e886537db`\n\n",
+            "childOf": "REST API Overview"
+        },
+        "Placing Orders": {
+            "description": "Orders are placed using the [POST /orders](#operation--orders-post) operation. You can find sample request bodies for different types of orders in the examples in this section.\n\n### __Order Types__\n\n - __Market Order__ : An order to buy or sell a specified quantity of an asset immediately at the best available price. The market order will consume available orders on the book as it executes. Consequently, especially for large orders, the average price at which the order is filled will deviate from the last-traded price or current quote.\n\n - __Limit Order__ : An order to trade a specified quantity of an asset at a specified price. A buy order will only be filled at or below the limit price and a sell order will only be filled at or above the limit price.\n\n - __Ceiling Order__ : A market or limit order that allows you to specify the amount of quote currency you want to spend (or receive, if selling) instead of the quantity of the market currency (e.g. buy $100 USD of BTC at the current market BTC price)\n\n - __Good-Til-Cancelled Order__ : The order remains in force until it is explicitly cancelled either by the user or by Bittrex \n\n - __Immediate-Or-Cancel Order__ : The order will be filled immediately as much as possible and then cancelled.\n\n - __Fill-or-Kill__ : The order will be filled immediately and completely, or it is cancelled without being filled at all.\n\n - __Post Only__ : This option allows market makers to ensure that their orders are making it to the order book instead of matching with a pre-existing order. Note: If the order is not a maker order, you will return an error and the order will be cancelled\n\n - __Conditional Order__ : A directive for the system to place an order on your behalf when the price on the market moves past a given threshold. These are treated separately from orders. Refer to the Placing Conditional Orders section for more information. \n\n\n ### __Order types and time in force__ \n\n The following table shows which time in force options apply to which order types.\n\n\n<div style='overflow-x:auto;'><table><tbody><tr><th>timeInForce</th><th>LIMIT</th><th>MARKET</th><th>CEILING_LIMIT</th><th>CEILING_MARKET</th></tr><tr><td>GOOD_TIL_CANCELLED</td><td>BUY OR SELL</td><td>NOT ALLOWED</td><td>NOT ALLOWED</td><td>NOT ALLOWED</td></tr><tr><td>IMMEDIATE_OR_CANCEL</td><td>BUY OR SELL</td><td>BUY OR SELL</td><td>BUY OR SELL</td><td>BUY OR SELL</td></tr><tr><td>FILL_OR_KILL</td><td>BUY OR SELL</td><td>BUY OR SELL</td><td>BUY OR SELL</td><td>BUY OR SELL</td></tr><tr><td>POST_ONLY_GOOD_TIL_CANCELLED</td><td>BUY OR SELL</td><td>NOT ALLOWED</td><td>NOT ALLOWED</td><td>NOT ALLOWED</td></tr></tbody></table></div> \n\n\n ### __clientOrderId__ \n\nAn optional UUID which is generated by the user to to keep a track of the order. If the outcome of placing an order is not known (for example due to a client-side crash that occurred while placing the order), the same order can be safely placed again using the same UUID as the clientOrderId. If the order was received and processed the first time, the API will return an error that includes the existing order's id instead of creating a second order. This protection is in place for 24 hours after an order is placed. Although clientOrderIds which are more than 24 hours old are no longer checked against new orders, they remain associated with their orders as metadata and may be retrieved by clients.\n\n",
+            "childOf": "REST API Overview",
+            "example": "<h5>Request Body Example For Limit Order</h5><br><!-- < div class=\"hljs\" > --> <pre><code class=\"hljs lang-json\">{<br>    <span class=\"hljs-attr\">&quot;marketSymbol&quot;</span>: <span class=\"hljs-string\">&quot;string&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;direction&quot;</span>: <span class=\"hljs-string\">&quot;string&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;type&quot;</span>: <span class=\"hljs-string\">&quot;LIMIT&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;quantity&quot;</span>: <span class=\"hljs-string\">&quot;number (double)&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;limit&quot;</span>: <span class=\"hljs-string\">&quot;number (double)&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;timeInForce&quot;</span>: <span class=\"hljs-string\">&quot;GOOD_TIL_CANCELLED || IMMEDIATE_OR_CANCEL || FILL_OR_KILL || POST_ONLY_GOOD_TIL_CANCELLED&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;clientOrderId&quot;</span>: <span class=\"hljs-string\">&quot;string (uuid)&quot;</span><br>}<br></code></pre><br><h5>Request Body Example For Market Order</h5><br><!-- <div class=\"hljs\"> --><pre><code class=\"hljs lang-json\">{<br>    <span class=\"hljs-attr\">&quot;marketSymbol&quot;</span>: <span class=\"hljs-string\">&quot;string&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;direction&quot;</span>: <span class=\"hljs-string\">&quot;string&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;type&quot;</span>: <span class=\"hljs-string\">&quot;MARKET&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;quantity&quot;</span>: <span class=\"hljs-string\">&quot;number (double)&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;timeInForce&quot;</span>: <span class=\"hljs-string\">&quot;IMMEDIATE_OR_CANCEL || FILL_OR_KILL&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;clientOrderId&quot;</span>: <span class=\"hljs-string\">&quot;string (uuid)&quot;</span><br>}<br></code></pre><br><h5>Request Body Example For Ceiling limit Order</h5><br><!-- <div class=\"hljs\"> --><pre><code class=\"hljs lang-json\">{<br>    <span class=\"hljs-attr\">&quot;marketSymbol&quot;</span>: <span class=\"hljs-string\">&quot;string&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;direction&quot;</span>: <span class=\"hljs-string\">&quot;string&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;type&quot;</span>: <span class=\"hljs-string\">&quot;CEILING_LIMIT&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;limit&quot;</span>: <span class=\"hljs-string\">&quot;number (double)&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;ceiling&quot;</span>: <span class=\"hljs-string\">&quot;number (double)&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;timeInForce&quot;</span>: <span class=\"hljs-string\">&quot;IMMEDIATE_OR_CANCEL || FILL_OR_KILL&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;clientOrderId&quot;</span>: <span class=\"hljs-string\">&quot;string (uuid)&quot;</span><br>}<br></code></pre><br><h5>Request Body Example For Ceiling Market Order</h5><br><!-- <div class=\"hljs\"> --><pre><code class=\"hljs lang-json\">{<br>    <span class=\"hljs-attr\">&quot;marketSymbol&quot;</span>: <span class=\"hljs-string\">&quot;string&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;direction&quot;</span>: <span class=\"hljs-string\">&quot;string&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;type&quot;</span>: <span class=\"hljs-string\">&quot;CEILING_MARKET&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;ceiling&quot;</span>: <span class=\"hljs-string\">&quot;number (double)&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;timeInForce&quot;</span>: <span class=\"hljs-string\">&quot;IMMEDIATE_OR_CANCEL||FILL_OR_KILL&quot;</span>,<br>    <span class=\"hljs-attr\">&quot;clientOrderId&quot;</span>: <span class=\"hljs-string\">&quot;string (uuid)&quot;</span><br>}<br></code></pre>"
+        },
         "Placing Conditional Orders": {
-            "description": "### Placing Conditional Orders\n\nConditional orders are placed using this API by specifying the market price trigger conditions and what action to take when the trigger is reached. When a trade occurs on the market that matches the trigger conditions, the actions are triggered such as placing an order. Conditional orders are not the same as orders. They are stored separately from normal orders and do not appear on the order book. As such, there is a small delay between trading occurring on the market and corresponding conditional orders being triggered.\n\nCare must also be taken when working with conditional orders because balance is not reserved. If you create a conditional order costing an amount in excess of your account balance for a currency or if your account balance drops due to other trades subsequent to you placing a conditional order there is a risk that you will not have enough balance available to place the order when the conditional order’s condition is met. If this occurs, placement of the order will fail.\n\n#### Trigger conditions:\n\nThe trigger for a conditional order is made up of two parts: the operand and the trigger price or percentage. Operand may be either less than or equal to (LTE) or greater than or equal to (GTE). triggerPrice will be compared to the price of the last trade on the market to determine if the action(s) specified in the conditional order should be executed. Alternately, a trailingStopPercent may be specified. This will cause the triggerPrice to float a fixed percent off from the smallest or largest price seen since the conditional order was placed. The below table summarizes these options:\n\n\n<div style='overflow-x:auto;'><table><tbody><tr><th>Parameter provided</th><th>Operand</th><th>Trigger Price</th><th>Triggers when</th></tr><tr><td>triggerPrice</td><td>LTE</td><td>Constant</td><td>A trade occurs at a price LTE the provided trigger price</td></tr><tr><td>triggerPrice</td><td>GTE</td><td>Constant</td><td>A trade occurs at a price GTE the provided trigger price</td></tr><tr><td>trailingStopPercent</td><td>LTE</td><td>Calculated to be trailingStopPercent less than the maximum trade price on the market since the conditional order was placed</td><td>A trade occurs at a price LTE the calculated trigger price</td></tr><tr><td>trailingStopPercent</td><td>GTE</td><td>Calculated to be trailingStopPercent more than the minimum trade price on the market since the conditional order was placed</td><td>A trade occurs at a price GTE the calculated trigger price</td></tr></tbody></table></div> \n\n\n#### Actions:\n\nWhen the trigger condition is met, this will result in a new order being placed and, optionally, another order or conditional order being cancelled. The order to place is configured by populating orderToCreate with the same object you would post to create an order. There are some limitations: ceiling orders, post only orders, awards, and clientOrderId are not supported. For idempotency, instead specify a clientConditionalOrderId as a peer of orderToCreate in the request body.\n\nIf canceling an order is desired, provide the id of the order to cancel and the type of order (ORDER for an order on the book or CONDITIONAL_ORDER) in the orderToCancel object. This will pair the newly placed or with its target. If either conditional order triggers, the other will be cancelled. If both are trigger simultaneously, only the first conditional order place will trigger and the other will be cancelled. Note that there is not currently a way to break up two conditional orders paired in the fashion. To change the cancellation relationship, both conditional orders must be cancelled and placed again. You cannot link more than two orders in the fashion. Also note that if the orderToCancel is an order on the book and the conditional order triggers, the order on the book will be cancelled to free up funds prior to attempting to place the ordered triggered by the condition."
-             },
-            "Sub Accounts": {
-                "description": "(NOTE: This functionality is limited to partners and unavailable to general traders.)\n\nThe subaccount feature will enable partners to create a sub accounts for each of their users allowing the users to create sub account deposit addresses, manage deposit and withdrawal transactions as well as place orders from for the sub and access historical data.\n\n\n ### Getting Started: \n\n Key points to remember before working with this feature :\n\n - Enable 2FA on your account as the API Keys cannot be generated unless 2FA is enabled and extended verification is done on the account.\n\n - When enabled, authentication mechanism will need to be modified which is shown under `Api-subaccount-ID` under Authentication with with examples."
+            "description": "### Placing Conditional Orders\n\nConditional orders are placed using this API by specifying the market price trigger conditions and what action to take when the trigger is reached. When a trade occurs on the market that matches the trigger conditions, the actions are triggered such as placing an order. Conditional orders are not the same as orders. They are stored separately from normal orders and do not appear on the order book. As such, there is a small delay between trading occurring on the market and corresponding conditional orders being triggered.\n\nCare must also be taken when working with conditional orders because balance is not reserved. If you create a conditional order costing an amount in excess of your account balance for a currency or if your account balance drops due to other trades subsequent to you placing a conditional order there is a risk that you will not have enough balance available to place the order when the conditional order’s condition is met. If this occurs, placement of the order will fail.\n\n#### Trigger conditions\n\nThe trigger for a conditional order is made up of two parts: the operand and the trigger price or percentage. Operand may be either less than or equal to (LTE) or greater than or equal to (GTE). triggerPrice will be compared to the price of the last trade on the market to determine if the action(s) specified in the conditional order should be executed. Alternately, a trailingStopPercent may be specified. This will cause the triggerPrice to float a fixed percent off from the smallest or largest price seen since the conditional order was placed. The below table summarizes these options:\n\n\n<div style='overflow-x:auto;'><table><tbody><tr><th>Parameter provided</th><th>Operand</th><th>Trigger Price</th><th>Triggers when</th></tr><tr><td>triggerPrice</td><td>LTE</td><td>Constant</td><td>A trade occurs at a price LTE the provided trigger price</td></tr><tr><td>triggerPrice</td><td>GTE</td><td>Constant</td><td>A trade occurs at a price GTE the provided trigger price</td></tr><tr><td>trailingStopPercent</td><td>LTE</td><td>Calculated to be trailingStopPercent less than the maximum trade price on the market since the conditional order was placed</td><td>A trade occurs at a price LTE the calculated trigger price</td></tr><tr><td>trailingStopPercent</td><td>GTE</td><td>Calculated to be trailingStopPercent more than the minimum trade price on the market since the conditional order was placed</td><td>A trade occurs at a price GTE the calculated trigger price</td></tr></tbody></table></div> \n\n\n#### Actions\n\nWhen the trigger condition is met, this will result in a new order being placed and, optionally, another order or conditional order being cancelled. The order to place is configured by populating orderToCreate with the same object you would post to create an order. There are some limitations: post only orders, awards, and clientOrderId are not supported. For idempotency, instead specify a clientConditionalOrderId as a peer of orderToCreate in the request body.\n\nIf canceling an order is desired, provide the id of the order to cancel and the type of order (ORDER for an order on the book or CONDITIONAL_ORDER) in the orderToCancel object. This will pair the newly placed or with its target. If either conditional order triggers, the other will be cancelled. If both are trigger simultaneously, only the first conditional order place will trigger and the other will be cancelled. Note that there is not currently a way to break up two conditional orders paired in the fashion. To change the cancellation relationship, both conditional orders must be cancelled and placed again. You cannot link more than two orders in the fashion. Also note that if the orderToCancel is an order on the book and the conditional order triggers, the order on the book will be cancelled to free up funds prior to attempting to place the ordered triggered by the condition.\n\n#### Common Use Cases\n\nThis section describes some common use cases and provides instruction for how to meet them using the API:\n\n- __Stop Order__: A market order triggered by price moving past a given threshold. Specify operand and triggerPrice as desired and define a market buy or sell order in orderToCreate.\n\n- __Stop Limit Order__: A limit order triggered by price moving past a given threshold. Specify operand and triggerPrice as desired and define a limit buy or sell order in orderToCreate.\n\n- __Stop Loss Order__: A market sell order triggered by price falling to a given threshold. Specify LTE as the operand and triggerPrice as desired and define a market sell order in orderToCreate.\n\n- __Take Profit Order__: A limit sell order triggered by price rising to a given threshold. Specify GTE as the operand and triggerPrice as desired and define a limit sell order in orderToCreate.\n\n- __Trailing Stop Loss Order__: A market sell order triggered when price falls more than a given amount below the highest price seen since the order was created. Specify LTE as the operand, set trailingStopPercent as desired, and define a market sell order in orderToCreate.\n\n- __One Cancels the Other Order (OCO)__: A pair of orders where if one is triggered (for a conditional order) or executed (for an order on book) the other is automatically cancelled. When creating the second order in the pair, specify the id of the first order in orderToCancel. Note that currently one member of the OCO pair must be a conditional order.\n\nNote that more combinations are possible. These examples are intended as a guide to some common use cases, not an exhaustive list of supported scenarios.",
+            "childOf": "REST API Overview"
+        },
+        "Error Codes": {
+            "description": "### __Overview__:\n\n If an error occurs during the processing of an API request, the Bittrex API will return an error to the caller. The general flow of information to check is:\n\n - status code of the response.\n\n - error code and other information in the response body (JSON)\n\n### __HTTP Status Codes__\n\n<div style='overflow-x:auto;'><table><tbody><tr><th>Status Code</th><th>Description</th></tr><tr><td>400 - Bad Request</td><td>The request was malformed, often due to a missing or invalid parameter. See the error code and response data for more details.</td></tr><tr><td>401 - Unauthorized</td><td>The request failed to authenticate (example: a valid api key was not included in your request header)</td></tr><tr><td>403 - Forbidden</td><td> The provided api key is not authorized to perform the requested operation (example: attempting to trade with an api key not authorized to make trades)</td></tr><tr><td>404 - Not Found</td><td>The requested resource does not exist.</td></tr><tr><td>409 - Conflict</td><td>The request parameters were valid but the request failed due to an operational error. (example: INSUFFICIENT_FUNDS) </td><tr><td>429 - Too Many Requests</td><td>Too many requests hit the API too quickly. Please make sure to implement exponential backoff with your requests.</td></tr><tr><td>501 - Not Implemented</td><td>The service requested has not yet been implemented.</td></tr><tr><td>503 - Service Unavailable</td><td>The request parameters were valid but the request failed because the resource is temporarily unavailable (example: CURRENCY_OFFLINE)</td></tr></tbody></table></div>\n\n",
+            "childOf": "REST API Overview"
+        },
+        "Websocket Overview": {
+            "description": "The v3 websocket is intended to allow a client to subscribe to a live stream of updates about things that are changing in the system instead of needing to poll the REST API looking for updates. It is designed to complement and be used in conjunction with the v3 REST API. As such the messages sent from the socket include payloads that are formatted to match the corresponding data models from the v3 REST API.\n\nLike the existing v1 socket, the v3 socket is based on [Microsoft ASP.net’s SignalR](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr). We are not using ASP.net Core’s SignalR implementation at this time. As such, any existing SignalR client implementation working with the v1 socket should be able to be modified to work with the new v3 socket. If working in the .Net environment, the Microsoft.AspNet.SignalR.Client NuGet package is the recommended basis for a client implementation. The remainder of this section assumes you are working in C# using that library."
+        },
+        "Connecting": {
+            "description": "To connect to the v3 socket, create a HubConnection to the socket URL (https://socket-v3.bittrex.com/signalr) and create a hub proxy. The hub name to use when creating the proxy is \"c3\". Once these objects are created, you can start the HubConnection to connect to the socket. There are no streams of data sent automatically based solely on being connected. To get data, you must [subscribe](#topic-Subscribing) to one or more streams. The available streams are discussed in the Websocket Streams section of this site.",
+            "childOf": "Websocket Overview",
+            "example": "<pre><code class=\"hljs language-c#\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">SocketClient</span><br>{<br>    <span class=\"hljs-keyword\">private</span> <span class=\"hljs-keyword\">string</span> _url;<br>    <span class=\"hljs-keyword\">private</span> HubConnection _hubConnection;<br>    <span class=\"hljs-keyword\">private</span> IHubProxy _hubProxy;<br><br>    <span class=\"hljs-function\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-title\">SocketClient</span>(<span class=\"hljs-params\"><span class=\"hljs-keyword\">string</span> url</span>)</span><br>    {<br>        _url = url;<br>        _hubConnection = <span class=\"hljs-keyword\">new</span> HubConnection(_url);<br>        _hubProxy = _hubConnection.CreateHubProxy(<span class=\"hljs-string\">\"c3\"</span>);<br>    }<br><br>    <span class=\"hljs-function\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">async</span> Task&lt;<span class=\"hljs-keyword\">bool</span>&gt; <span class=\"hljs-title\">Connect</span>(<span class=\"hljs-params\"></span>)</span> {<br>        <span class=\"hljs-keyword\">await</span> _hubConnection.Start();<br>        <span class=\"hljs-keyword\">return</span> _hubConnection.State == ConnectionState.Connected;<br>    }<br>}<br></code></pre>"
+        },
+        "Authenticating": {
+            "description": "Some streams contain private data and require that you be authenticated prior to subscribing. In order to authenticate, invoke the Authenticate method on the hub as shown in the example. The authentication will need to be renewed periodically. Currently authentication lasts for 10 minutes. When authentication expires subscriptions to any private streams will be cancelled. One minute prior to authentication expiring, a reminder message will be sent notifying the client that it is time to reauthenticate.",
+            "childOf": "Websocket Overview",
+            "example": "<pre><code class=\"hljs language-c#\"><span class=\"hljs-function\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">async</span> Task&lt;SocketResponse&gt; <span class=\"hljs-title\">Authenticate</span>(<span class=\"hljs-params\"><span class=\"hljs-keyword\">string</span> apiKey, <span class=\"hljs-keyword\">string</span> apiKeySecret</span>)</span><br>{<br>    <span class=\"hljs-keyword\">var</span> timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();<br>    <span class=\"hljs-keyword\">var</span> randomContent = <span class=\"hljs-string\">$\"<span class=\"hljs-subst\">{ Guid.NewGuid() }</span>\"</span>;<br>    <span class=\"hljs-keyword\">var</span> content = <span class=\"hljs-keyword\">string</span>.Join(<span class=\"hljs-string\">\"\"</span>, timestamp, randomContent);<br>    <span class=\"hljs-keyword\">var</span> signedContent = CreateSignature(apiKeySecret, content);<br>    <span class=\"hljs-keyword\">var</span> result = <span class=\"hljs-keyword\">await</span> _hubProxy.Invoke&lt;SocketResponse&gt;(<br>        <span class=\"hljs-string\">\"Authenticate\"</span>, <br>        apiKey, <br>        timestamp, <br>        randomContent, <br>        signedContent);<br>    <span class=\"hljs-keyword\">return</span> result;<br>} <br>        <br><span class=\"hljs-function\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title\">SetAuthExpiringHandler</span>(<span class=\"hljs-params\"><span class=\"hljs-keyword\">string</span> apiKey, <span class=\"hljs-keyword\">string</span> apiKeySecret</span>)</span><br>{<br>    _hubProxy.On(<span class=\"hljs-string\">\"authenticationExpiring\"</span>, <span class=\"hljs-keyword\">async</span> () =&gt;<br>    {<br>        <span class=\"hljs-keyword\">await</span> Authenticate(apiKey, apiKeySecret);<br>    });<br>} <br>        <br><span class=\"hljs-function\"><span class=\"hljs-keyword\">private</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">string</span> <span class=\"hljs-title\">CreateSignature</span>(<span class=\"hljs-params\"><span class=\"hljs-keyword\">string</span> apiSecret, <span class=\"hljs-keyword\">string</span> data</span>)</span><br>{<br>    <span class=\"hljs-keyword\">var</span> hmacSha512 = <span class=\"hljs-keyword\">new</span> HMACSHA512(Encoding.ASCII.GetBytes(apiSecret));<br>    <span class=\"hljs-keyword\">var</span> hash = hmacSha512.ComputeHash(Encoding.ASCII.GetBytes(data));<br>    <span class=\"hljs-keyword\">return</span> BitConverter.ToString(hash).Replace(<span class=\"hljs-string\">\"-\"</span>, <span class=\"hljs-keyword\">string</span>.Empty);<br>}<br></code></pre>"
+        },
+        "Subscribing": {
+            "description": "To subscribe to one or more streams, simply invoke the Subscribe method with an array of streams to which you wish to subscribe. For a list of stream names, refer to the Websocket Streams section. The Subscribe method may be invoked as many times as desired if not all desired streams are known initially.\n\nThe result of invoking the Subscribe method is a list of [SocketResponse](#definition-SocketResponse) objects containing a Boolean value indicating if the subscription was successful and, in the case of failure, an error code.",
+            "childOf": "Websocket Overview",
+            "example": "``` c#\npublic async Task<List<SocketResponse>> Subscribe(string[] channels)\n{\n    return await _hubProxy.Invoke<List<SocketResponse>>(\"Subscribe\", (object)channels);\n}\n```"
+        },
+        "Handling Messages": {
+            "description": "Once you have subscribed to a stream, you will begin receiving messages as relevant activity occures in the system. The incoming messages must be decoded to do something with them. A basic example of this is shown below. The \"balance\" specified as a parameter is the name of the message to handle. This corresponds to the name of the stream. For a list of possible values and how they map to streams, refer to the Websocket Streams section.\nMessages sent on the v3 socket are gzipped and must be decompressed prior to being used. The DataConverter.Decode method shown in the example is doing this decompression and then parsing the resulting json into an object.\n\n``` c#\n_hubProxy.On(\"balance\", message =>\n{\n    var decoded = DataConverter.Decode<BalanceDelta>(message);\n    // Do stuff with the decoded BalanceDelta object\n});\n```\n\nThe schema for the BalanceDelta type can be found in the documentation for the [Balance stream](#method-Balance). It consists of an accountId field for identifying the account (or subaccount) the message relates to, the sequence number of the message used for synchronization, and the actualy delta which is an updated [Balance object](#definition-Balance). The schema of the object deltas sent by the websock are the same as those retrived from the equivalent REST API. For details about individual streams, refer to the Websocket Streams section of this page.",
+            "childOf": "Websocket Overview",
+            "example": "<pre><code class=\"hljs language-c#\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">DataConverter</span><br>{<br>    <span class=\"hljs-keyword\">private</span> <span class=\"hljs-keyword\">static</span> JsonSerializerSettings _jsonSerializerSettings = <span class=\"hljs-keyword\">new</span> JsonSerializerSettings<br>    {<br>        ContractResolver = <span class=\"hljs-keyword\">new</span> CamelCasePropertyNamesContractResolver(),<br>        DateFormatHandling = DateFormatHandling.IsoDateFormat,<br>        DateTimeZoneHandling = DateTimeZoneHandling.Utc,<br>        FloatParseHandling = FloatParseHandling.Decimal,<br>        MissingMemberHandling = MissingMemberHandling.Ignore,<br>        NullValueHandling = NullValueHandling.Ignore,<br>        Converters = <span class=\"hljs-keyword\">new</span> List&lt;JsonConverter&gt;<br>        {<br>            <span class=\"hljs-keyword\">new</span> StringEnumConverter(),<br>        }<br>    };<br><br>    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> T Decode&lt;T&gt;(<span class=\"hljs-keyword\">string</span> wireData)<br>    {<br>        <span class=\"hljs-comment\">// Step 1: Base64 decode the wire data into a gzip blob</span><br>        <span class=\"hljs-keyword\">byte</span>[] gzipData = Convert.FromBase64String(wireData);<br><br>        <span class=\"hljs-comment\">// Step 2: Decompress gzip blob into JSON</span><br>        <span class=\"hljs-keyword\">string</span> json = <span class=\"hljs-literal\">null</span>;<br><br>        <span class=\"hljs-keyword\">using</span> (<span class=\"hljs-keyword\">var</span> decompressedStream = <span class=\"hljs-keyword\">new</span> MemoryStream())<br>        <span class=\"hljs-keyword\">using</span> (<span class=\"hljs-keyword\">var</span> compressedStream = <span class=\"hljs-keyword\">new</span> MemoryStream(gzipData))<br>        <span class=\"hljs-keyword\">using</span> (<span class=\"hljs-keyword\">var</span> deflateStream = <span class=\"hljs-keyword\">new</span> DeflateStream(compressedStream, CompressionMode.Decompress))<br>        {<br>            deflateStream.CopyTo(decompressedStream);<br>            decompressedStream.Position = <span class=\"hljs-number\">0</span>;<br>            <span class=\"hljs-keyword\">using</span> (<span class=\"hljs-keyword\">var</span> streamReader = <span class=\"hljs-keyword\">new</span> StreamReader(decompressedStream))<br>            {<br>                json = streamReader.ReadToEnd();<br>            }<br>        }<br><br>        <span class=\"hljs-comment\">// Step 3: Deserialize the JSON string into a strongly-typed object</span><br>        <span class=\"hljs-keyword\">return</span> JsonConvert.DeserializeObject&lt;T&gt;(json, _jsonSerializerSettings);<br>    }<br>}<br></code></pre><br>"
+        },
+        "Synchronizing": {
+            "description": "To ensure you have the most recent data, and have not missed anything, the recommended sequence of steps is to:\n\n1. Subscribe to the relevant socket streams\n2. Begin to queue up messages without processing them\n3. Call the equivalent v3 REST API and record both the results and the value of the returned `Sequence` header (refer to the descriptions of individual streams to find the corresponding REST API)\n4. If the `Sequence` header is less than the sequence number of the first queued socket message received (unlikely), discard the results of step 3 and then repeat step 3 until this check passes.\n5. Discard all socket messages where the sequence number is less than or equal to the `Sequence` header retrieved from the REST call\n6. Apply the remaining socket messages in order on top of the results of the REST call. The objects received in the socket deltas have the same schemas as the objects returned by the REST API. Each socket delta is a snapshot of an object. The identity of the object is defined by a unique key made up of one or more fields in the message (see documentation of individual streams for details). To apply socket deltas to a local cache of data, simply replace the objects in the cache with those coming from the socket where the keys match.\n7. Continue to apply messages as they are received from the socket as long as sequence number on the stream is always increasing by 1 each message (Note: for private streams, the sequence number is scoped to a single account or subaccount).\n8. If a message is received that is not the next in order, return to step 2 in this process\n\nFor applications that depend on keeping the stream of data as reliable as possible, creating multiple socket connections for redundancy is recommended. The sequence numbers published across all of the connections will be consistent with each other and can be used to determine which messages have been received.",
+            "childOf": "Websocket Overview"
+        },
+        "Unsubscribing": {
+            "description": "Unsubscribing from streams follows the same pattern as subscribing to streams. Simply invoke the Unsubscribe method on the hub and provide the list of streams you wish to unsubscribe from.",
+            "childOf": "Websocket Overview",
+            "example": "``` c#\npublic async Task<List<SocketResponse>> Unsubscribe(string[] channels)\n{\n    return await _hubProxy.Invoke<List<SocketResponse>>(\"Unsubscribe\", (object)channels);\n}\n```"
+        },
+        "Subaccounts": {
+            "description": "(NOTE: This functionality is limited to partners and unavailable to general traders.)\n\nSubaccounts provide a way for partners to model their users without needing to create individual user accounts. Each subaccount has its own deposit addresses, balances, desposits and withdrawals, orders, etc. Partners control all actions of their subaccounts via the v3 REST API and may use the v3 websocket to be notified of any updates to their balances, deposits, and orders.\n\nIn order to work with subaccounts, you must be using an API key that has subaccount permissions. Partners who are part of this program can work with their Bittrex representative to get their API key enabled.\n\nTo create a subaccount, POST to the [subaccounts](#operation--subaccounts-post) endpoint. This will create a new subaccount and return its id. Once you have a subaccount id, you can transfer funds between it and your main (master) account using the [transfers](#operation--transfers-post) endpoint. In order to place orders, view history, or take other actions in the context of a subaccount using the REST API, add the `Api-subaccount-ID` header to the request and adjust your [request signature](#topic-Authentication) as needed.\n\nTo be notified of updates to subaccount data, use a websocket connection authenticated with a subaccount enabled API key and subscribe to the subaccount streams for the types of data you care about. A single subscription will receive data from all subaccounts the API key is authorized to manage. Messaages will include an accountId field which can be used to associate them with the correct subaccount. For subaccount streams that include a sequence number for synchronizing with the server, the sequence number is independent for each subaccount."
+        },
+    };
+
+    // Looks for topics claiming to be children of other topics and then marks them as such on that topic
+    Object.keys(topics).forEach(function (key) {
+        if (topics[key].childOf) {
+            if (topics[topics[key].childOf].children) {
+                topics[topics[key].childOf].children.push(key);
+            }
+            else {
+                topics[topics[key].childOf].children = [key];
+            }
+        }
+    });
+
+    return _.assign({}, json, {
+        'x-spectacle-topics': topics
+    });
+}
+
+function websocketApi(json) {
+    console.log('Adding websocket api documentation...');
+
+    return _.assign({}, json, {
+        "x-btx-methods": {
+            "Authenticate": {
+                "operationId": "ws-authenticate",
+                "summary": "",
+                "description": "Authenticates the current connection using an API key. Refer to the [websocket authentication](#topic-Authenticating) topic for additional information.",
+                "deprecated": false,
+                "parameters": [
+                    {
+                        "name": "apiKey",
+                        "type": "string",
+                        "in": "",
+                        "description": "a valid API key for your account",
+                        "required": true
+                    },
+                    {
+                        "name": "timestamp",
+                        "type": "string",
+                        "in": "",
+                        "description": "the current UNIX-style time in epoch millisecond format",
+                        "required": true
+                    },
+                    {
+                        "name": "randomContent",
+                        "type": "string",
+                        "in": "",
+                        "description": "a random uuid",
+                        "required": true
+                    },
+                    {
+                        "name": "signature",
+                        "type": "string",
+                        "in": "",
+                        "description": "randomContent and timestamp signed by the apiKey's secret. Refer to the [websocket authentication](#topic-Authenticating) topic for an example.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "Response": {
+                        "description": "[SocketResponse](#definition-SocketResponse)",
+                    }
+                }
             },
-            "Error Codes": {
-                "description": "### __Overview__:\n\n If an error occurs during the processing of an API request, the Bittrex API will return an error to the caller. The general flow of information to check is:\n\n - status code of the response.\n\n - error code and other information in the response body (JSON)\n\n### __HTTP Status Codes__\n\n<div style='overflow-x:auto;'><table><tbody><tr><th>Status Code</th><th>Description</th></tr><tr><td>400 - Bad Request</td><td>The request was malformed, often due to a missing or invalid parameter. See the error code and response data for more details.</td></tr><tr><td>401 - Unauthorized</td><td>The request failed to authenticate (example: a valid api key was not included in your request header)</td></tr><tr><td>403 - Forbidden</td><td> The provided api key is not authorized to perform the requested operation (example: attempting to trade with an api key not authorized to make trades)</td></tr><tr><td>404 - Not Found</td><td>The requested resource does not exist.</td></tr><tr><td>409 - Conflict</td><td>The request parameters were valid but the request failed due to an operational error. (example: INSUFFICIENT_FUNDS) </td><tr><td>429 - Too Many Requests</td><td>Too many requests hit the API too quickly. Please make sure to implement exponential backoff with your requests.</td></tr><tr><td>501 - Not Implemented</td><td>The service requested has not yet been implemented.</td></tr><tr><td>503 - Service Unavailable</td><td>The request parameters were valid but the request failed because the resource is temporarily unavailable (example: CURRENCY_OFFLINE)</td></tr></tbody></table></div>\n\n"
+            "IsAuthenticated": {
+                "operationId": "ws-isauthenticated",
+                "summary": "",
+                "description": "Determines if the current connection is authenticated",
+                "deprecated": false,
+                "responses": {
+                    "Response": {
+                        "description": "True if the connection is authenticated, false otherwise"
+                    }
+                }
+            },
+            "Subscribe": {
+                "operationId": "ws-subscribe",
+                "summary": "",
+                "description": "Subscribes to one or more data streams",
+                "deprecated": false,
+                "parameters": [{
+                    "name": "channels",
+                    "type": "Array<string>",
+                    "in": "",
+                    "description": "list of streams to subscribe to",
+                    "required": true
+                }],
+                "responses": {
+                    "Response": {
+                        "description": "Array<[SocketResponse](#definition-SocketResponse)>",
+                    }
+                }
+            },
+            "Unsubscribe": {
+                "operationId": "ws-unsubscribe",
+                "summary": "",
+                "description": "Unsubscribes from one or more data streams",
+                "deprecated": false,
+                "parameters": [{
+                    "name": "channels",
+                    "type": "Array<string>",
+                    "in": "",
+                    "description": "list of streams to unsubscribe from",
+                    "required": true
+                }],
+                "responses": {
+                    "Response": {
+                        "description": "Array<[SocketResponse](#definition-SocketResponse)>",
+                    }
+                }
             }
         }
     });
 }
 
+function websocketStreams(json) {
+    console.log('Adding websocket streams documentation...');
+    return _.assign({}, json, {
+        "x-btx-wsstreams": {
+            "Balance": {
+                "operationId": "balance",
+                "summary": "",
+                "description": "Sends a message when the authenticated user’s total or available balance of a currency changes.",
+                "deprecated": false,
+                "x-btx-wsauthenticated": true,
+                "stream-details": {
+                    "subscription": "balance",
+                    "message-name": "balance",
+                    "unique-key": "accountId, currencySymbol",
+                    "restApi": "[GET /balances](#operation--balances-get)",
+                    "subaccountStream": "subaccounts_balance"
+                },
+                "message-schema": {
+                    "balance": {
+                        "description": "balance",
+                        "schema": {
+                            "type": "BalanceUpdate",
+                            "properties": {
+                                "accountId": {
+                                    "type": "string",
+                                    "example": "string (uuid)"
+                                },
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "delta": {
+                                    "$ref": "#/definitions/Balance"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Candle": {
+                "operationId": "candle",
+                "summary": "",
+                "description": "Sends a message at the start of each candle (based on the subscribed interval) and when trades have occurred on the market.",
+                "stream-details": {
+                    "subscription": "candle_{marketSymbol}_{candleInterval}",
+                    "message-name": "candle",
+                    "unique-key": "marketSymbol, interval, startsAt",
+                    "restApi": "[GET /markets/{marketSymbol}/candles /{candleInterval}/recent](#operation--markets--marketSymbol--candles--candleInterval--recent-get)"
+                },
+                "deprecated": false,
+                "parameters": [{
+                        "name": "marketSymbol",
+                        "in": "",
+                        "description": "symbol of market to retrieve candles for",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "candleInterval",
+                        "in": "",
+                        "description": "desired time interval between candles",
+                        "required": true,
+                        "enum": ["MINUTE_1", "MINUTE_5", "HOUR_1", "DAY_1"],
+                        "type": "string"
+                    }
+                ],
+                "message-schema": {
+                    "candle": {
+                        "description": "candle",
+                        "schema": {
+                            "type": "CandleUpdate",
+                            "properties": {
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "marketSymbol": {
+                                    "type": "string",
+                                    "example": "string"
+                                },
+                                "interval": {
+                                    "type": "string",
+                                    "example": "string"
+                                },
+                                "delta": {
+                                    "$ref": "#/definitions/Candle"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Deposit": {
+                "operationId": "deposit",
+                "summary": "",
+                "description": "Sends a message when a new deposit is detected or its status changes.",
+                "deprecated": false,
+                "x-btx-wsauthenticated": true,
+                "stream-details": {
+                    "subscription": "deposit",
+                    "message-name": "deposit",
+                    "unique-key": "id",
+                    "restApi": "[GET /deposits/open](#operation--deposits-open-get)",
+                    "subaccountStream": "subaccounts_deposit"
+                },
+                "message-schema": {
+                    "deposit": {
+                        "description": "deposit",
+                        "schema": {
+                            "type": "DepositUpdate",
+                            "properties": {
+                                "accountId": {
+                                    "type": "string",
+                                    "example": "string (uuid)"
+                                },
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "delta": {
+                                    "$ref": "#/definitions/Deposit"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Heartbeat": {
+                "operationId": "heartbeat",
+                "summary": "",
+                "description": "Sends an empty message on an interval (currently 5 seconds). If you stop getting a heartbeat that means your connection is dead. If you are still getting a heartbeat but are not getting updates on active markets then that means your connection is alive but something else is wrong.",
+                "deprecated": false,
+                "stream-details": {
+                    "subscription": "heartbeat",
+                    "message-name": "heartbeat",
+                    "unique-key": "n/a",
+                    "restApi": "n/a"
+                },
+                "message-schema": {
+                    "heartbeat": {
+                        "description": "heartbeat",
+                        "schema": {
+                            "type": "Heartbeat messages contain no payload"
+                        }
+                    }
+                }
+            },
+            "Market Summaries": {
+                "operationId": "marketSummaries",
+                "summary": "",
+                "description": "Provides regular updates of the current market summary data for all markets. Market summary data is different from candles in that it is a rolling 24-hour number as opposed to data for a fixed interval like candles.",
+                "deprecated": false,
+                "stream-details": {
+                    "subscription": "market_summaries",
+                    "message-name": "marketsummaries",
+                    "unique-key": "symbol",
+                    "restApi": "[GET /markets/summaries](#operation--markets-summaries-get)"
+                },
+                "message-schema": {
+                    "marketsummaries": {
+                        "description": "marketsummaries",
+                        "schema": {
+                            "type": "MarketSummaryUpdate",
+                            "properties": {
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "deltas": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/MarketSummary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Market Summary": {
+                "operationId": "marketSummary",
+                "summary": "",
+                "description": "Provides regular updates of the current market summary data for a given market. Market summary data is different from candles in that it is a rolling 24-hour number as opposed to data for a fixed interval like candles.",
+                "deprecated": false,
+                "stream-details": {
+                    "subscription": "market_summary_{marketSymbol}",
+                    "message-name": "marketsummary",
+                    "unique-key": "symbol",
+                    "restApi": "[GET /markets/{marketSymbol}/summary](#operation--markets--marketSymbol--summary-get)",
+                    "notes": "This stream does not include a sequence number because each message received is a full snapshot of the current state."
+                },
+                "parameters": [{
+                    "name": "marketSymbol",
+                    "in": "",
+                    "description": "symbol of market to retrieve the summary for",
+                    "required": true,
+                    "type": "string"
+                }],
+                "message-schema": {
+                    "marketsummary": {
+                        "description": "marketsummary",
+                        "schema": {
+                            "$ref": "#/definitions/MarketSummary"
+                        }
+                    }
+                }
+            },
+            "Order": {
+                "operationId": "order",
+                "summary": "",
+                "description": "Sends messages when there are changes to the user’s open orders.",
+                "deprecated": false,
+                "x-btx-wsauthenticated": true,
+                "stream-details": {
+                    "subscription": "order",
+                    "message-name": "order",
+                    "unique-key": "id",
+                    "restApi": "[GET /orders/open](#operation--orders-open-get)",
+                    "subaccountStream": "subaccounts_order"
+                },
+                "message-schema": {
+                    "order": {
+                        "description": "order",
+                        "schema": {
+                            "type": "OrderUpdate",
+                            "properties": {
+                                "accountId": {
+                                    "type": "string",
+                                    "example": "string (uuid)"
+                                },
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "delta": {
+                                    "$ref": "#/definitions/Order"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Orderbook": {
+                "operationId": "orderbook",
+                "summary": "",
+                "description": "Sends a message when there are changes to the order book within the subscribed depth.",
+                "stream-details": {
+                    "subscription": "orderbook_{marketSymbol}_{depth}",
+                    "message-name": "orderbook",
+                    "unique-key": "marketSymbol, depth, \"bid\" | \"ask\", rate",
+                    "restApi": "[GET /markets/{marketSymbol}/orderbook?depth={depth}](#operation--markets--marketSymbol--orderbook-get)",
+                    "notes": "An update with quantity 0 means that there is no longer any liquidity available at that rate or that this rate is no longer within the subscribed depth. For example, if subscribed to a depth of 25, if an order is placed at a new rate somewhere in the middle of the top 25, the entry that was formerly the 25th, and is now 26th, will get an update with quantity 0.\n\nFor this reason, depth is included as part of the key defined above. The first 25 levels of the depth 25 and depth 500 orderbooks will be identical, but updates for level 26 of the depth 25 order book (always 0) must be kept separate from updates for the depth 500 orderbook if you are subscribed to both."
+                },
+                "deprecated": false,
+                "tags": [],
+                "parameters": [{
+                        "name": "marketSymbol",
+                        "in": "",
+                        "description": "symbol of market to monitor order book for",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "depth",
+                        "in": "",
+                        "description": "depth of order book to monitor",
+                        "required": true,
+                        "enum": ["1", "25", "500"],
+                        "type": "string"
+                    }
+                ],
+                "message-schema": {
+                    "orderbook": {
+                        "description": "orderbook",
+                        "schema": {
+                            "type": "OrderBookUpdate",
+                            "properties": {
+                                "marketSymbol": {
+                                    "type": "string",
+                                    "example": "string"
+                                },
+                                "depth": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "bidDeltas": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/OrderBookEntry"
+                                    }
+                                },
+                                "askDeltas": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/OrderBookEntry"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Tickers": {
+                "operationId": "tickers",
+                "summary": "",
+                "description": "Sends a message with the best bid price, best ask price, and last trade price for all markets as there are changes to the order book or trades.",
+                "stream-details": {
+                    "subscription": "tickers",
+                    "message-name": "tickers",
+                    "unique-key": "symbol",
+                    "restApi": "[GET /markets/tickers](#operation--markets-tickers-get)"
+                },
+                "deprecated": false,
+                "tags": [],
+                "parameters": [],
+                "message-schema": {
+                    "tickers": {
+                        "description": "tickers",
+                        "schema": {
+                            "type": "TickerUpdate",
+                            "properties": {
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "deltas": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Ticker"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Ticker": {
+                "operationId": "ticker",
+                "summary": "",
+                "description": "Sends a message with the best bid and ask price for the given market as well as the last trade price whenever there is a relevant change to the order book or a trade.",
+                "stream-details": {
+                    "subscription": "ticker_{marketSymbol}",
+                    "message-name": "ticker",
+                    "unique-key": "symbol",
+                    "restApi": "[GET /markets/{marketSymbol}/ticker](#operation--markets--marketSymbol--ticker-get)",
+                    "notes": "This stream does not include a sequence number because each message received is a full snapshot of the current state."
+                },
+                "deprecated": false,
+                "tags": [],
+                "parameters": [{
+                    "name": "marketSymbol",
+                    "in": "",
+                    "description": "symbol of market to monitor for ticker updates",
+                    "required": true,
+                    "type": "string"
+                }],
+                "message-schema": {
+                    "ticker": {
+                        "description": "ticker",
+                        "schema": {
+                            "$ref": "#/definitions/Ticker"
+                        }
+                    }
+                }
+            },
+            "Trade": {
+                "operationId": "trade",
+                "summary": "",
+                "description": "Sends a message with the quantity and rate of trades on a market as they occur.",
+                "stream-details": {
+                    "subscription": "trade_{marketSymbol}",
+                    "message-name": "trade",
+                    "unique-key": "id",
+                    "restApi": "[GET /markets/{marketSymbol}/trades](#operation--markets--marketSymbol--trades-get)"
+                },
+                "deprecated": false,
+                "tags": [],
+                "parameters": [{
+                    "name": "marketSymbol",
+                    "in": "",
+                    "description": "symbol of market to monitor for trades",
+                    "required": true,
+                    "type": "string"
+                }],
+                "message-schema": {
+                    "trades": {
+                        "description": "trades",
+                        "schema": {
+                            "type": "TradeUpdate",
+                            "properties": {
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "marketSymbol": {
+                                    "type": "string",
+                                    "example": "string"
+                                },
+                                "deltas": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Trade"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        }
+    });
+}
+
+function customSchemaDefinitions(json) {
+    console.log('Adding custom schema definitions...');
+    return _.set(json, 'definitions.SocketResponse', {
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+            "success": {
+                "description": "true if the operation was successful, false otherwise",
+                "type": "boolean"
+            },
+            "errorCode": {
+                "description": "failure reason",
+                "type": "string"
+            }
+        }
+    });
+}
 
 function siteDescription(json) {
     console.log('Adding site description...');
@@ -46,18 +637,7 @@ function siteDescription(json) {
         "info": {
             "version": "v3",
             "title": "Bittrex API",
-            "description": "Bittrex provides a simple and powerful API consisting of REST endpoints for transactional operations .\n\n Access to and use of the API is governed by our Terms of Service.\n If you are a user of Bittrex.com, the applicable Terms of Service are available [here](https://bittrex.com/home/terms).\n If you are a user of Bittrex Global, the applicable Terms of Service are available [here](https://global.bittrex.com/home/terms).\n\n If you have any API questions, feedback, or recommendations please post a question via our [Github page](https://github.com/Bittrex/bittrex.github.io/issues)."
-        }
-    });
-}
-
-function securityDefinitions(json) {
-    console.log('Adding security definition section...');
-    return _.assign({}, json, {
-        "securityDefinitions": {
-            "api_key": {
-                "description": "### Overview\n In order to properly sign an authenticated request for the Bittrex v3 API, the following headers must be included:\n\n- `Api-Key`\n\n- `Api-Timestamp`\n\n- `Api-Content-Hash`\n\n- `Api-Signature`\n\n- `Api-Subaccount-Id (optional)`\n\n\nThe following sections are instructions for properly populating these headers.\n\n---\n #### Api-Key\nPopulate this header with your API key.\n\nExample Value:\n\n`4894xxxxxxxx407e827d05xxxxxxxxxx`\n\n---\n #### Api-Timestamp\nPopulate this header with the current time as a UNIX timestamp, in epoch-millisecond format.\n\nSample JS Code Snippet:\n\n``` javascript\nvar timestamp = new Date().getTime();\n```\n\nExample Value:\n\n`1542323450016`\n\n---\n #### Api-Content-Hash\nPopulate this header with a SHA512 hash of the request contents, Hex-encoded. If there are no request contents, populate this header with a SHA512 hash of an empty string.\n\nSample JS Code Snippet:\n\n``` javascript\nvar contentHash = CryptoJS.SHA512(content).toString(CryptoJS.enc.Hex);\n```\n\nExample Value:\n\n``` markdown\ncf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\n```\n\n---\n #### Api-Subaccount-Id (Only for subaccount feature) \n(NOTE: This functionality is limited to partners and unavailable to general traders.)\n\nIf you wish to make a request on behalf of a subaccount, you will need to:\n\n1. Authenticate using all 4 of the headers above referring to your master account.\n2. Populate the Api-Subaccount-Id header with the UUID of the subaccount you wish to impersonate for this request. The specified subaccount *must* be a subaccount of the master account used to authenticate the request.\n3. Include the Api-Subaccount-Id header at the end of the pre-signed signature, as indicated in the next section.\n\nExample Value:\n\n`x111x11x-8968-48ac-b956-x1x11x111111`\n\n---\n #### Api-Signature\nCreate a pre-sign string formed from the following items and concatenating them together:\n1. Contents of your `Api-Timestamp` header\n2. The full URI you are using to make the request (including query string)\n3. The HTTP method of the request, in all caps (GET, POST, DELETE, etc.)  \n4. Contents of your `Api-Content-Hash` header \n5. Content of your `Api-Subaccount-Id` header (or an empty string if not present) \n\n\nOnce you have created this pre-sign string, sign it via HmacSHA512, using your API secret as the signing secret. Hex-encode the result of this operation and populate the `Api-Signature` header with it.\n\n\nSample JS Code Snippet:\n\n``` javascript\nvar uri = 'https://api.bittrex.com/v3/balances';\nvar preSign = [timestamp, uri, method, contentHash, subaccountId].join('');\nvar signature = CryptoJS.HmacSHA512(preSign, apiSecret).toString(CryptoJS.enc.Hex);\n```\n\nExample Pre-Signed Value (no subaccount)\n\n``` markdown\n1542323450016https://api.bittrex.com/v3/balancesGETcf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\n```\n\nExample Pre-Signed Value (with subaccount)\n\n``` markdown\n1542323450016https://api.bittrex.com/v3/balancesGETcf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3ex111x11x-8968-48ac-b956-x1x11x111111\n```\n\nExample Post-Signed Value:\n\n``` markdown\n939047623f0efbe10bfbb32f18e5d8885b2a91be3c3cea82adf0dd2d20892b20bcb6a10a91fec3afcedcc009f2b2a86c5366974cfadcf671fe0490582568f51f\n```\n\n\n"
-            }
+            "description": "Bittrex provides a simple and powerful API consisting of REST endpoints for transactional operations and a complementary Websocket service providing streaming market and user data updates.\n\n Access to and use of the API is governed by our Terms of Service.\n If you are a user of Bittrex.com, the applicable Terms of Service are available [here](https://bittrex.com/home/terms).\n If you are a user of Bittrex Global, the applicable Terms of Service are available [here](https://global.bittrex.com/home/terms).\n\n If you have any API questions, feedback, or recommendations please post a question via our [Github page](https://github.com/Bittrex/bittrex.github.io/issues)."
         }
     });
 }
@@ -327,8 +907,10 @@ function transformPathParameters(json) {
 module.exports = R.pipe(
     spectacleTopics,
     siteDescription,
-    securityDefinitions,
     requestExamples,
     removeUuidExamples,
-    transformPathParameters
+    transformPathParameters,
+    websocketApi,
+    websocketStreams,
+    customSchemaDefinitions,
 );
