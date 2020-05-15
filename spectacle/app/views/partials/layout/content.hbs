@@ -24,6 +24,10 @@
   {{#if x-btx-methods}}
     {{>websocket/x-btx-methods}}
   {{/if}}
+    
+  {{#if x-btx-wsstreams}}
+    {{>websocket/x-btx-wsstreams}}
+  {{/if}}
 
   {{>swagger/definitions definitions=definitions}}
 </article>
