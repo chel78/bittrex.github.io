@@ -13,7 +13,7 @@
         {{#each x-spectacle-topics}}
         {{#if children}}
         <section>
-            <a href="#topic-{{htmlId @key}}">{{@key}}</a>
+            <a href="#topic-{{htmlId @key}}">{{@key}}{{#if badge}} <span class="badge">{{badge}}</span>{{/if}}</a>
             <ul>
                 {{#each children}}
                 <li>
@@ -25,7 +25,7 @@
         {{else}}
         {{#if childOf}}
         {{else}}
-        <a href="#topic-{{htmlId @key}}">{{@key}}</a>
+        <a href="#topic-{{htmlId @key}}">{{@key}}{{#if badge}} <span class="badge">{{badge}}</span>{{/if}}</a>
         {{/if}}
         {{/if}}
         {{/each}}
