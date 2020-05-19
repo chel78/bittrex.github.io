@@ -1,6 +1,6 @@
 {{#if x-spectacle-topics}}
   {{#each x-spectacle-topics}}
-    <h1 id="topic-{{htmlId @key}}" data-traverse-target="topic-{{htmlId @key}}">{{@key}}</h1>
+    <h1 id="topic-{{htmlId @key}}" data-traverse-target="topic-{{htmlId @key}}">{{@key}}{{#if badge}} <span class="badge">{{badge}}</span>{{/if}}</h1>
     <div class="panel">
       <div class="doc-row">
         <div class="doc-copy">
