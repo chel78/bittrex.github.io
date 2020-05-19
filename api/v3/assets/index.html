@@ -7,13 +7,15 @@
       <nav id="nav" role="navigation">
         <h5>Topics</h5>
         <a href="#introduction">Introduction</a>
-        <a href="#topic-Pre-Release-Warning">Pre-Release Warning</a>
         <a href="#topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</a>
         <a href="#topic-Change-Log">Change Log</a>
         <a href="#topic-Known-Issues">Known Issues</a>
         <section>
           <a href="#topic-REST-API-Overview">REST API Overview</a>
           <ul>
+            <li>
+              <a href="#topic-Pre-Release-Warning">Pre-Release Warning</a>
+            </li>
             <li>
               <a href="#topic-Best-Practices">Best Practices</a>
             </li>
@@ -35,8 +37,13 @@
           </ul>
         </section>
         <section>
-          <a href="#topic-Websocket-Overview">Websocket Overview</a>
+          <a href="#topic-Websocket-Overview">Websocket Overview
+            <span class="badge">Beta</span>
+          </a>
           <ul>
+            <li>
+              <a href="#topic-Pre-Release--Warning">Pre-Release Warning</a>
+            </li>
             <li>
               <a href="#topic-Connecting">Connecting</a>
             </li>
@@ -377,17 +384,6 @@
             </div>
           </div>
         </div>
-        <h1 id="topic-Pre-Release-Warning" data-traverse-target="topic-Pre-Release-Warning">Pre-Release Warning</h1>
-        <div class="panel">
-          <div class="doc-row">
-            <div class="doc-copy">
-              <p>The v3-Beta APIs operate against production (live-site) data and accounts. We recommend testing with small-value transactions to validate your implementation.</p>
-              <p>The REST portions of the v3-Beta API are now stable with the exception of the items listed in the
-                <a href="#topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</a> section. There are currently no plans to make any further breaking changes to the REST portions of the v3 API other than those listed.</p>
-              <p>The newly released websocket portions of the v3-Beta are subject to breaking changes, potentially without notice, until the final API is released. These APIs should only be used for testing and review. By using the v3-Beta APIs you understand and agree that issues may be encountered without warning, affecting your use of the website and API.</p>
-            </div>
-          </div>
-        </div>
         <h1 id="topic-Upcoming-Breaking-Changes" data-traverse-target="topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</h1>
         <div class="panel">
           <div class="doc-row">
@@ -485,6 +481,16 @@
                 <li>Enable 2FA on your account. API Keys cannot be generated unless 2FA is enabled and extended verification is done on the account.</li>
                 <li>All REST requests must be sent to <code>https://api.bittrex.com/v3</code> using the <code>application/json</code> content type. Non-HTTPS requests will be redirected to HTTPS, possibly causing functional or performance issues with your application.</li>
               </ul>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Pre-Release-Warning" data-traverse-target="topic-Pre-Release-Warning">Pre-Release Warning</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>The v3-Beta APIs operate against production (live-site) data and accounts. We recommend testing with small-value transactions to validate your implementation.</p>
+              <p>The REST portions of the v3-Beta API are now stable with the exception of the items listed in the
+                <a href="#topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</a> section. There are currently no plans to make any further breaking changes to the REST portions of the v3 API other than those listed.</p>
             </div>
           </div>
         </div>
@@ -864,13 +870,23 @@
             </div>
           </div>
         </div>
-        <h1 id="topic-Websocket-Overview" data-traverse-target="topic-Websocket-Overview">Websocket Overview</h1>
+        <h1 id="topic-Websocket-Overview" data-traverse-target="topic-Websocket-Overview">Websocket Overview
+          <span class="badge">Beta</span>
+        </h1>
         <div class="panel">
           <div class="doc-row">
             <div class="doc-copy">
               <p>The v3 websocket is intended to allow a client to subscribe to a live stream of updates about things that are changing in the system instead of needing to poll the REST API looking for updates. It is designed to complement and be used in conjunction with the v3 REST API. As such the messages sent from the socket include payloads that are formatted to match the corresponding data models from the v3 REST API.</p>
               <p>Like the existing v1 socket, the v3 socket is based on
                 <a href="https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr">Microsoft ASP.net’s SignalR</a>. We are not using ASP.net Core’s SignalR implementation at this time. As such, any existing SignalR client implementation working with the v1 socket should be able to be modified to work with the new v3 socket. If working in the .Net environment, the Microsoft.AspNet.SignalR.Client NuGet package is the recommended basis for a client implementation. The remainder of this section assumes you are working in C# using that library.</p>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Pre-Release--Warning" data-traverse-target="topic-Pre-Release--Warning">Pre-Release Warning</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>The websocket portions of the v3-Beta are subject to breaking changes, potentially without notice, until the final API is released. These APIs should only be used for testing and review. By using the v3-Beta APIs you understand and agree that issues may be encountered without warning, affecting your use of the website and API.</p>
             </div>
           </div>
         </div>
@@ -943,7 +959,7 @@
               <ol>
                 <li>Subscribe to the relevant socket streams</li>
                 <li>Begin to queue up messages without processing them</li>
-                <li>Call the equivalent v3 REST API and record both the results and the value of the returned <code>Sequence</code> header (refer to the descriptions of individual streams to find the corresponding REST API)</li>
+                <li>Call the equivalent v3 REST API and record both the results and the value of the returned <code>Sequence</code> header. Refer to the descriptions of individual streams to find the corresponding REST API. Note that you must call the REST API with the same parameters as you used to subscribed to the stream to get the right snapshot. For example, orderbook snapshots of different depths will have different sequence numbers.</li>
                 <li>If the <code>Sequence</code> header is less than the sequence number of the first queued socket message received (unlikely), discard the results of step 3 and then repeat step 3 until this check passes.</li>
                 <li>Discard all socket messages where the sequence number is less than or equal to the <code>Sequence</code> header retrieved from the REST call</li>
                 <li>Apply the remaining socket messages in order on top of the results of the REST call. The objects received in the socket deltas have the same schemas as the objects returned by the REST API. Each socket delta is a snapshot of an object. The identity of the object is defined by a unique key made up of one or more fields in the message (see documentation of individual streams for details). To apply socket deltas to a local cache of data, simply replace the objects in the cache with those coming from the socket where the keys match.</li>
@@ -7897,6 +7913,8 @@
                 </table>
                 <p>An update with quantity 0 means that there is no longer any liquidity available at that rate or that this rate is no longer within the subscribed depth. For example, if subscribed to a depth of 25, if an order is placed at a new rate somewhere in the middle of the top 25, the entry that was formerly the 25th, and is now 26th, will get an update with quantity 0.</p>
                 <p>For this reason, depth is included as part of the key defined above. The first 25 levels of the depth 25 and depth 500 orderbooks will be identical, but updates for level 26 of the depth 25 order book (always 0) must be kept separate from updates for the depth 500 orderbook if you are subscribed to both.</p>
+                <p>
+                  <strong>Note:</strong> You must get the orderbook snapshot from the same depth as you are subscribed to on the websocket. Sequence numbers are not the same for different depths.</p>
               </section>
             </div>
             <div class="doc-examples">
