@@ -582,7 +582,7 @@
       },
       "head": {
         "tags": [ "Markets" ],
-        "description": "Get sequence of the last 24 hours of activity for all market summaries snapshot.",
+        "description": "Retrieve the current sequence number for the market summaries snapshot.",
         "operationId": "Markets_GetSummariesNonce",
         "consumes": [],
         "produces": [ "application/json" ],
@@ -608,7 +608,7 @@
       },
       "head": {
         "tags": [ "Markets" ],
-        "description": "Get Tickers sequence",
+        "description": "Retrieve the current sequence number for the tickers snapshot.",
         "operationId": "Markets_GetTickersNonce",
         "consumes": [],
         "produces": [ "application/json" ],
@@ -728,7 +728,7 @@
       },
       "head": {
         "tags": [ "Markets" ],
-        "description": "Retrieve the nonce of order book for a specific market.",
+        "description": "Retrieve the current sequence number for the specified market's order book snapshot.",
         "operationId": "Markets_GetOrderBookNonce",
         "consumes": [],
         "produces": [ "application/json" ],
@@ -782,7 +782,7 @@
     "/markets/{marketSymbol}/trade": {
       "head": {
         "tags": [ "Markets" ],
-        "description": "Retrieve the nonce of trade for a specific market.",
+        "description": "Retrieve the current sequence number for the specified market's recent trades snapshot.",
         "operationId": "Markets_GetTradesNonce",
         "consumes": [],
         "produces": [ "application/json" ],
@@ -796,41 +796,6 @@
           }
         ],
         "responses": { "200": { "description": "OK" } }
-      }
-    },
-    "/markets/{marketSymbol}/candles": {
-      "get": {
-        "tags": [ "Markets" ],
-        "description": "Retrieve recent candles for a specific market.\r\nThe maximum age of the returned candles depends on the interval as follows:\r\n(MINUTE_1: 1 day, MINUTE_5: 1 day, HOUR_1: 31 days, DAY_1: 366 days).\r\nCandles for intervals without any trading activity are omitted.\r\n** Note: baseVolume is being deprecated and will be removed in favor of quoteVolume",
-        "operationId": "Markets_GetCandlesDeprecated",
-        "consumes": [],
-        "produces": [ "application/json" ],
-        "parameters": [
-          {
-            "name": "marketSymbol",
-            "in": "path",
-            "description": "symbol of market to retrieve candles for",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "candleInterval",
-            "in": "query",
-            "description": "desired time interval between candles",
-            "required": true,
-            "type": "string",
-            "enum": [ "MINUTE_1", "MINUTE_5", "HOUR_1", "DAY_1" ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": { "$ref": "#/definitions/Candle" }
-            }
-          }
-        }
       }
     },
     "/markets/{marketSymbol}/candles/{candleInterval}/recent": {
@@ -869,7 +834,7 @@
       },
       "head": {
         "tags": [ "Markets" ],
-        "description": "Retrieve latest candles sequence for a specific market and candle interval.",
+        "description": "Retrieve the current sequence number for the specified market's candles snapshot.",
         "operationId": "Markets_GetCandlesSequence",
         "consumes": [],
         "produces": [ "application/json" ],
@@ -1629,7 +1594,12 @@
             "format": "uuid"
           }
         ],
-        "responses": { "204": { "description": "NoContent" } },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/Withdrawal" }
+          }
+        },
         "x-btx-authenticated": true
       }
     },
@@ -2402,7 +2372,7 @@
         },
         "orderToCancel": {
           "$ref": "#/definitions/NewCancelConditionalOrder",
-          "description": "conditional order to cancel if this conditional order triggers\r\nNote that this relationship is reciprocal."
+          "description": "conditional order to cancel if this order executes\r\nNote that this relationship is reciprocal."
         }
       }
     },
