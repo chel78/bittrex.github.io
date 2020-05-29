@@ -196,9 +196,6 @@
               <a href="#operation--markets--marketSymbol--trade-head" title="/markets/{marketSymbol}/trade"> HEAD /markets/{marketSymbol}/trade </a>
             </li>
             <li>
-              <a href="#operation--markets--marketSymbol--candles-get" title="/markets/{marketSymbol}/candles"> GET /markets/{marketSymbol}/candles </a>
-            </li>
-            <li>
               <a href="#operation--markets--marketSymbol--candles--candleInterval--recent-get" title="/markets/{marketSymbol}/candles/{candleInterval}/recent"> GET /markets/{marketSymbol}/candles/{candleInterval}/recent </a>
             </li>
             <li>
@@ -389,7 +386,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <p>The following breaking changes will be made on or after
-                <strong>05/27/2020</strong>:
+                <strong>06/10/2020</strong>:
                 <table>
                   <tr>
                     <th>Change</th>
@@ -397,20 +394,8 @@
                   </tr>
                   <tbody>
                     <tr>
-                      <td>Historical candles endpoint will no longer allow you to specify more portions of the date parameters than are necessary for the selected candle interval.</td>
-                      <td>Specify only year for day candles. Specify only year and month for hour candles.</td>
-                    </tr>
-                    <tr>
-                      <td>GET /candles endpoint will be removed</td>
-                      <td>Use GET /candles/{interval}/recent instead. The response schema is the same as the old endpoint.</td>
-                    </tr>
-                    <tr>
                       <td>The BaseVolume property on MarketSummary and Candle responses will be removed</td>
-                      <td>The BaseVolume property has been reporting quote volume. If quote volume is desired, use the QuoteVolume property. If base volume is desired, use the Volume property. </td>
-                    </tr>
-                    <tr>
-                      <td>Successful cancel withdrawal response will change from 204 with no content in the response body to a 200 with the cancelled withdrawal in the response body. </td>
-                      <td>Accept any 2XX response as success </td>
+                      <td>The BaseVolume property has been reporting quote volume. If quote volume is desired, use the QuoteVolume property. If base volume is desired, use the Volume property.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -422,6 +407,14 @@
         <div class="panel">
           <div class="doc-row">
             <div class="doc-copy">
+              <p>
+                <strong>05/27/2020</strong>
+              </p>
+              <ul>
+                <li>Successful cancel withdrawal response will change from 204 with no content in the response body to a 200 with the cancelled withdrawal in the response body</li>
+                <li>Historical candles endpoint will no longer allow you to specify more portions of the date parameters than are necessary for the selected candle interval. Specify only year for day candles. Specify only year and month for hour candles.</li>
+                <li>GET /candles endpoint is deprecated and has been removed from the documentation. Use GET /candles/{interval}/recent instead. The response model is the same.</li>
+              </ul>
               <p>
                 <strong>05/15/2020</strong>
               </p>
@@ -3242,7 +3235,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Get sequence of the last 24 hours of activity for all market summaries snapshot.</p>
+                <p>Retrieve the current sequence number for the market summaries snapshot.</p>
               </section>
             </div>
           </div>
@@ -3371,7 +3364,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Get Tickers sequence</p>
+                <p>Retrieve the current sequence number for the tickers snapshot.</p>
               </section>
             </div>
           </div>
@@ -3829,7 +3822,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Retrieve the nonce of order book for a specific market.</p>
+                <p>Retrieve the current sequence number for the specified market&#39;s order book snapshot.</p>
               </section>
             </div>
           </div>
@@ -4010,7 +4003,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Retrieve the nonce of trade for a specific market.</p>
+                <p>Retrieve the current sequence number for the specified market&#39;s recent trades snapshot.</p>
               </section>
             </div>
           </div>
@@ -4055,130 +4048,6 @@
               <h5>Response Content-Types:
                 <span>application/json</span>
               </h5>
-            </div>
-          </div>
-        </div>
-        <div id="operation--markets--marketSymbol--candles-get" class="operation panel" data-traverse-target="operation--markets--marketSymbol--candles-get">
-          <!-- <section class="operation-tags row"> -->
-          <!-- <div class="doc-copy"> -->
-          <div class="operation-tags">
-            <a class="label" href="#tag-Markets">Markets</a>
-            <!---->
-          </div>
-          <!-- </div> -->
-          <!-- </section> -->
-          <h2 class="operation-title">
-            <span class="operation-name">
-              <span class="operation-name">GET</span>
-              <span class="operation-path">/markets/{marketSymbol}/candles</span>
-            </span>
-          </h2>
-          <div class="doc-row">
-            <div class="doc-copy">
-              <section class="swagger-operation-description">
-                <p>Retrieve recent candles for a specific market. The maximum age of the returned candles depends on the interval as follows: (MINUTE_1: 1 day, MINUTE_5: 1 day, HOUR_1: 31 days, DAY_1: 366 days). Candles for intervals without any trading activity are omitted. ** Note: baseVolume is being deprecated and will be removed in favor of quoteVolume</p>
-              </section>
-            </div>
-          </div>
-          <div class="doc-row">
-            <div class="doc-copy">
-              <section class="swagger-request-params">
-                <div class="prop-row prop-group">
-                  <div class="prop-name">
-                    <div class="prop-title">marketSymbol:
-                      <span class="prop-type">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </span>
-                    </div>
-                    <span class="json-property-required"></span>
-                    <div class="prop-subtitle"> in path </div>
-                  </div>
-                  <div class="prop-value">
-                    <p>symbol of market to retrieve candles for</p>
-                  </div>
-                </div>
-                <div class="prop-row prop-group">
-                  <div class="prop-name">
-                    <div class="prop-title">candleInterval:
-                      <span class="prop-type">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-enum" title="Possible values">
-                          <span class="json-property-enum-item">MINUTE_1</span>,
-                          <span class="json-property-enum-item">MINUTE_5</span>,
-                          <span class="json-property-enum-item">HOUR_1</span>,
-                          <span class="json-property-enum-item">DAY_1</span>
-                        </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </span>
-                    </div>
-                    <span class="json-property-required"></span>
-                    <div class="prop-subtitle"> in query </div>
-                  </div>
-                  <div class="prop-value">
-                    <p>desired time interval between candles</p>
-                  </div>
-                </div>
-              </section>
-            </div>
-            <div class="doc-examples">
-              <section>
-                <h5>Request Url Example</h5> <pre><code>https://api.bittrex.com/v3/markets/{marketSymbol}/candles</code></pre> </section>
-            </div>
-          </div>
-          <div class="doc-row">
-            <div class="doc-copy">
-              <section class="swagger-responses">
-                <div class="prop-row prop-group">
-                  <div class="prop-name">
-                    <div class="prop-title">200 OK</div>
-                    <div class="prop-ref">
-                      <span class="json-schema-ref-array">
-                        <a class="json-schema-ref" href="#/definitions/Candle">Candle</a>
-                      </span>
-                    </div>
-                    <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
-                  </div>
-                  <div class="prop-value">
-                    <p>OK</p>
-                  </div>
-                </div>
-                <div class="prop-row prop-inner">
-                  <div class="prop-name">type</div>
-                  <div class="prop-value">
-                    <span class="json-property-type">
-                      <span class="json-schema-ref-array">
-                        <a class="json-schema-ref" href="#/definitions/Candle">Candle</a>
-                      </span>
-                    </span>
-                    <span class="json-property-range" title="Value limits"></span>
-                  </div>
-                </div>
-              </section>
-            </div>
-            <div class="doc-examples">
-              <h5>Response Content-Types:
-                <span>application/json</span>
-              </h5>
-              <section>
-                <h5>Response Example
-                  <span>(200 OK)</span>
-                </h5>
-                <!-- <div class="hljs"> --><pre><code class="hljs language-json">[
-  {
-    <span class="hljs-attr">&quot;startsAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>,
-    <span class="hljs-attr">&quot;open&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;high&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;close&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>
-  }
-]
-</code></pre>
-                <!-- </div> -->
-              </section>
             </div>
           </div>
         </div>
@@ -4323,7 +4192,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Retrieve latest candles sequence for a specific market and candle interval.</p>
+                <p>Retrieve the current sequence number for the specified market&#39;s candles snapshot.</p>
               </section>
             </div>
           </div>
@@ -6806,10 +6675,16 @@
               <section class="swagger-responses">
                 <div class="prop-row prop-group">
                   <div class="prop-name">
-                    <div class="prop-title">204 No Content</div>
+                    <div class="prop-title">200 OK</div>
+                    <div class="prop-ref">
+                      <span class="">
+                        <a class="json-schema-ref" href="#/definitions/Withdrawal">Withdrawal</a>
+                      </span>
+                    </div>
+                    <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
                   </div>
                   <div class="prop-value">
-                    <p>NoContent</p>
+                    <p>OK</p>
                   </div>
                 </div>
               </section>
@@ -6818,6 +6693,25 @@
               <h5>Response Content-Types:
                 <span>application/json</span>
               </h5>
+              <section>
+                <h5>Response Example
+                  <span>(200 OK)</span>
+                </h5>
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>,
+  <span class="hljs-attr">&quot;currencySymbol&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;quantity&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
+  <span class="hljs-attr">&quot;cryptoAddress&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;cryptoAddressTag&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;txCost&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
+  <span class="hljs-attr">&quot;txId&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;status&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>,
+  <span class="hljs-attr">&quot;completedAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>
+}
+</code></pre>
+                <!-- </div> -->
+              </section>
             </div>
           </div>
         </div>
@@ -10105,7 +9999,7 @@
                     <span class="json-property-range" title="Value limits"></span>
                   </dt>
                   <dd>
-                    <p>conditional order to cancel if this conditional order triggers Note that this relationship is reciprocal.</p>
+                    <p>conditional order to cancel if this order executes Note that this relationship is reciprocal.</p>
                   </dd>
                 </dl>
               </section>
