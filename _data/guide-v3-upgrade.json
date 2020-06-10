@@ -1,0 +1,287 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API Upgrade Guide: v1.1 to v3",
+    "description": "This document provides a guide for v1 API users looking to transition to the v3 API.\n\n Access to and use of the API is governed by our Terms of Service.\n If you are a user of Bittrex.com, the applicable Terms of Service are available [here](https://bittrex.com/home/terms).\n If you are a user of Bittrex Global, the applicable Terms of Service are available [here](https://global.bittrex.com/home/terms).\n\n If you have any API questions, feedback, or recommendations please post a question via our [Github page](https://github.com/Bittrex/bittrex.github.io/issues)",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": {
+    "Public": {
+      "name": "Public"
+    },
+    "Market": {
+      "name": "Market"
+    },
+    "Account": {
+      "name": "Account"
+    }
+  },
+  "x-spectacle-topics": {
+    "Getting Started": {
+      "description": "Version 3 of the Bittrex API (v3) is an evolutionary step up from the previous version 1.1 (v1). Operations that API developers are accustomed to using in v1 typically have a direct corollary in the v3 api. The names of endpoints and fields may be different, but there is broad conceptual alignment across the two versions to help make v3 feel familiar to developers who have worked with the v1 API. From a client technology stack perspective, any client stack which was working with v1 should also be able to work with v3. This document provides both general high level guidance about transitioning from v1 to v3 as well as a detailed mapping of v1 operations and fields to their v3 equivalents.\n\nThese steps outline the process to upgrade from v1 to v3:\n1. Read through the [New Features](#topic-New-Features) and [General Information](#topic-General-Information) sections of this guide to gain a high level familiarity with what is new and different in v3.\n2. Take an inventory of your usage of the v1 API in your existing code base.\n    - Identify operations and data used from v1.\n    - Note easy opportunities for improvement based on the new features in v3.\n3. Use the REST API and Websocket API reference portions of this guide to map your v1 API usage to v3 equivalents.\n4. Plan your strategy for replacing v1 dependencies with their v3 equivalents\n    - _Note:_ The same engine backs both versions of the API. It is possible to use a mix of v1 and v3 operations while transitioning. Due to the interconnected nature of the v3 REST API and websocket, if a phased transition is desirable, transitioning REST & socket object by object instead of all of REST followed by all of socket may be easier. However the right decision depends on the details of your implementation.\n5. Execute your plan. Be sure to test your v3 implementation with small-value transactions to validate it prior to full production usage.\n\nIf you have questions about how something works in v3, be sure to check out the [v3 API Reference](../../../api/v3). If you have additional questions, feedback, or recommendations please post a question via our [Github page](https://github.com/Bittrex/bittrex.github.io/issues)."
+    },
+    "New Features": {
+      "description": "There are a number of improvements in the v3 API over the v1 API. Some of the highlights are listed below. Additional improvements related to individual v1 operations may be found in the detailed reference sections later in this guide.\n\n__REST API:__\n- Support for more [order types](../../../api/v3/#topic-Placing-Orders)\n    - Market orders\n    - Post-only orders\n    - Stop and stop limit [conditional orders](../../../api/v3/#topic-Placing-Conditional-Orders)\n    -One cancels the other [conditional orders](../../../api/v3/#topic-Placing-Conditional-Orders)\n    -Fill or kill\n    - Precise control over cost/proceeds with ceiling orders\n- [Placing an order](../../../api/v3/#operation--orders-post) returns the current state of the order when it hit the book\n- [Cancelling an order](../../../api/v3/#operation--orders--orderId--delete) returns the order's final state\n- Ability to specify a key to ensure idempotency of [order placement](../../../api/v3/#topic-Placing-Orders)\n-Ability to [page](../../../api/v3/#topic-Pagination) through historical results\n- Access to more [deposit](../../../api/v3/#operation--deposits-closed-get), [withdrawal](../../../api/v3/#operation--withdrawals-closed-get), and [order](../../../api/v3/#operation--orders-closed-get) history\n- Ability to view your orders' executions\n- Ability to get [recent](../../../api/v3/#operation--markets--marketSymbol--candles--candleInterval--recent-get) and [historical](../../../api/v3/#operation--markets--marketSymbol--candles--candleInterval--historical--year---month---day--get) candles\n\n__Websocket:__\n- Faster updates\n- Live [candle websocket](../../../api/v3/#method-Candle) stream\n- Ability to subscribe for [deposit](../../../api/v3/#method-Deposit) updates\n- Easier to consume messages designed to match the REST API\n- Greater control over websocket subscription granularity and the ability to [unsuscribe](../../../api/v3/#method-Unsubscribe)\n- Unified sequence numbers across the REST API and socket for easy [synchronization](../../../api/v3/#topic-Synchronizing)"
+    },
+    "General Information": {
+      "description": "This section provides high level comparisons of aspects of the v1 and v3 APIs the cut across multiple operations. For detailed comparisons of individual operations, refer to the REST API and WEBSOCKET reference sections of this guide.",
+      "children": [ "Authentication", "Authorization", "RESTfulness", "Error Handling", "Placing Orders", "Websocket Subscriptions" ]
+    },
+    "Authentication": {
+      "childOf": "General Information",
+      "description": "Authentication in the v3 API uses the same API keys as were used in the v1 API. Your existing keys will work with the v3 API. The mechanisms for their use are somewhat different.\n\nIn the REST API the process for signing request is similar to that of v1, but now also requires a hash of the request body content where applicable. Refer to the [REST Authentication](../../../#topic-Authentication) documentation for details.\n\nAuthentication in the v3 websocket no longer requires getting an auth context prior to authenticating. Instead it uses a client-generated uuid in place of a server generated challenge. It also requires authentication to be renewed periodically for the client to remain subscribed to private streams.Refer to the [Authenticating](../../../api/v3#topic-Authenticating) topic in the v3 websocket documentation for additional information."
+    },
+    "Authorization": {
+      "childOf": "General Information",
+      "description": "Authorization in the v3 API uses API keys with the same three permission level as were used in the v1 API.\n- __View__ allows retrieving account information but not placing orders or withdrawals\n- __Trade__ allows placing and cancellation of trades\n- __Withdraw__ allows creation and cancellation of withdrawals"
+    },
+    "RESTfulness": {
+      "childOf": "General Information",
+      "description": "The v1 API used the GET verb for all operations. The v3 API is designed to be RESTful and adheres to the standard definitions of HTTP verbs.\n- __GET__ retrieves information without impacting the state of the system (e.g. view an order)\n- __POST__ creates a new resource (e.g. create an order)\n- __DELETE__ deletes a resource or cancels an operation (e.g. cancels an order)\n- __HEAD__ similar to GET but only retrieves the headers instead of the whole object (e.g. get the current order stream sequence number to make sure you haven't missed anything)"
+    },
+    "Error Handling": {
+      "childOf": "General Information",
+      "description": "The v1 API included a flag in response bodies indicating if there was an error along with an error code. Error handling in v3 uses HTTP error codes instead of a flag inside of the response body. Details may be found [here](../../../api/v3/#topic-Error-Codes). In the case of an error, a detailed error code and potentially additional information will be included in the response body. In general, a 4XX series error indicates that the client was at fault (e.g. malformed request, insufficient balance, etc.) while a 5XX series error indicates a server-side issue."
+    },
+    "Placing Orders": {
+      "childOf": "General Information",
+      "description": "In v3 there are no longer separate endpoints for buy and sell orders. Order placement has been centralized into [POST /orders](../../../api/v3/#operation--orders-post) for orders that execute or are placed on the orderbook immediately and [POST /conditional-orders](../../../api/v3/#operation--conditional-orders-post) for orders that may execute later based on a condition being met (e.g. stop orders). Conditional orders do not currently have an equivalent in the v1 API so the remainder of this section is focused on regular orders.\n\nImprovements to order placement and management are one area where the v3 API has significant advantages over the v1 API. In addition to supporting many more types of orders, the v3 API supports setting a `clientOrderId` when placing an order. This id is used as an idempotency key. If reused for order creation within 24 hours, the request will fail with a reference to the existing order. The `clientOrderId` is stored with created orders forever, but it is no longer enforced after 24 hours.\n\nAnother important advantage of the v3 API is that when orders are created or cancelled, the response body will include the current state of the order. This means that it is no longer necessary in v3 to get the order state immediately after placement or cancellation to see what happened when the order hit the book or to get its final state after cancellation.\n\nThe configuration options when placing an order have been moved into the body of the [POST /orders](../../../api/v3/#operation--orders-post) request. The table below contains a mapping of v1 query parameters to v3 order request fields.\n\n| v1&nbsp;Query&nbsp;Parameter | v3&nbsp;NewOrder&nbsp;Field | Notes |\n| --- | --- | --- |\n||direction|In v1 the endpoint determined buy vs. sell. In v3 this is an enum (BUY, SELL)|\n||type|In v1 only limit orders were supported. In v3 there are a number of different order types. Set `type` to LIMIT for a limit order.|\n|market|marketSymbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|quantity|quantity||\n|rate|limit||\n|timeInForce|timeInForce|In v1 this could be GTC or IOC. In v3 the equivalent values are GOOD_TIL_CANCELLED and IMMEDIATE_OR_CANCEL. FILL_OR_KILL is also supported in v3.|\n\n_Additional fields are available in the v3 model that have no equivalent in v1. Refer to the [NewOrder](../../../api/v3/#definition-NewOrder) schema definition for details._"
+    },
+    "Websocket Subscriptions": {
+      "childOf": "General Information",
+      "description": "The technical underpinnings of the v3 socket are unchanged from v1. It is still based on [Microsoft ASP.net SignalR](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr) which should make it easy to transition any existing v1 websocket client implementations to v3. However there are some conceptual differences around subscriptions and message handling.\n\nIn v3, subsciptions are arranged around types of resources in the same way that the v3 REST API is organized. For example there is a [/balances endpoint](../../../api/v3/#tag-balances) that can be used to retrieve [Balance](../../../api/v3/#definition-Balance) objects. For live updates to balances, you subscribe to the [Balance stream](../../../api/v3/#method-Balance). Once subscribed, when one of your currency balances changes, you will receive a message with a snapshot of the new balance for that currency. The schema of the payload of that update will be a [Balance](../../../api/v3/#definition-Balance) object just like what is retrieved from the REST API. It will also include a sequence number (the v3 equivalent of a nonce) that matches a sequence number returned in the `sequence` response header from the [GET /balances](../../../api/v3/#operation--balances-get). This allows usage of the REST API and websocket in concert to maintain a local cache of balance data. All v3 websocket streams follow this general pattern for [synchronization](../../../api/v3/#topic-Synchronizing).\n\nAdditional in v3, websocket messages are no longer minified so there is no need for a mapping table in order to interpret them. Messages are compressed though so decompression is still required before consumption."
+    }
+  },
+  "paths": {
+    "/public/getmarkets": {
+      "get": {
+        "operationId": "public_getmarkets",
+        "subtitle": "__Equivalent in v3:__ [GET /markets](../../../api/v3/#operation--markets-get)",
+        "description": "The v1 getmarkets request has been replace primarily by the markets endpoint in v3. Some of the fields in the v1 request are actually attributes of a currency, not a market. Those may be found at the currencies endpoint in v3.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|MarketCurrency|Market|baseCurrencySymbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|BaseCurrency|Market|quoteCurrencySymbol||\n|MarketCurrencyLong|Currency|name|Retrieve from [GET /currencies/{baseCurrencySymbol}](../../../api/v3/#operation--currencies--symbol--get)|\n|BaseCurrencyLong|Currency|name|Retrieve from [GET /currencies/{quoteCurrencySymbol}](../../../api/v3/#operation--currencies--symbol--get)|\n|MinTradeSize|Market|minTradeSize||\n|MarketName|Market|symbol||\n|IsActive|Market|status|In v1 this was a boolean flag. In v3 is it an enum (ONLINE, OFFLINE).|\n|IsRestricted|Market|prohibitedIn|In v1 this was a boolean flag. In v3 it is an array of strings indicating prohibited locales.|\n|Created|Market|createdAt||\n|Notice|Market|notice||\n|IsSponsored|||_Deprecated_|\n|LogoUrl|Currency|LogoUrl|Retrieve from [GET /currencies/{baseCurrencySymbol}](../../../api/v3/#operation--currencies--symbol--get)|\n",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/public/getcurrencies": {
+      "get": {
+        "operationId": "public_getcurrencies",
+        "subtitle": "__Equivalent in v3:__ [GET /currencies](../../../api/v3/#operation--currencies-get)",
+        "description": "The v1 getcurrencies request has been replaced with the currencies endpoint in v3.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Currency|Currency|symbol||\n|CurrencyLong|Currency|name||\n|CoinType|Currency|coinType||\n|MinConfirmations|Currency|minConfirmations||\n|TxFee|Currency|txFee||\n|Notice|Currency|notice||\n|IsActive|Currency|status|In v1 this was a boolean flag. In v3 is it an enum (ONLINE, OFFLINE).|\n|IsRestricted|Currency|prohibitedIn|In v1 this was a boolean flag. In v3 it is an array of strings indicating prohibited locales.|\n|BaseAddress|||_Deprecated_|",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/public/getticker": {
+      "get": {
+        "operationId": "public_getticker",
+        "subtitle": "__Equivalent in v3:__ [GET /markets/{marketSymbol}/ticker](../../../api/v3/#operation--markets--marketSymbol--ticker-get)",
+        "description": "The v1 getticker request has been replaced with the market ticker endpoint in v3. In v3 it is also possible to get the tickers for all markets with a single [GET /markets/tickers](../../../api/v3/#operation--markets-tickers-get) request. Note that when getting a single ticker, the market symbol parameter is reversed in v3 to align with standard forex conventions.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Bid|Ticker|bidRate||\n|Ask|Ticker|askRate||\n|Last|Ticker|lastTradeRate||",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/public/getmarketsummaries": {
+      "get": {
+        "operationId": "public_getmarketsummaries",
+        "subtitle": "__Equivalent in v3:__ [GET /markets/summaries](../../../api/v3/#operation--markets-summaries-get)",
+        "description": "The v1 getmarketsummaries request has been replaced primarily with the market summaries endpoint in v3. However some of the fields from the v1 version are either no longer available or found on the ticker or market objects instead.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|MarketName|MarketSummary|symbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|High|MarketSummary|high||\n|Low|MarketSummary|low||\n|Volume|MarketSummary|volume||\n|Last|Ticker|lastTradeRate|Retrieve from [GET /markets/tickers](../../../api/v3/#operation--markets-tickers-get)|\n|BaseVolume|MarketSummary|quoteVolume||\n|TimeStamp|MarketSummary|updatedAt||\n|Bid|Ticker|bidRate|Retrieve from [GET /markets/tickers](../../../api/v3/#operation--markets-tickers-get)|\n|Ask|Ticker|askRate|Retrieve from [GET /markets/tickers](../../../api/v3/#operation--markets-tickers-get)|\n|OpenBuyOrders|||_Deprecated_|\n|OpenSellOrders|||_Deprecated_|\n|PrevDay|MarketSummary|percentChange|In v3 the `PrevDay` value has been replaced with a rolling 24hr `percentChange`|\n|Created|Market|createdAt|Retrieve from [GET /markets](../../../api/v3/#operation--markets-get)|",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/public/getmarketsummary": {
+      "get": {
+        "operationId": "public_getmarketsummary",
+        "subtitle": "__Equivalent in v3:__ [GET /markets/{marketSymbol}/summary](../../../api/v3/#operation--markets--marketSymbol--summary-get)",
+        "description": "The v1 getmarketsummary request has been replaced primarily with the market's summary endpoint in v3. However some of the fields from the v1 version are either no longer available or found on the ticker or market object instead.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|MarketName|MarketSummary|symbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|High|MarketSummary|high||\n|Low|MarketSummary|low||\n|Volume|MarketSummary|volume||\n|Last|Ticker|lastTradeRate|Retrieve from [GET /markets/{marketSymbol}/ticker](../../../api/v3/#operation--markets--marketSymbol--ticker-get)|\n|BaseVolume|MarketSummary|quoteVolume||\n|TimeStamp|MarketSummary|updatedAt||\n|Bid|Ticker|bidRate|Retrieve from [GET /markets/{marketSymbol}/ticker](../../../api/v3/#operation--markets--marketSymbol--ticker-get)|\n|Ask|Ticker|askRate|Retrieve from [GET /markets/{marketSymbol}/ticker](../../../api/v3/#operation--markets--marketSymbol--ticker-get)|\n|OpenBuyOrders|||_Deprecated_|\n|OpenSellOrders|||_Deprecated_|\n|PrevDay|MarketSummary|percentChange|In v3 the `PrevDay` value has been replaced with a rolling 24hr `percentChange`|\n|Created|Market|createdAt|Retrieve from [GET /markets/{marketSymbol}](../../../api/v3/#operation--markets--marketSymbol--get)|",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/public/getorderbook": {
+      "get": {
+        "operationId": "public_getorderbook",
+        "subtitle": "__Equivalent in v3:__ [GET /markets/{marketSymbol}/orderbook](../../../api/v3/#operation--markets--marketSymbol--orderbook-get)",
+        "description": "The v1 getorderbook request has been replaced with the market's orderbook endpoint in v3. The v3 version of the API does not allow you to get only the buy or sell side of the book, but it does allow you to limit the depth returned.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Buy|OrderBook|bid|Array of OrderBookEntry objects|\n|&nbsp;&nbsp;&nbsp;&nbsp;Quantity|OrderBookEntry|quantity||\n|&nbsp;&nbsp;&nbsp;&nbsp;Rate|OrderBookEntry|rate||\n|Sell|OrderBook|ask|Array of OrderBookEntry objects|\n|&nbsp;&nbsp;&nbsp;&nbsp;Quantity|OrderBookEntry|quantity||\n|&nbsp;&nbsp;&nbsp;&nbsp;Rate|OrderBookEntry|rate||",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/public/getmarkethistory": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /markets/{marketSymbol}/trades](../../../api/v3/#operation--markets--marketSymbol--trades-get)",
+        "description": "The v1 getmarkethistory request has been replaced with the market's trades endpoint in v3.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Id|||_Deprecated_|\n|TimeStamp|Trade|executedAt||\n|Quantity|Trade|quantity||\n|Price|Trade|rate||\n|Total|||_Deprecated_|\n|FillType|||_Deprecated_|\n|OrderType|Trade|takerSide|In v1 this was an enum (BUY, SELL). In v3 it is a boolean flag.|\n|Uuid|Trade|id||",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/market/buylimit": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [POST /orders](../../../api/v3/#operation--orders-post)",
+        "description": "Order placement in the v3 API has been centralized in the orders endpoint. There are many more order type and time in force options than there were in v1. Additionally, the response from posting a new order in v3 returns the full order so there is no need to get the order again after placement to determine its state. Refer to the [Placing Orders](#topic-Placing-Orders) topic for additional information.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|uuid|Order|id||\n\n_The v3 response model for this operation contains the entire order object. Refer to the [Order](../../../api/v3#definition-Order) model definition for details._",
+        "tags": [
+          "Market"
+        ]
+      }
+    },
+    "/market/selllimit": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [POST /orders](../../../api/v3/#operation--orders-post)",
+        "description": "Order placement in the v3 API has been centralized in the orders endpoint. There are many more order type and time in force options than there were in v1. Additionally, the response from posting a new order in v3 returns the full order so there is no need to get the order again after placement to determine its state. Refer to the [Placing Orders](#topic-Placing-Orders) topic for additional information.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|uuid|Order|id||\n\n_The v3 response model for this operation contains the entire order object. Refer to the [Order](../../../api/v3#definition-Order) model definition for details._",
+        "tags": [
+          "Market"
+        ]
+      }
+    },
+    "/market/cancel": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [DELETE /orders/{orderId}](../../../api/v3/#operation--orders--orderId--delete)",
+        "description": "Order cancellation in the v3 API is performed via the orders endpoint. The response from cancelling an order in v3 returns the full order so there is no need to get the order again after cancellation to determine its final state. Refer to the [Placing Orders](#topic-Placing-Orders) topic for additional information.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|uuid|Order|id||\n\n_The v3 response model for this operation contains the entire order object. Refer to the [Order](../../../api/v3#definition-Order) model definition for details._",
+        "tags": [
+          "Market"
+        ]
+      }
+    },
+    "/market/getopenorders": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /orders/open](../../../api/v3/#operation--orders-open-get)",
+        "description": "The v1 getopenorders request has been replaced by orders/open in v3. Like the v1 version, in v3 you can filter down to a specific market using a query parameter. In v3 this query parameter is called marketSymbol as opposed to market in v1. Also note that the market symbol in v3 has been reversed to align with standard forex conventions.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Uuid|||_Deprecated_|\n|OrderUuid|Order|id||\n|Exchange|Order|marketSymbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|OrderType|Order|type<br>direction|This field has been decomposed into separate `type` and `direction` fields in v3.|\n|Quantity|Order|quantity||\n|QuantityRemaining|Order|fillQuantity|The v3 API reports quantity filled instead of quantity remaining.|\n|Limit|Order|limit||\n|CommissionPaid|Order|commission||\n|Price|Order|proceeds||\n|PricePerUnit|||_Deprecated_|\n|Opened|Order|createdAt||\n|CancelInitiated|||_Deprecated_|\n|ImmediateOrCancel|Order|timeInForce|This boolean flag from v1 has been incorporated into the enum for `timeInForce` in v3.|\n|IsConditional|||Conditional orders are a separate concept from orders in v3. Refer to [Placing Conditional Orders](../../../api/v3/#topic-Placing-Conditional-Orders)|\n|Condition|||_Deprecated_|\n|ConditionTarget|||_Deprecated_|\n\n_Additional fields are available in the v3 model that have no equivalent in v1. Refer to the [Order](../../../api/v3#definition-Order) schema definition for details._",
+        "tags": [
+          "Market"
+        ]
+      }
+    },
+    "/account/getbalances": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /balances](../../../api/v3/#operation--balances-get)",
+        "description": "The v1 getbalances request has been replaced primarily by the balances endpoint in v3. However some of the fields have either been deprecated or can be found under the address endpoint in v3.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Currency|Balance|currencySymbol||\n|Balance|Balance|total||\n|Available|Balance|available||\n|Pending|||_Deprecated_|\n|CryptoAddress|Address|cryptoAddress|Retrieve from [GET /addresses](../../../api/v3/#operation--addresses-get)|\n|Requested|Address|status|Retrieve from [GET /addresses](../../../api/v3/#operation--addresses-get). This boolean flag has been replaced by an enum (REQUESTED, PROVISIONED) in v3.|\n|Uuid|||_Deprecated_|\n\n_The v3 response model for this operation also includes an updatedAt timestamp that has no equivalent in v1. Refer to the [Balance](../../../api/v3#definition-Balance) schema definition for details._",
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/account/getbalance": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /balances/{currencySymbol}](../../../api/v3/#operation--balances--currencySymbol--get)",
+        "description": "The v1 getbalance request has been replaced primarily by the balances endpoint in v3. However some of the fields have either been deprecated or can be found under the address endpoint in v3.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Currency|Balance|currencySymbol||\n|Balance|Balance|total||\n|Available|Balance|available||\n|Pending|||_Deprecated_|\n|CryptoAddress|Address|cryptoAddress|Retrieve from [GET /addresses/{currencySymbol}](../../../api/v3/#operation--addresses--currencySymbol--get)|\n|Requested|Address|status|Retrieve from [GET /addresses/{currencySymbol}](../../../api/v3/#operation--addresses--currencySymbol--get). This boolean flag has been replaced by an enum (REQUESTED, PROVISIONED) in v3.|\n|Uuid|||_Deprecated_|\n\n_The v3 response model for this operation also includes an updatedAt timestamp that has no equivalent in v1. Refer to the [Balance](../../../api/v3#definition-Balance) schema definition for details_",
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/account/getdepositaddress": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /addresses/{currencySymbol}](../../../api/v3/#operation--addresses--currencySymbol--get)",
+        "description": "The v1 getdespositaddress request has been replaced by the addresses endpoint in v3. One key difference in v3 is that to create a desposit address, you must explicitly send a [POST /addresses](../../../api/v3/#operation--addresses-post) request for the currency. Another difference is that in v3 it is possible to get your deposit addresses for all currencies with a single [GET /addresses](../../../api/v3/#operation--addresses-get) request. The v3 version of the API also supports address memos/tags. \n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Currency|Address|currencySymbol||\n|Address|Address|cryptoAddress||\n\n_Additional fields are available in the v3 model that have no equivalent in v1. Refer to the [Address](../../../api/v3#definition-Address) schema definition for details._",
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/account/withdraw": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [POST /withdrawals](../../../api/v3/#operation--withdrawals-post)",
+        "description": "The v1 withdraw request has been replaced by [POST /withdrawals](../../../api/v3/#operation--withdrawals-post) in v3. As with all similar requests, the parameters have been moved into the request body. Additionally, in v3 the response model echos all of the information about the withdrawal. Refer to the [POST /withdrawals](../../../api/v3/#operation--withdrawals-post) for details. It is also possible in v3 to attempt to cancel a withdrawal using [DELETE /withdrawal/{withdrawalId}](../../../api/v3#operation--withdrawals--withdrawalId--delete).\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|uuid|Withdrawal|id||\n\n_The v3 response model for this operation contains the entire withdrawal object. Refer to the [Withdrawal](../../../api/v3#definition-Withdrawal) schema definition for details._",
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/account/getorder": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /orders/{orderId}](../../../api/v3/#operation--orders--orderId--get)",
+        "description": "The v1 getorder request has been replaced by [GET /orders/{orderId}](../../../api/v3/#operation--orders--orderId--get) in v3.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Uuid|||_Deprecated_|\n|OrderUuid|Order|id||\n|Exchange|Order|marketSymbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|OrderType|Order|type<br>direction|This field has been decomposed into separate `type` and `direction` fields in v3.|\n|Quantity|Order|quantity||\n|QuantityRemaining|Order|fillQuantity|The v3 API reports quantity filled instead of quantity remaining.|\n|Limit|Order|limit||\n|CommissionPaid|Order|commission||\n|Price|Order|proceeds||\n|PricePerUnit|||_Deprecated_|\n|Opened|Order|createdAt||\n|Closed|Order|closedAt|\n|CancelInitiated|||_Deprecated_|\n|ImmediateOrCancel|Order|timeInForce|This boolean flag from v1 has been incorporated into the enum for `timeInForce` in v3.|\n|IsConditional|||Conditional orders are a separate concept from orders in v3. Refer to [Placing Conditional Orders](../../../api/v3/#topic-Placing-Conditional-Orders)|\n\n_Additional fields are available in the v3 model that have no equivalent in v1. Refer to the [Order](../../../api/v3#definition-Order) schema definition for details._",
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/account/getorderhistory": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /orders/closed](../../../api/v3/#operation--orders-closed-get)",
+        "description": "The v1 getorderhistory request has been replaced by [GET /orders/closed](../../../api/v3/#operation--orders-closed-get) in v3. Like the v1 version, in v3 you can filter down to a specific market using a query parameter. In v3 this query parameter is called marketSymbol as opposed to market in v1. Also note that the market symbol in v3 has been reversed to align with standard forex conventions.  Additionally, in v3 it is possible to retrieve more history than was possible in v1 by paging back in time. It is also possible filter by the results by date. Refer to the [GET /orders/closed](../../../api/v3/#operation--orders-closed-get) documenation and the [pagination](../../../api/v3/#topic-Pagination) topic for details. \n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Uuid|||_Deprecated_|\n|OrderUuid|Order|id||\n|Exchange|Order|marketSymbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|OrderType|Order|type<br>direction|This field has been decomposed into separate `type` and `direction` fields in v3.|\n|Quantity|Order|quantity||\n|QuantityRemaining|Order|fillQuantity|The v3 API reports quantity filled instead of quantity remaining.|\n|Limit|Order|limit||\n|CommissionPaid|Order|commission||\n|Price|Order|proceeds||\n|PricePerUnit|||_Deprecated_|\n|Opened|Order|createdAt||\n|Closed|Order|closedAt|\n|CancelInitiated|||_Deprecated_|\n|ImmediateOrCancel|Order|timeInForce|This boolean flag from v1 has been incorporated into the enum for `timeInForce` in v3.|\n|IsConditional|||Conditional orders are a separate concept from orders in v3. Refer to [Placing Conditional Orders](../../../api/v3/#topic-Placing-Conditional-Orders)|\n\n_Additional fields are available in the v3 model that have no equivalent in v1. Refer to the [Order](../../../api/v3#definition-Order) schema definition for details._",
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/account/getwithdrawalhistory": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /withdrawals/closed](../../../api/v3/#operation--withdrawals-closed-get)",
+        "description": "The v3 api offers many more options for retrieving withdrawals than were offered by v1. In v3 you can:\n- Get a list of all requested, pending, etc. withdrawals using [GET /withdrawals/open](../../../api/v3/#operation--withdrawals-open-get). This operation may be filtered by specific state and currency.\n- Get completed and cancelled withdrawals from [GET /withdrawals/closed](../../../api/v3/#operation--withdrawals-closed-get). In addition to being able to filter by specific state and currency, you can also retrieve a significantly longer history than in v1 by paging back in time. Refer to the [pagination](../../../api/v3/#topic-Pagination) topic for details.\n- Get withdrawals by [withdawal id](../../../api/v3/#operation--withdrawals--withdrawalId--get) or by [blockchain transaction id](../../../api/v3/#operation--withdrawals-ByTxId--txId--get).\n\nIn all cases, the response model for an individual withdrawal will be the same. The fields from the v1 getwithdrawalhistory operation map to the v3 model as shown below.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|PaymentUuid|Withdrawal|id||\n|Currency|Withdrawal|currencySymbol||\n|Amount|Withdrawal|quantity||\n|Address|Withdrawal|cryptoAddress||\n|Opened|Withdrawal|createdAt||\n|TxId|Withdrawal|txId||\n|Authorized<br>PendingPayment<br>Canceled<br>InvalidAddress|Withdrawal|status|The four boolean status flags from v1 have been aggregated into a single `status` enum field in v3.|\n\n_Additional fields are available in the v3 model that have no equivalent in v1. Refer to the [Withdrawal](../../../api/v3#definition-Withdrawal) schema definition for details._",
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/account/getdeposithistory": {
+      "get": {
+        "operationId": "",
+        "subtitle": "__Equivalent in v3:__ [GET /deposits/closed](../../../api/v3/#operation--deposits-closed-get)",
+        "description": "The v3 api offers many more options for retrieving deposits than were offered by v1. In v3 you can:\n- Get a list of all deposits pending confirmation using [GET /deposits/open](../../../api/v3/#operation--deposits-open-get). This operation may be filtered by currency.\n- Get completed, orphaned, or invalidated deposits from [GET /deposits/closed](../../../api/v3/#operation--deposits-closed-get). In addition to being able to filter by specific state and currency, you can also retrieve a significantly longer history than in v1 by paging back in time. Refer to the [pagination](../../../api/v3/#topic-Pagination) topic for details.\n- Get deposits by [deposit id](../../../api/v3/#operation--deposits--depositId--get) or by [blockchain transaction id](../../../api/v3/#operation--deposits-ByTxId--txId--get).\n\nIn all cases, the response model for an individual deposit will be the same. The fields from the v1 getdeposithistory operation map to the v3 model as shown below.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Id|Deposit|id||\n|Amount|Deposit|quantity||\n|Currency|Deposit|currencySymbol||\n|Confirmations|Deposit|confirmations||\n|LastUpdated|Deposit|updatedAt||\n|TxId|Deposit|txId||\n|CryptoAddress|Deposit|cryptoAddress||\n\n_Additional fields are available in the v3 model that have no equivalent in v1. Refer to the [Deposit](../../../api/v3#definition-Deposit) schema definition for details._",
+        "tags": [
+          "Account"
+        ]
+      }
+    }
+  },
+  "x-btx-methods": {
+    "GetAuthContext": {
+      "operationId": "GetAuthContext",
+      "description": "The v3 websocket does not require getting an auth context prior to authenticating. As such, there is no v3 equivalent for this operation. To learn about websocket authentication in v3, refer to the [Authenticating](../../../api/v3#topic-Authenticating) topic in the v3 websocket documentation.",
+      "tags": []
+    },
+    "Authenticate": {
+      "operationId": "Authenticate",
+      "description": "Like v1, the v3 websocket contains an [Authenticate](../../../api/v3/#method-Authenticate) method that must be called prior to receiving user specific updates. Unlike the v1 version, the v3 version uses a client-generated uuid instead of a server generated challenge. Additionally, in v3 authenticating does not automatically subscribe the client for any updates. After authenticating, the client can subscribe authenticated streams as desired. Finally, in v3 authentication must be renewed periodically or the client will be unsubscribed from any authenticated streams. Refer to the [Authenticating](../../../api/v3#topic-Authenticating) topic in the v3 websocket documentation for additional information.\n\nThe `uB` and `uO` messages that resulted from authenticating in v1 have been replaced by the [Balance](../../../api/v3/#method-Balance) and [Order](../../../api/v3/#method-Order) streams in v3, respectively. For a field by field comparison of messages, refer to the two tables below.\n\n__Balance Delta - uB__\n\n| v1&nbsp;Field | v3&nbsp;Stream | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Nonce|Balance|sequence||\n|Uuid|||_Deprecated_|\n|AccountId|Balance|accountId|In v1 this was an int. In v3 it is a uuid.|\n|Currency|Balance|currencySymbol||\n|Balance|Balance|total||\n|Available|Balance|available||\n|Pending|||_Deprecated_|\n|CryptoAddress|||Not available via websocket. Use `cryptoAddress` from [GET /addresses](../../../api/v3/#operation--addresses-get) instead.|\n|Requested|||Not available via websocket. Use `status` from [GET /addresses](../../../api/v3/#operation--addresses-get) instead.|\n|Updated|Balance|updatedAt||\n|AutoSell|||_Deprecated_|\n\n\n__Order Delta - uO__\n\n| v1&nbsp;Field | v3&nbsp;Stream | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|AccountUuid|Order|accountId||\n|Nonce|Order|sequence||\n|Type|||_Deprecated_|\n|Uuid|||_Deprecated_|\n|OrderUuid|Order|id||\n|Id|||_Deprecated_|\n|Exchange|Order|marketSymbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|OrderType|Order|type<br>direction|This field has been decomposed into separate `type` and `direction` fields in v3.|\n|Quantity|Order|quantity||\n|QuantityRemaining|Order|fillQuantity|The v3 API reports quantity filled instead of quantity remaining.|\n|Limit|Order|limit||\n|CommissionPaid|Order|commission||\n|Price|Order|proceeds||\n|PricePerUnit|||_Deprecated_|\n|Opened|Order|createdAt||\n|Closed|Order|closedAt||\n|IsOpen|Order|status|This boolean flag from v1 has been replaced by an enum (OPEN, CLOSED) in v3.|\n|CancelInitiated|||_Deprecated_|\n|ImmediateOrCancel|Order|timeInForce||\n|IsConditional|||_Deprecated_|\n|Condition|||_Deprecated_|\n|ConditionTarget|||_Deprecated_|\n|Updated|Order|updatedAt||",
+      "tags": []
+    },
+    "QueryExchangeState": {
+      "operationId": "QueryExchangeState",
+      "description": "The v3 websocket does not support querying. Use the v3 REST API operations for [getting the orderbook](../../../api/v3#operation--markets--marketSymbol--orderbook-get) and [getting trades](../../../api/v3#operation--markets--marketSymbol--trades-get) instead. These operations return a sequence number in a header (the v3 equivalent of a nonce) so they can be used for synchronizing state with the server. For more information about synchronizing state in v3, refer to [this topic](../../../api/v3/#topic-Synchronizing). For a field by field comparison of responses, refer to the below table.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Buys|OrderBook|bid|Array of OrderBookEntry objects|\n|&nbsp;&nbsp;&nbsp;&nbsp;Quantity|OrderBookEntry|quantity||\n|&nbsp;&nbsp;&nbsp;&nbsp;Rate|OrderBookEntry|rate||\n|Sells|OrderBook|ask|Array of OrderBookEntry objects|\n|&nbsp;&nbsp;&nbsp;&nbsp;Quantity|OrderBookEntry|quantity||\n|&nbsp;&nbsp;&nbsp;&nbsp;Rate|OrderBookEntry|rate||\n|Fills|||Array of Trade objects|\n|&nbsp;&nbsp;&nbsp;&nbsp;Id|||_Deprecated_|\n|&nbsp;&nbsp;&nbsp;&nbsp;TimeStamp|Trade|executedAt||\n|&nbsp;&nbsp;&nbsp;&nbsp;Quantity|Trade|quantity||\n|&nbsp;&nbsp;&nbsp;&nbsp;Price|Trade|rate||\n|&nbsp;&nbsp;&nbsp;&nbsp;Total|||_Deprecated_|\n|&nbsp;&nbsp;&nbsp;&nbsp;FillType|||_Deprecated_|\n|&nbsp;&nbsp;&nbsp;&nbsp;OrderType|Trade|takerSide|In v1 this was an enum (BUY, SELL). In v3 it is a boolean flag.",
+      "tags": []
+    },
+    "QuerySummaryState": {
+      "operationId": "QuerySummaryState",
+      "description": "The v3 websocket does not support querying. Use the v3 REST API's [GET /markets/summaries](../../../api/v3#operation--markets-summaries-get) operation instead. This operation returns a sequence number in a header (the v3 equivalent of a nonce) so it can be used for synchronizing state with the server. For more information about synchronizing state in v3, refer to [this topic](../../../api/v3/#topic-Synchronizing). For a field by field comparison of responses, refer to the below table.\n\n| v1&nbsp;Field | v3&nbsp;Object | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|MarketName|MarketSummary|symbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|High|MarketSummary|high||\n|Low|MarketSummary|low||\n|Volume|MarketSummary|volume||\n|Last|Ticker|lastTradeRate|Retrieve from [GET /markets/tickers](../../../api/v3/#operation--markets-tickers-get)|\n|BaseVolume|MarketSummary|quoteVolume||\n|TimeStamp|MarketSummary|updatedAt||\n|Bid|Ticker|bidRate|Retrieve from [GET /markets/tickers](../../../api/v3/#operation--markets-tickers-get)|\n|Ask|Ticker|askRate|Retrieve from [GET /markets/tickers](../../../api/v3/#operation--markets-tickers-get)|\n|OpenBuyOrders|||_Deprecated_|\n|OpenSellOrders|||_Deprecated_|\n|PrevDay|MarketSummary|percentChange|In v3 the `PrevDay` value has been replaced with a rolling 24hr `percentChange`|\n|Created|Market|createdAt|Retrieve from [GET /markets](../../../api/v3/#operation--markets-get)|",
+      "tags": []
+    },
+    "SubscribeToExchangeDeltas": {
+      "operationId": "SubscribeToExchangeDeltas",
+      "description": "The v1 SubscribeToExchangeDeltas operation has been replaced in v3 by subscribing to the [Orderbook](../../../api/v3/#method-Orderbook) and [Trade](../../../api/v3/#method-Trade) streams. One advantage of the v3 Orderbook stream is that it allows some control over the depth of the orderbook about which to receive updates. Refer to the stream's documentation for details.\n\n__Market Delta - uE__\n\n| v1&nbsp;Field | v3&nbsp;Stream | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|MarketName|Orderbook<br>& Trade|marketSymbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|Nonce|Orderbook<br>& Trade|sequence||\n|Buys|OrderBook|bidDeltas|Array of OrderBookEntry objects|\n|&nbsp;&nbsp;&nbsp;&nbsp;Type|||_Deprecated._ In v3 `quantity` equal to 0 indicates the entry should be removed.|\n|&nbsp;&nbsp;&nbsp;&nbsp;Quantity|OrderBook|quantity||\n|&nbsp;&nbsp;&nbsp;&nbsp;Rate|OrderBook|rate||\n|Sells|OrderBook|askDeltas|Array of OrderBookEntry objects|\n|&nbsp;&nbsp;&nbsp;&nbsp;Type|||_Deprecated._ In v3 `quantity` equal to 0 indicates the entry should be removed.|\n|&nbsp;&nbsp;&nbsp;&nbsp;Quantity|OrderBook|quantity||\n|&nbsp;&nbsp;&nbsp;&nbsp;Rate|OrderBook|rate||\n|Fills|||Array of Trade objects|\n|&nbsp;&nbsp;&nbsp;&nbsp;FillId|Trade|id|In v1 this was an int. In v3 it is a uuid.|\n|&nbsp;&nbsp;&nbsp;&nbsp;TimeStamp|Trade|executedAt||\n|&nbsp;&nbsp;&nbsp;&nbsp;Quantity|Trade|quantity||\n|&nbsp;&nbsp;&nbsp;&nbsp;Rate|Trade|rate||\n|&nbsp;&nbsp;&nbsp;&nbsp;OrderType|Trade|takerSide|In v1 this was an enum (BUY, SELL). In v3 it is a boolean flag.",
+      "tags": []
+    },
+    "SubscribeToSummaryDeltas": {
+      "operationId": "SubscribeToSummaryDeltas",
+      "description": "The v1 SubscribeToSummaryDeltas operation has been replaced in v3 by subscribing to the [Market Summaries](../../../api/v3/#method-Market-Summaries) and [Tickers](../../../api/v3/#method-Tickers) streams. These streams will return data for all markets. Additionally in v3 it is possible to subscribe for updates about individual markets by using the [Market Summary](../../../api/v3/#method-Market-Summary) and [Ticker](../../../api/v3/#method-Ticker) streams.\n\n__Summary Delta - uS__\n\n| v1&nbsp;Field | v3&nbsp;Stream | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|Nonce|MarketSummaries<br>& Tickers|sequence|In v3 `sequence` is only included with Market Summaries and Tickers subscriptions. Individual Market Summary and Ticker subscriptions do not include a sequence number because each message is a full snapshot.|\n|MarketName|MarketSummaries<br>& Tickers|symbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|High|MarketSummaries|high||\n|Low|MarketSummaries|low||\n|Volume|MarketSummaries|volume||\n|Last|Tickers|lastTradeRate||\n|BaseVolume|MarketSummaries|quoteVolume||\n|TimeStamp|MarketSummaries|updatedAt||\n|Bid|Tickers|bidRate||\n|Ask|Tickers|askRate||\n|OpenBuyOrders|||_Deprecated_|\n|OpenSellOrders|||_Deprecated_|\n|PrevDay|MarketSummaries|percentChange|In v3 the `PrevDay` value has been replaced with a rolling 24hr `percentChange`|\n|Created|||Not available via websocket. Use `createdAt` from [GET /markets](../../../api/v3/#operation--markets-get) instead.|",
+      "tags": []
+    },
+    "SubscribeToSummaryLiteDeltas": {
+      "operationId": "SubscribeToSummaryLiteDeltas",
+      "description": "The v3 websocket does not have lighter versions of its summary delta equivalents: the Market Summary and Ticker streams. Instead it offers the ability to subscribe to them on a market by market basis using the [Market Summary](../../../api/v3/#method-Market-Summary) and [Ticker](../../../api/v3/#method-Ticker) streams.\n\n__Lite Summary Delta - uL__\n\n| v1&nbsp;Field | v3&nbsp;Stream | v3&nbsp;Field | Notes |\n| --- | --- | --- | --- |\n|MarketName|MarketSummary<br>& Ticker|symbol|Market symbols are reversed in v3 to align with standard forex conventions|\n|Last|Ticker|lastTradeRate||\n|BaseVolume|MarketSummary|quoteVolume||\n|PrevDay|MarketSummaries|percentChange|In v3 the `PrevDay` value has been replaced with a rolling 24hr `percentChange`|",
+      "tags": []
+    }
+  }
+}

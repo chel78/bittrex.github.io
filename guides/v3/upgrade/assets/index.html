@@ -1,0 +1,3195 @@
+<div id="spectacle">
+  <div id="page" class="drawer-layout drawer-slide-right-large">
+    <div id="sidebar">
+      <button class="close-button" aria-label="Close menu" type="button" data-drawer-close>
+        <span aria-hidden="true">×</span>
+      </button>
+      <nav id="nav" role="navigation">
+        <h5>Topics</h5>
+        <a href="#introduction">Introduction</a>
+        <a href="#topic-Getting-Started">Getting Started</a>
+        <a href="#topic-New-Features">New Features</a>
+        <section>
+          <a href="#topic-General-Information">General Information</a>
+          <ul>
+            <li>
+              <a href="#topic-Authentication">Authentication</a>
+            </li>
+            <li>
+              <a href="#topic-Authorization">Authorization</a>
+            </li>
+            <li>
+              <a href="#topic-RESTfulness">RESTfulness</a>
+            </li>
+            <li>
+              <a href="#topic-Error-Handling">Error Handling</a>
+            </li>
+            <li>
+              <a href="#topic-Placing-Orders">Placing Orders</a>
+            </li>
+            <li>
+              <a href="#topic-Websocket-Subscriptions">Websocket Subscriptions</a>
+            </li>
+          </ul>
+        </section>
+        <h5>Rest API</h5>
+        <a href="#operation--public-getmarkets-get" title="/public/getmarkets"> GET /public/getmarkets </a>
+        <a href="#operation--public-getcurrencies-get" title="/public/getcurrencies"> GET /public/getcurrencies </a>
+        <a href="#operation--public-getticker-get" title="/public/getticker"> GET /public/getticker </a>
+        <a href="#operation--public-getmarketsummaries-get" title="/public/getmarketsummaries"> GET /public/getmarketsummaries </a>
+        <a href="#operation--public-getmarketsummary-get" title="/public/getmarketsummary"> GET /public/getmarketsummary </a>
+        <a href="#operation--public-getorderbook-get" title="/public/getorderbook"> GET /public/getorderbook </a>
+        <a href="#operation--public-getmarkethistory-get" title="/public/getmarkethistory"> GET /public/getmarkethistory </a>
+        <a href="#operation--market-buylimit-get" title="/market/buylimit"> GET /market/buylimit </a>
+        <a href="#operation--market-selllimit-get" title="/market/selllimit"> GET /market/selllimit </a>
+        <a href="#operation--market-cancel-get" title="/market/cancel"> GET /market/cancel </a>
+        <a href="#operation--market-getopenorders-get" title="/market/getopenorders"> GET /market/getopenorders </a>
+        <a href="#operation--account-getbalances-get" title="/account/getbalances"> GET /account/getbalances </a>
+        <a href="#operation--account-getbalance-get" title="/account/getbalance"> GET /account/getbalance </a>
+        <a href="#operation--account-getdepositaddress-get" title="/account/getdepositaddress"> GET /account/getdepositaddress </a>
+        <a href="#operation--account-withdraw-get" title="/account/withdraw"> GET /account/withdraw </a>
+        <a href="#operation--account-getorder-get" title="/account/getorder"> GET /account/getorder </a>
+        <a href="#operation--account-getorderhistory-get" title="/account/getorderhistory"> GET /account/getorderhistory </a>
+        <a href="#operation--account-getwithdrawalhistory-get" title="/account/getwithdrawalhistory"> GET /account/getwithdrawalhistory </a>
+        <a href="#operation--account-getdeposithistory-get" title="/account/getdeposithistory"> GET /account/getdeposithistory </a>
+        <h5>Websocket API</h5>
+        <a href="#method-GetAuthContext" title="GetAuthContext"> GetAuthContext </a>
+        <a href="#method-Authenticate" title="Authenticate"> Authenticate </a>
+        <a href="#method-QueryExchangeState" title="QueryExchangeState"> QueryExchangeState </a>
+        <a href="#method-QuerySummaryState" title="QuerySummaryState"> QuerySummaryState </a>
+        <a href="#method-SubscribeToExchangeDeltas" title="SubscribeToExchangeDeltas"> SubscribeToExchangeDeltas </a>
+        <a href="#method-SubscribeToSummaryDeltas" title="SubscribeToSummaryDeltas"> SubscribeToSummaryDeltas </a>
+        <a href="#method-SubscribeToSummaryLiteDeltas" title="SubscribeToSummaryLiteDeltas"> SubscribeToSummaryLiteDeltas </a>
+      </nav>
+    </div>
+    <div id="docs" class="row collapse expanded drawer" data-drawer>
+      <button class="floating-menu-icon" type="button" data-drawer-slide="right">
+        <span class="hamburger"></span>
+      </button>
+      <div class="example-box doc-content"></div>
+      <article>
+        <h1 class="doc-title">API Upgrade Guide: v1.1 to v3
+          <span>API Reference</span>
+        </h1>
+        <div id="introduction" data-traverse-target="introduction">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>This document provides a guide for v1 API users looking to transition to the v3 API.</p>
+              <p> Access to and use of the API is governed by our Terms of Service. If you are a user of Bittrex.com, the applicable Terms of Service are available
+                <a href="https://bittrex.com/home/terms">here</a>. If you are a user of Bittrex Global, the applicable Terms of Service are available
+                <a href="https://global.bittrex.com/home/terms">here</a>.</p>
+              <p> If you have any API questions, feedback, or recommendations please post a question via our
+                <a href="https://github.com/Bittrex/bittrex.github.io/issues">Github page</a>
+              </p>
+            </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Getting-Started" data-traverse-target="topic-Getting-Started">Getting Started</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>Version 3 of the Bittrex API (v3) is an evolutionary step up from the previous version 1.1 (v1). Operations that API developers are accustomed to using in v1 typically have a direct corollary in the v3 api. The names of endpoints and fields may be different, but there is broad conceptual alignment across the two versions to help make v3 feel familiar to developers who have worked with the v1 API. From a client technology stack perspective, any client stack which was working with v1 should also be able to work with v3. This document provides both general high level guidance about transitioning from v1 to v3 as well as a detailed mapping of v1 operations and fields to their v3 equivalents.</p>
+              <p>These steps outline the process to upgrade from v1 to v3:</p>
+              <ol>
+                <li>Read through the
+                  <a href="#topic-New-Features">New Features</a> and
+                  <a href="#topic-General-Changes">General Information</a> sections of this guide to gain a high level familiarity with what is new and different in v3.</li>
+                <li>Take an inventory of your usage of the v1 API in your existing code base.
+                  <ul>
+                    <li>Identify operations and data used from v1.</li>
+                    <li>Note easy opportunities for improvement based on the new features in v3.</li>
+                  </ul>
+                </li>
+                <li>Use the REST API and Websocket API reference portions of this guide to map your v1 API usage to v3 equivalents.</li>
+                <li>Plan your strategy for replacing v1 dependencies with their v3 equivalents
+                  <ul>
+                    <li>
+                      <em>Note:</em> The same engine backs both versions of the API. It is possible to use a mix of v1 and v3 operations while transitioning. Due to the interconnected nature of the v3 REST API and websocket, if a phased transition is desirable, transitioning REST &amp; socket object by object instead of all of REST followed by all of socket may be easier. However the right decision depends on the details of your implementation.</li>
+                  </ul>
+                </li>
+                <li>Execute your plan. Be sure to test your v3 implementation with small-value transactions to validate it prior to full production usage.</li>
+              </ol>
+              <p>If you have questions about how something works in v3, be sure to check out the
+                <a href="../../../api/v3">v3 API Reference</a>. If you have additional questions, feedback, or recommendations please post a question via our
+                <a href="https://github.com/Bittrex/bittrex.github.io/issues">Github page</a>.</p>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-New-Features" data-traverse-target="topic-New-Features">New Features</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>There are a number of improvements in the v3 API over the v1 API. Some of the highlights are listed below. Additional improvements related to individual v1 operations may be found in the detailed reference sections later in this guide.</p>
+              <p>
+                <strong>REST API:</strong>
+              </p>
+              <ul>
+                <li>Support for more
+                  <a href="../../../api/v3/#topic-Placing-Orders">order types</a>
+                  <ul>
+                    <li>Market orders</li>
+                    <li>Post-only orders</li>
+                    <li>Stop and stop limit
+                      <a href="../../../api/v3/#topic-Placing-Conditional-Orders">conditional orders</a>
+                    </li>
+                    <li>One cancels the other
+                      <a href="../../../api/v3/#topic-Placing-Conditional-Orders">conditional orders</a>
+                    </li>
+                    <li>Fill or kill</li>
+                    <li>Precise control over cost/proceeds with ceiling orders</li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="../../../api/v3/#operation--orders-post">Placing an order</a> returns the current state of the order when it hit the book</li>
+                <li>
+                  <a href="../../../api/v3/#operation--orders--orderId--delete">Cancelling an order</a> returns the order&#39;s final state</li>
+                <li>Ability to specify a key to ensure idempotency of
+                  <a href="../../../api/v3/#topic-Placing-Orders">order placement</a>
+                </li>
+                <li>Ability to
+                  <a href="../../../api/v3/#topic-Pagination">page</a> through historical results</li>
+                <li>Access to more
+                  <a href="../../../api/v3/#operation--deposits-closed-get">deposit</a>,
+                  <a href="../../../api/v3/#operation--withdrawals-closed-get">withdrawal</a>, and
+                  <a href="../../../api/v3/#operation--orders-closed-get">order</a> history</li>
+                <li>Ability to view your orders&#39; executions</li>
+                <li>Ability to get
+                  <a href="../../../api/v3/#operation--markets--marketSymbol--candles--candleInterval--recent-get">recent</a> and
+                  <a href="../../../api/v3/#operation--markets--marketSymbol--candles--candleInterval--historical--year---month---day--get">historical</a> candles</li>
+              </ul>
+              <p>
+                <strong>Websocket:</strong>
+              </p>
+              <ul>
+                <li>Faster updates</li>
+                <li>Live
+                  <a href="../../../api/v3/#method-Candle">candle websocket</a> stream</li>
+                <li>Ability to subscribe for
+                  <a href="../../../api/v3/#method-Deposit">deposit</a> updates</li>
+                <li>Easier to consume messages designed to match the REST API</li>
+                <li>Greater control over websocket subscription granularity and the ability to
+                  <a href="../../../api/v3/#method-Unsubscribe">unsuscribe</a>
+                </li>
+                <li>Unified sequence numbers across the REST API and socket for easy
+                  <a href="../../../api/v3/#topic-Synchronizing">synchronization</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-General-Information" data-traverse-target="topic-General-Information">General Information</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>This section provides high level comparisons of aspects of the v1 and v3 APIs the cut across multiple operations. For detailed comparisons of individual operations, refer to the REST API and WEBSOCKET reference sections of this guide.</p>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Authentication" data-traverse-target="topic-Authentication">Authentication</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>Authentication in the v3 API uses the same API keys as were used in the v1 API. Your existing keys will work with the v3 API. The mechanisms for their use are somewhat different.</p>
+              <p>In the REST API the process for signing request is similar to that of v1, but now also requires a hash of the request body content where applicable. Refer to the
+                <a href="../../../#topic-Authentication">REST Authentication</a> documentation for details.</p>
+              <p>Authentication in the v3 websocket no longer requires getting an auth context prior to authenticating. Instead it uses a client-generated uuid in place of a server generated challenge. It also requires authentication to be renewed periodically for the client to remain subscribed to private streams.Refer to the
+                <a href="../../../api/v3#topic-Authenticating">Authenticating</a> topic in the v3 websocket documentation for additional information.</p>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Authorization" data-traverse-target="topic-Authorization">Authorization</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>Authorization in the v3 API uses API keys with the same three permission level as were used in the v1 API.</p>
+              <ul>
+                <li>
+                  <strong>View</strong> allows retrieving account information but not placing orders or withdrawals</li>
+                <li>
+                  <strong>Trade</strong> allows placing and cancellation of trades</li>
+                <li>
+                  <strong>Withdraw</strong> allows creation and cancellation of withdrawals</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-RESTfulness" data-traverse-target="topic-RESTfulness">RESTfulness</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>The v1 API used the GET verb for all operations. The v3 API is designed to be RESTful and adheres to the standard definitions of HTTP verbs.</p>
+              <ul>
+                <li>
+                  <strong>GET</strong> retrieves information without impacting the state of the system (e.g. view an order)</li>
+                <li>
+                  <strong>POST</strong> creates a new resource (e.g. create an order)</li>
+                <li>
+                  <strong>DELETE</strong> deletes a resource or cancels an operation (e.g. cancels an order)</li>
+                <li>
+                  <strong>HEAD</strong> similar to GET but only retrieves the headers instead of the whole object (e.g. get the current order stream sequence number to make sure you haven&#39;t missed anything)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Error-Handling" data-traverse-target="topic-Error-Handling">Error Handling</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>The v1 API included a flag in response bodies indicating if there was an error along with an error code. Error handling in v3 uses HTTP error codes instead of a flag inside of the response body. Details may be found
+                <a href="../../../api/v3/#topic-Error-Codes">here</a>. In the case of an error, a detailed error code and potentially additional information will be included in the response body. In general, a 4XX series error indicates that the client was at fault (e.g. malformed request, insufficient balance, etc.) while a 5XX series error indicates a server-side issue.</p>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Placing-Orders" data-traverse-target="topic-Placing-Orders">Placing Orders</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>In v3 there are no longer separate endpoints for buy and sell orders. Order placement has been centralized into
+                <a href="../../../api/v3/#operation--orders-post">POST /orders</a> for orders that execute or are placed on the orderbook immediately and
+                <a href="../../../api/v3/#operation--conditional-orders-post">POST /conditional-orders</a> for orders that may execute later based on a condition being met (e.g. stop orders). Conditional orders do not currently have an equivalent in the v1 API so the remainder of this section is focused on regular orders.</p>
+              <p>Improvements to order placement and management are one area where the v3 API has significant advantages over the v1 API. In addition to supporting many more types of orders, the v3 API supports setting a <code>clientOrderId</code> when placing an order. This id is used as an idempotency key. If reused for order creation within 24 hours, the request will fail with a reference to the existing order. The <code>clientOrderId</code> is stored with created orders forever, but it is no longer enforced after 24 hours.</p>
+              <p>Another important advantage of the v3 API is that when orders are created or cancelled, the response body will include the current state of the order. This means that it is no longer necessary in v3 to get the order state immediately after placement or cancellation to see what happened when the order hit the book or to get its final state after cancellation.</p>
+              <p>The configuration options when placing an order have been moved into the body of the
+                <a href="../../../api/v3/#operation--orders-post">POST /orders</a> request. The table below contains a mapping of v1 query parameters to v3 order request fields.</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>v1&nbsp;Query&nbsp;Parameter</th>
+                    <th>v3&nbsp;NewOrder&nbsp;Field</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td>direction</td>
+                    <td>In v1 the endpoint determined buy vs. sell. In v3 this is an enum (BUY, SELL)</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>type</td>
+                    <td>In v1 only limit orders were supported. In v3 <code>type</code> must be set to LIMIT for a limit order</td>
+                  </tr>
+                  <tr>
+                    <td>market</td>
+                    <td>marketSymbol</td>
+                    <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                  </tr>
+                  <tr>
+                    <td>quantity</td>
+                    <td>quantity</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>rate</td>
+                    <td>limit</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>timeInForce</td>
+                    <td>timeInForce</td>
+                    <td>In v1 this could be GTC or IOC. In v3 the equivalent values are GOOD_TIL_CANCELLED and IMMEDIATE_OR_CANCEL.</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                <em>Additional fields are available in the v3 model that have no equivalent in v1. Refer to the
+                  <a href="../../../api/v3/#definition-NewOrder">NewOrder</a> schema definition for details.</em>
+              </p>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Websocket-Subscriptions" data-traverse-target="topic-Websocket-Subscriptions">Websocket Subscriptions</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>The technical underpinnings of the v3 socket are unchanged from v1. It is still based on
+                <a href="https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr">Microsoft ASP.net SignalR</a> which should make it easy to transition any existing v1 websocket client implementations to v3. However there are some conceptual differences around subscriptions and message handling.</p>
+              <p>In v3, subsciptions are arranged around types of resources in the same way that the v3 REST API is organized. For example there is a
+                <a href="../../../api/v3/#tag-balances">/balances endpoint</a> that can be used to retrieve
+                <a href="../../../api/v3/#definition-Balance">Balance</a> objects. For live updates to balances, you subscribe to the
+                <a href="../../../api/v3/#method-Balance">Balance stream</a>. Once subscribed, when one of your currency balances changes, you will receive a message with a snapshot of the new balance for that currency. The schema of the payload of that update will be a
+                <a href="../../../api/v3/#definition-Balance">Balance</a> object just like what is retrieved from the REST API. It will also include a sequence number (the v3 equivalent of a nonce) that matches a sequence number returned in the <code>sequence</code> response header from the
+                <a href="../../../api/v3/#operation--balances-get">GET /balances</a>. This allows usage of the REST API and websocket in concert to maintain a local cache of balance data. All v3 websocket streams follow this general pattern for
+                <a href="../../../api/v3/#topic-Synchronizing">synchronization</a>.</p>
+              <p>Additional in v3, websocket messages are no longer minified so there is no need for a mapping table in order to interpret them. Messages are compressed though so decompression is still required before consumption.</p>
+            </div>
+          </div>
+        </div>
+        <h1>REST API</h1>
+        <span id="path--public-getmarkets"></span>
+        <div id="operation--public-getmarkets-get" class="operation panel" data-traverse-target="operation--public-getmarkets-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Public">Public</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/public/getmarkets</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--markets-get">GET /markets</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getmarkets request has been replace primarily by the markets endpoint in v3. Some of the fields in the v1 request are actually attributes of a currency, not a market. Those may be found at the currencies endpoint in v3.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>MarketCurrency</td>
+                      <td>Market</td>
+                      <td>baseCurrencySymbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>BaseCurrency</td>
+                      <td>Market</td>
+                      <td>quoteCurrencySymbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>MarketCurrencyLong</td>
+                      <td>Currency</td>
+                      <td>name</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--currencies--symbol--get">GET /currencies/{baseCurrencySymbol}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>BaseCurrencyLong</td>
+                      <td>Currency</td>
+                      <td>name</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--currencies--symbol--get">GET /currencies/{quoteCurrencySymbol}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>MinTradeSize</td>
+                      <td>Market</td>
+                      <td>minTradeSize</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>MarketName</td>
+                      <td>Market</td>
+                      <td>symbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>IsActive</td>
+                      <td>Market</td>
+                      <td>status</td>
+                      <td>In v1 this was a boolean flag. In v3 is it an enum (ONLINE, OFFLINE).</td>
+                    </tr>
+                    <tr>
+                      <td>IsRestricted</td>
+                      <td>Market</td>
+                      <td>prohibitedIn</td>
+                      <td>In v1 this was a boolean flag. In v3 it is an array of strings indicating prohibited locales.</td>
+                    </tr>
+                    <tr>
+                      <td>Created</td>
+                      <td>Market</td>
+                      <td>createdAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Notice</td>
+                      <td>Market</td>
+                      <td>notice</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>IsSponsored</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>LogoUrl</td>
+                      <td>Currency</td>
+                      <td>LogoUrl</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--currencies--symbol--get">GET /currencies/{baseCurrencySymbol}</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--public-getcurrencies"></span>
+        <div id="operation--public-getcurrencies-get" class="operation panel" data-traverse-target="operation--public-getcurrencies-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Public">Public</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/public/getcurrencies</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--currencies-get">GET /currencies</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getcurrencies request has been replaced with the currencies endpoint in v3.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Currency</td>
+                      <td>Currency</td>
+                      <td>symbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CurrencyLong</td>
+                      <td>Currency</td>
+                      <td>name</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CoinType</td>
+                      <td>Currency</td>
+                      <td>coinType</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>MinConfirmations</td>
+                      <td>Currency</td>
+                      <td>minConfirmations</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>TxFee</td>
+                      <td>Currency</td>
+                      <td>txFee</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Notice</td>
+                      <td>Currency</td>
+                      <td>notice</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>IsActive</td>
+                      <td>Currency</td>
+                      <td>status</td>
+                      <td>In v1 this was a boolean flag. In v3 is it an enum (ONLINE, OFFLINE).</td>
+                    </tr>
+                    <tr>
+                      <td>IsRestricted</td>
+                      <td>Currency</td>
+                      <td>prohibitedIn</td>
+                      <td>In v1 this was a boolean flag. In v3 it is an array of strings indicating prohibited locales.</td>
+                    </tr>
+                    <tr>
+                      <td>BaseAddress</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--public-getticker"></span>
+        <div id="operation--public-getticker-get" class="operation panel" data-traverse-target="operation--public-getticker-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Public">Public</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/public/getticker</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getticker request has been replaced with the market ticker endpoint in v3. In v3 it is also possible to get the tickers for all markets with a single
+                  <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a> request. Note that when getting a single ticker, the market symbol parameter is reversed in v3 to align with standard forex conventions.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Bid</td>
+                      <td>Ticker</td>
+                      <td>bidRate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Ask</td>
+                      <td>Ticker</td>
+                      <td>askRate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Last</td>
+                      <td>Ticker</td>
+                      <td>lastTradeRate</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--public-getmarketsummaries"></span>
+        <div id="operation--public-getmarketsummaries-get" class="operation panel" data-traverse-target="operation--public-getmarketsummaries-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Public">Public</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/public/getmarketsummaries</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--markets-summaries-get">GET /markets/summaries</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getmarketsummaries request has been replaced primarily with the market summaries endpoint in v3. However some of the fields from the v1 version are either no longer available or found on the ticker or market objects instead.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>MarketName</td>
+                      <td>MarketSummary</td>
+                      <td>symbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>High</td>
+                      <td>MarketSummary</td>
+                      <td>high</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Low</td>
+                      <td>MarketSummary</td>
+                      <td>low</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Volume</td>
+                      <td>MarketSummary</td>
+                      <td>volume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Last</td>
+                      <td>Ticker</td>
+                      <td>lastTradeRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>BaseVolume</td>
+                      <td>MarketSummary</td>
+                      <td>quoteVolume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>TimeStamp</td>
+                      <td>MarketSummary</td>
+                      <td>updatedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Bid</td>
+                      <td>Ticker</td>
+                      <td>bidRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Ask</td>
+                      <td>Ticker</td>
+                      <td>askRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OpenBuyOrders</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OpenSellOrders</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>PrevDay</td>
+                      <td>MarketSummary</td>
+                      <td>percentChange</td>
+                      <td>In v3 the <code>PrevDay</code> value has been replaced with a rolling 24hr <code>percentChange</code></td>
+                    </tr>
+                    <tr>
+                      <td>Created</td>
+                      <td>Market</td>
+                      <td>createdAt</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets-get">GET /markets</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--public-getmarketsummary"></span>
+        <div id="operation--public-getmarketsummary-get" class="operation panel" data-traverse-target="operation--public-getmarketsummary-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Public">Public</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/public/getmarketsummary</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--markets--marketSymbol--summary-get">GET /markets/{marketSymbol}/summary</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getmarketsummary request has been replaced primarily with the market&#39;s summary endpoint in v3. However some of the fields from the v1 version are either no longer available or found on the ticker or market object instead.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>MarketName</td>
+                      <td>MarketSummary</td>
+                      <td>symbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>High</td>
+                      <td>MarketSummary</td>
+                      <td>high</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Low</td>
+                      <td>MarketSummary</td>
+                      <td>low</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Volume</td>
+                      <td>MarketSummary</td>
+                      <td>volume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Last</td>
+                      <td>Ticker</td>
+                      <td>lastTradeRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>BaseVolume</td>
+                      <td>MarketSummary</td>
+                      <td>quoteVolume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>TimeStamp</td>
+                      <td>MarketSummary</td>
+                      <td>updatedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Bid</td>
+                      <td>Ticker</td>
+                      <td>bidRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Ask</td>
+                      <td>Ticker</td>
+                      <td>askRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OpenBuyOrders</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OpenSellOrders</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>PrevDay</td>
+                      <td>MarketSummary</td>
+                      <td>percentChange</td>
+                      <td>In v3 the <code>PrevDay</code> value has been replaced with a rolling 24hr <code>percentChange</code></td>
+                    </tr>
+                    <tr>
+                      <td>Created</td>
+                      <td>Market</td>
+                      <td>createdAt</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets--marketSymbol--get">GET /markets/{marketSymbol}</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--public-getorderbook"></span>
+        <div id="operation--public-getorderbook-get" class="operation panel" data-traverse-target="operation--public-getorderbook-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Public">Public</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/public/getorderbook</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--markets--marketSymbol--orderbook-get">GET /markets/{marketSymbol}/orderbook</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getorderbook request has been replaced with the market&#39;s orderbook endpoint in v3. The v3 version of the API does not allow you to get only the buy or sell side of the book, but it does allow you to limit the depth returned.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Buy</td>
+                      <td>OrderBook</td>
+                      <td>bid</td>
+                      <td>Array of OrderBookEntry objects</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Quantity</td>
+                      <td>OrderBookEntry</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Rate</td>
+                      <td>OrderBookEntry</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Sell</td>
+                      <td>OrderBook</td>
+                      <td>ask</td>
+                      <td>Array of OrderBookEntry objects</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Quantity</td>
+                      <td>OrderBookEntry</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Rate</td>
+                      <td>OrderBookEntry</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--public-getmarkethistory"></span>
+        <div id="operation--public-getmarkethistory-get" class="operation panel" data-traverse-target="operation--public-getmarkethistory-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Public">Public</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/public/getmarkethistory</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--markets--marketSymbol--trades-get">GET /markets/{marketSymbol}/trades</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getmarkethistory request has been replaced with the market&#39;s trades endpoint in v3.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Id</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>TimeStamp</td>
+                      <td>Trade</td>
+                      <td>executedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Quantity</td>
+                      <td>Trade</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Price</td>
+                      <td>Trade</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Total</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>FillType</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OrderType</td>
+                      <td>Trade</td>
+                      <td>takerSide</td>
+                      <td>In v1 this was an enum (BUY, SELL). In v3 it is a boolean flag.</td>
+                    </tr>
+                    <tr>
+                      <td>Uuid</td>
+                      <td>Trade</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--market-buylimit"></span>
+        <div id="operation--market-buylimit-get" class="operation panel" data-traverse-target="operation--market-buylimit-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Market">Market</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/market/buylimit</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--orders-post">POST /orders</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>Order placement in the v3 API has been centralized in the orders endpoint. There are many more order type and time in force options than there were in v1. Additionally, the response from posting a new order in v3 returns the full order so there is no need to get the order again after placement to determine its state. Refer to the
+                  <a href="#topic-Placing-Orders">Placing Orders</a> topic for additional information.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>uuid</td>
+                      <td>Order</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>The v3 response model for this operation contains the entire order object. Refer to the
+                    <a href="../../../api/v3#definition-Order">Order</a> model definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--market-selllimit"></span>
+        <div id="operation--market-selllimit-get" class="operation panel" data-traverse-target="operation--market-selllimit-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Market">Market</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/market/selllimit</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--orders-post">POST /orders</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>Order placement in the v3 API has been centralized in the orders endpoint. There are many more order type and time in force options than there were in v1. Additionally, the response from posting a new order in v3 returns the full order so there is no need to get the order again after placement to determine its state. Refer to the
+                  <a href="#topic-Placing-Orders">Placing Orders</a> topic for additional information.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>uuid</td>
+                      <td>Order</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>The v3 response model for this operation contains the entire order object. Refer to the
+                    <a href="../../../api/v3#definition-Order">Order</a> model definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--market-cancel"></span>
+        <div id="operation--market-cancel-get" class="operation panel" data-traverse-target="operation--market-cancel-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Market">Market</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/market/cancel</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--orders--orderId--delete">DELETE /orders/{orderId}</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>Order cancellation in the v3 API is performed via the orders endpoint. The response from cancelling an order in v3 returns the full order so there is no need to get the order again after cancellation to determine its final state. Refer to the
+                  <a href="#topic-Placing-Orders">Placing Orders</a> topic for additional information.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>uuid</td>
+                      <td>Order</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>The v3 response model for this operation contains the entire order object. Refer to the
+                    <a href="../../../api/v3#definition-Order">Order</a> model definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--market-getopenorders"></span>
+        <div id="operation--market-getopenorders-get" class="operation panel" data-traverse-target="operation--market-getopenorders-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Market">Market</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/market/getopenorders</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--orders-open-get">GET /orders/open</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getopenorders request has been replaced by orders/open in v3. Like the v1 version, in v3 you can filter down to a specific market using a query parameter. In v3 this query parameter is called marketSymbol as opposed to market in v1. Also note that the market symbol in v3 has been reversed to align with standard forex conventions.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Uuid</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OrderUuid</td>
+                      <td>Order</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Exchange</td>
+                      <td>Order</td>
+                      <td>marketSymbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>OrderType</td>
+                      <td>Order</td>
+                      <td>type
+                        <br>direction</td>
+                      <td>This field has been decomposed into separate <code>type</code> and <code>direction</code> fields in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>Quantity</td>
+                      <td>Order</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>QuantityRemaining</td>
+                      <td>Order</td>
+                      <td>fillQuantity</td>
+                      <td>The v3 API reports quantity filled instead of quantity remaining.</td>
+                    </tr>
+                    <tr>
+                      <td>Limit</td>
+                      <td>Order</td>
+                      <td>limit</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CommissionPaid</td>
+                      <td>Order</td>
+                      <td>commission</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Price</td>
+                      <td>Order</td>
+                      <td>proceeds</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>PricePerUnit</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Opened</td>
+                      <td>Order</td>
+                      <td>createdAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CancelInitiated</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>ImmediateOrCancel</td>
+                      <td>Order</td>
+                      <td>timeInForce</td>
+                      <td>This boolean flag from v1 has been incorporated into the enum for <code>timeInForce</code> in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>IsConditional</td>
+                      <td></td>
+                      <td></td>
+                      <td>Conditional orders are a separate concept from orders in v3. Refer to
+                        <a href="../../../api/v3/#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Condition</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>ConditionTarget</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>Additional fields are available in the v3 model that have no equivalent in v1. Refer to the
+                    <a href="../../../api/v3#definition-Order">Order</a> schema definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--account-getbalances"></span>
+        <div id="operation--account-getbalances-get" class="operation panel" data-traverse-target="operation--account-getbalances-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Account">Account</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/account/getbalances</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--balances-get">GET /balances</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getbalances request has been replaced primarily by the balances endpoint in v3. However some of the fields have either been deprecated or can be found under the address endpoint in v3.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Currency</td>
+                      <td>Balance</td>
+                      <td>currencySymbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Balance</td>
+                      <td>Balance</td>
+                      <td>total</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Available</td>
+                      <td>Balance</td>
+                      <td>available</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Pending</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>CryptoAddress</td>
+                      <td>Address</td>
+                      <td>cryptoAddress</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Requested</td>
+                      <td>Address</td>
+                      <td>status</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a>. This boolean flag has been replaced by an enum (REQUESTED, PROVISIONED) in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>Uuid</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>The v3 response model for this operation also includes an updatedAt timestamp that has no equivalent in v1. Refer to the
+                    <a href="../../../api/v3#definition-Balance">Balance</a> schema definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--account-getbalance"></span>
+        <div id="operation--account-getbalance-get" class="operation panel" data-traverse-target="operation--account-getbalance-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Account">Account</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/account/getbalance</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--balances--currencySymbol--get">GET /balances/{currencySymbol}</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getbalance request has been replaced primarily by the balances endpoint in v3. However some of the fields have either been deprecated or can be found under the address endpoint in v3.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Currency</td>
+                      <td>Balance</td>
+                      <td>currencySymbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Balance</td>
+                      <td>Balance</td>
+                      <td>total</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Available</td>
+                      <td>Balance</td>
+                      <td>available</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Pending</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>CryptoAddress</td>
+                      <td>Address</td>
+                      <td>cryptoAddress</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Requested</td>
+                      <td>Address</td>
+                      <td>status</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>. This boolean flag has been replaced by an enum (REQUESTED, PROVISIONED) in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>Uuid</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>The v3 response model for this operation also includes an updatedAt timestamp that has no equivalent in v1. Refer to the
+                    <a href="../../../api/v3#definition-Balance">Balance</a> schema definition for details</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--account-getdepositaddress"></span>
+        <div id="operation--account-getdepositaddress-get" class="operation panel" data-traverse-target="operation--account-getdepositaddress-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Account">Account</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/account/getdepositaddress</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getdespositaddress request has been replaced by the addresses endpoint in v3. One key difference in v3 is that to create a desposit address, you must explicitly send a
+                  <a href="../../../api/v3/#operation--addresses-post">POST /addresses</a> request for the currency. Another difference is that in v3 it is possible to get your deposit addresses for all currencies with a single
+                  <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a> request. The v3 version of the API also supports address memos/tags. </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Currency</td>
+                      <td>Address</td>
+                      <td>currencySymbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Address</td>
+                      <td>Address</td>
+                      <td>cryptoAddress</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>Additional fields are available in the v3 model that have no equivalent in v1. Refer to the
+                    <a href="../../../api/v3#definition-Address">Address</a> schema definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--account-withdraw"></span>
+        <div id="operation--account-withdraw-get" class="operation panel" data-traverse-target="operation--account-withdraw-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Account">Account</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/account/withdraw</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--withdrawals-post">POST /withdrawals</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 withdraw request has been replaced by
+                  <a href="../../../api/v3/#operation--withdrawals-post">POST /withdrawals</a> in v3. As with all similar requests, the parameters have been moved into the request body. Additionally, in v3 the response model echos all of the information about the withdrawal. Refer to the
+                  <a href="../../../api/v3/#operation--withdrawals-post">POST /withdrawals</a> for details. It is also possible in v3 to attempt to cancel a withdrawal using
+                  <a href="../../../api/v3#operation--withdrawals--withdrawalId--delete">DELETE /withdrawal/{withdrawalId}</a>.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>uuid</td>
+                      <td>Withdrawal</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>The v3 response model for this operation contains the entire withdrawal object. Refer to the
+                    <a href="../../../api/v3#definition-Withdrawal">Withdrawal</a> schema definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--account-getorder"></span>
+        <div id="operation--account-getorder-get" class="operation panel" data-traverse-target="operation--account-getorder-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Account">Account</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/account/getorder</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--orders--orderId--get">GET /orders/{orderId}</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getorder request has been replaced by
+                  <a href="../../../api/v3/#operation--orders--orderId--get">GET /orders/{orderId}</a> in v3.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Uuid</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OrderUuid</td>
+                      <td>Order</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Exchange</td>
+                      <td>Order</td>
+                      <td>marketSymbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>OrderType</td>
+                      <td>Order</td>
+                      <td>type
+                        <br>direction</td>
+                      <td>This field has been decomposed into separate <code>type</code> and <code>direction</code> fields in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>Quantity</td>
+                      <td>Order</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>QuantityRemaining</td>
+                      <td>Order</td>
+                      <td>fillQuantity</td>
+                      <td>The v3 API reports quantity filled instead of quantity remaining.</td>
+                    </tr>
+                    <tr>
+                      <td>Limit</td>
+                      <td>Order</td>
+                      <td>limit</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CommissionPaid</td>
+                      <td>Order</td>
+                      <td>commission</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Price</td>
+                      <td>Order</td>
+                      <td>proceeds</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>PricePerUnit</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Opened</td>
+                      <td>Order</td>
+                      <td>createdAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Closed</td>
+                      <td>Order</td>
+                      <td>closedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CancelInitiated</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>ImmediateOrCancel</td>
+                      <td>Order</td>
+                      <td>timeInForce</td>
+                      <td>This boolean flag from v1 has been incorporated into the enum for <code>timeInForce</code> in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>IsConditional</td>
+                      <td></td>
+                      <td></td>
+                      <td>Conditional orders are a separate concept from orders in v3. Refer to
+                        <a href="../../../api/v3/#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>Additional fields are available in the v3 model that have no equivalent in v1. Refer to the
+                    <a href="../../../api/v3#definition-Order">Order</a> schema definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--account-getorderhistory"></span>
+        <div id="operation--account-getorderhistory-get" class="operation panel" data-traverse-target="operation--account-getorderhistory-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Account">Account</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/account/getorderhistory</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--orders-closed-get">GET /orders/closed</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 getorderhistory request has been replaced by
+                  <a href="../../../api/v3/#operation--orders-closed-get">GET /orders/closed</a> in v3. Like the v1 version, in v3 you can filter down to a specific market using a query parameter. In v3 this query parameter is called marketSymbol as opposed to market in v1. Also note that the market symbol in v3 has been reversed to align with standard forex conventions. Additionally, in v3 it is possible to retrieve more history than was possible in v1 by paging back in time. It is also possible filter by the results by date. Refer to the
+                  <a href="../../../api/v3/#operation--orders-closed-get">GET /orders/closed</a> documenation and the
+                  <a href="../../../api/v3/#topic-Pagination">pagination</a> topic for details. </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Uuid</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OrderUuid</td>
+                      <td>Order</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Exchange</td>
+                      <td>Order</td>
+                      <td>marketSymbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>OrderType</td>
+                      <td>Order</td>
+                      <td>type
+                        <br>direction</td>
+                      <td>This field has been decomposed into separate <code>type</code> and <code>direction</code> fields in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>Quantity</td>
+                      <td>Order</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>QuantityRemaining</td>
+                      <td>Order</td>
+                      <td>fillQuantity</td>
+                      <td>The v3 API reports quantity filled instead of quantity remaining.</td>
+                    </tr>
+                    <tr>
+                      <td>Limit</td>
+                      <td>Order</td>
+                      <td>limit</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CommissionPaid</td>
+                      <td>Order</td>
+                      <td>commission</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Price</td>
+                      <td>Order</td>
+                      <td>proceeds</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>PricePerUnit</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Opened</td>
+                      <td>Order</td>
+                      <td>createdAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Closed</td>
+                      <td>Order</td>
+                      <td>closedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CancelInitiated</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>ImmediateOrCancel</td>
+                      <td>Order</td>
+                      <td>timeInForce</td>
+                      <td>This boolean flag from v1 has been incorporated into the enum for <code>timeInForce</code> in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>IsConditional</td>
+                      <td></td>
+                      <td></td>
+                      <td>Conditional orders are a separate concept from orders in v3. Refer to
+                        <a href="../../../api/v3/#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>Additional fields are available in the v3 model that have no equivalent in v1. Refer to the
+                    <a href="../../../api/v3#definition-Order">Order</a> schema definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--account-getwithdrawalhistory"></span>
+        <div id="operation--account-getwithdrawalhistory-get" class="operation panel" data-traverse-target="operation--account-getwithdrawalhistory-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Account">Account</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/account/getwithdrawalhistory</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--withdrawals-closed-get">GET /withdrawals/closed</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v3 api offers many more options for retrieving withdrawals than were offered by v1. In v3 you can:</p>
+                <ul>
+                  <li>Get a list of all requested, pending, etc. withdrawals using
+                    <a href="../../../api/v3/#operation--withdrawals-open-get">GET /withdrawals/open</a>. This operation may be filtered by specific state and currency.</li>
+                  <li>Get completed and cancelled withdrawals from
+                    <a href="../../../api/v3/#operation--withdrawals-closed-get">GET /withdrawals/closed</a>. In addition to being able to filter by specific state and currency, you can also retrieve a significantly longer history than in v1 by paging back in time. Refer to the
+                    <a href="../../../api/v3/#topic-Pagination">pagination</a> topic for details.</li>
+                  <li>Get withdrawals by
+                    <a href="../../../api/v3/#operation--withdrawals--withdrawalId--get">withdawal id</a> or by
+                    <a href="../../../api/v3/#operation--withdrawals-ByTxId--txId--get">blockchain transaction id</a>.</li>
+                </ul>
+                <p>In all cases, the response model for an individual withdrawal will be the same. The fields from the v1 getwithdrawalhistory operation map to the v3 model as shown below.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PaymentUuid</td>
+                      <td>Withdrawal</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Currency</td>
+                      <td>Withdrawal</td>
+                      <td>currencySymbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Amount</td>
+                      <td>Withdrawal</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Address</td>
+                      <td>Withdrawal</td>
+                      <td>cryptoAddress</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Opened</td>
+                      <td>Withdrawal</td>
+                      <td>createdAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>TxId</td>
+                      <td>Withdrawal</td>
+                      <td>txId</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Authorized
+                        <br>PendingPayment
+                        <br>Canceled
+                        <br>InvalidAddress</td>
+                      <td>Withdrawal</td>
+                      <td>status</td>
+                      <td>The four boolean status flags from v1 have been aggregated into a single <code>status</code> enum field in v3.</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>Additional fields are available in the v3 model that have no equivalent in v1. Refer to the
+                    <a href="../../../api/v3#definition-Withdrawal">Withdrawal</a> schema definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <span id="path--account-getdeposithistory"></span>
+        <div id="operation--account-getdeposithistory-get" class="operation panel" data-traverse-target="operation--account-getdeposithistory-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label" href="#tag-Account">Account</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/account/getdeposithistory</span>
+            </span>
+          </h2>
+          <div class="doc-row no-margin">
+            <div class="doc-copy">
+              <p>
+                <strong>Equivalent in v3:</strong>
+                <a href="../../../api/v3/#operation--deposits-closed-get">GET /deposits/closed</a>
+              </p>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v3 api offers many more options for retrieving deposits than were offered by v1. In v3 you can:</p>
+                <ul>
+                  <li>Get a list of all deposits pending confirmation using
+                    <a href="../../../api/v3/#operation--deposits-open-get">GET /deposits/open</a>. This operation may be filtered by currency.</li>
+                  <li>Get completed, orphaned, or invalidated deposits from
+                    <a href="../../../api/v3/#operation--deposits-closed-get">GET /deposits/closed</a>. In addition to being able to filter by specific state and currency, you can also retrieve a significantly longer history than in v1 by paging back in time. Refer to the
+                    <a href="../../../api/v3/#topic-Pagination">pagination</a> topic for details.</li>
+                  <li>Get deposits by
+                    <a href="../../../api/v3/#operation--deposits--depositId--get">deposit id</a> or by
+                    <a href="../../../api/v3/#operation--deposits-ByTxId--txId--get">blockchain transaction id</a>.</li>
+                </ul>
+                <p>In all cases, the response model for an individual deposit will be the same. The fields from the v1 getdeposithistory operation map to the v3 model as shown below.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Id</td>
+                      <td>Deposit</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Amount</td>
+                      <td>Deposit</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Currency</td>
+                      <td>Deposit</td>
+                      <td>currencySymbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Confirmations</td>
+                      <td>Deposit</td>
+                      <td>confirmations</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>LastUpdated</td>
+                      <td>Deposit</td>
+                      <td>updatedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>TxId</td>
+                      <td>Deposit</td>
+                      <td>txId</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CryptoAddress</td>
+                      <td>Deposit</td>
+                      <td>cryptoAddress</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <em>Additional fields are available in the v3 model that have no equivalent in v1. Refer to the
+                    <a href="../../../api/v3#definition-Deposit">Deposit</a> schema definition for details.</em>
+                </p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <h1>Websocket API</h1>
+        <div id="method-GetAuthContext" class="operation panel" data-traverse-target="method-GetAuthContext">
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-path">GetAuthContext</span>
+            </span>
+          </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v3 websocket does not require getting an auth context prior to authenticating. As such, there is no v3 equivalent for this operation. To learn about websocket authentication in v3, refer to the
+                  <a href="../../../api/v3#topic-Authenticating">Authenticating</a> topic in the v3 websocket documentation.</p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <div id="method-Authenticate" class="operation panel" data-traverse-target="method-Authenticate">
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-path">Authenticate</span>
+            </span>
+          </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>Like v1, the v3 websocket contains an
+                  <a href="../../../api/v3/#method-Authenticate">Authenticate</a> method that must be called prior to receiving user specific updates. Unlike the v1 version, the v3 version uses a client-generated uuid instead of a server generated challenge. Additionally, in v3 authenticating does not automatically subscribe the client for any updates. After authenticating, the client can subscribe authenticated streams as desired. Finally, in v3 authentication must be renewed periodically or the client will be unsubscribed from any authenticated streams. Refer to the
+                  <a href="../../../api/v3#topic-Authenticating">Authenticating</a> topic in the v3 websocket documentation for additional information.</p>
+                <p>The <code>uB</code> and <code>uO</code> messages that resulted from authenticating in v1 have been replaced by the
+                  <a href="../../../api/v3/#method-Balance">Balance</a> and
+                  <a href="../../../api/v3/#method-Order">Order</a> streams in v3, respectively. For a field by field comparison of messages, refer to the two tables below.</p>
+                <p>
+                  <strong>Balance Delta - uB</strong>
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Stream</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Nonce</td>
+                      <td>Balance</td>
+                      <td>sequence</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Uuid</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>AccountId</td>
+                      <td>Balance</td>
+                      <td>accountId</td>
+                      <td>In v1 this was an int. In v3 it is a uuid.</td>
+                    </tr>
+                    <tr>
+                      <td>Currency</td>
+                      <td>Balance</td>
+                      <td>currencySymbol</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Balance</td>
+                      <td>Balance</td>
+                      <td>total</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Available</td>
+                      <td>Balance</td>
+                      <td>available</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Pending</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>CryptoAddress</td>
+                      <td></td>
+                      <td></td>
+                      <td>Not available via websocket. Use <code>cryptoAddress</code> from
+                        <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a> instead.</td>
+                    </tr>
+                    <tr>
+                      <td>Requested</td>
+                      <td></td>
+                      <td></td>
+                      <td>Not available via websocket. Use <code>status</code> from
+                        <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a> instead.</td>
+                    </tr>
+                    <tr>
+                      <td>Updated</td>
+                      <td>Balance</td>
+                      <td>updatedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>AutoSell</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  <strong>Order Delta - uO</strong>
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Stream</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>AccountUuid</td>
+                      <td>Order</td>
+                      <td>accountId</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Nonce</td>
+                      <td>Order</td>
+                      <td>sequence</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Type</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Uuid</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OrderUuid</td>
+                      <td>Order</td>
+                      <td>id</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Id</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Exchange</td>
+                      <td>Order</td>
+                      <td>marketSymbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>OrderType</td>
+                      <td>Order</td>
+                      <td>type
+                        <br>direction</td>
+                      <td>This field has been decomposed into separate <code>type</code> and <code>direction</code> fields in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>Quantity</td>
+                      <td>Order</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>QuantityRemaining</td>
+                      <td>Order</td>
+                      <td>fillQuantity</td>
+                      <td>The v3 API reports quantity filled instead of quantity remaining.</td>
+                    </tr>
+                    <tr>
+                      <td>Limit</td>
+                      <td>Order</td>
+                      <td>limit</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>CommissionPaid</td>
+                      <td>Order</td>
+                      <td>commission</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Price</td>
+                      <td>Order</td>
+                      <td>proceeds</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>PricePerUnit</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Opened</td>
+                      <td>Order</td>
+                      <td>createdAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Closed</td>
+                      <td>Order</td>
+                      <td>closedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>IsOpen</td>
+                      <td>Order</td>
+                      <td>status</td>
+                      <td>This boolean flag from v1 has been replaced by an enum (OPEN, CLOSED) in v3.</td>
+                    </tr>
+                    <tr>
+                      <td>CancelInitiated</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>ImmediateOrCancel</td>
+                      <td>Order</td>
+                      <td>timeInForce</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>IsConditional</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Condition</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>ConditionTarget</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Updated</td>
+                      <td>Order</td>
+                      <td>updatedAt</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <div id="method-QueryExchangeState" class="operation panel" data-traverse-target="method-QueryExchangeState">
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-path">QueryExchangeState</span>
+            </span>
+          </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v3 websocket does not support querying. Use the v3 REST API operations for
+                  <a href="../../../api/v3#operation--markets--marketSymbol--orderbook-get">getting the orderbook</a> and
+                  <a href="../../../api/v3#operation--markets--marketSymbol--trades-get">getting trades</a> instead. These operations return a sequence number in a header (the v3 equivalent of a nonce) so they can be used for synchronizing state with the server. For more information about synchronizing state in v3, refer to
+                  <a href="../../../api/v3/#topic-Synchronizing">this topic</a>. For a field by field comparison of responses, refer to the below table.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Buys</td>
+                      <td>OrderBook</td>
+                      <td>bid</td>
+                      <td>Array of OrderBookEntry objects</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Quantity</td>
+                      <td>OrderBookEntry</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Rate</td>
+                      <td>OrderBookEntry</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Sells</td>
+                      <td>OrderBook</td>
+                      <td>ask</td>
+                      <td>Array of OrderBookEntry objects</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Quantity</td>
+                      <td>OrderBookEntry</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Rate</td>
+                      <td>OrderBookEntry</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Fills</td>
+                      <td></td>
+                      <td></td>
+                      <td>Array of Trade objects</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Id</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;TimeStamp</td>
+                      <td>Trade</td>
+                      <td>executedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Quantity</td>
+                      <td>Trade</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Price</td>
+                      <td>Trade</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Total</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;FillType</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;OrderType</td>
+                      <td>Trade</td>
+                      <td>takerSide</td>
+                      <td>In v1 this was an enum (BUY, SELL). In v3 it is a boolean flag.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <div id="method-QuerySummaryState" class="operation panel" data-traverse-target="method-QuerySummaryState">
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-path">QuerySummaryState</span>
+            </span>
+          </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v3 websocket does not support querying. Use the v3 REST API&#39;s
+                  <a href="../../../api/v3#operation--markets-summaries-get">GET /markets/summaries</a> operation instead. This operation returns a sequence number in a header (the v3 equivalent of a nonce) so it can be used for synchronizing state with the server. For more information about synchronizing state in v3, refer to
+                  <a href="../../../api/v3/#topic-Synchronizing">this topic</a>. For a field by field comparison of responses, refer to the below table.</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Object</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>MarketName</td>
+                      <td>MarketSummary</td>
+                      <td>symbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>High</td>
+                      <td>MarketSummary</td>
+                      <td>high</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Low</td>
+                      <td>MarketSummary</td>
+                      <td>low</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Volume</td>
+                      <td>MarketSummary</td>
+                      <td>volume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Last</td>
+                      <td>Ticker</td>
+                      <td>lastTradeRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>BaseVolume</td>
+                      <td>MarketSummary</td>
+                      <td>quoteVolume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>TimeStamp</td>
+                      <td>MarketSummary</td>
+                      <td>updatedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Bid</td>
+                      <td>Ticker</td>
+                      <td>bidRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Ask</td>
+                      <td>Ticker</td>
+                      <td>askRate</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OpenBuyOrders</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OpenSellOrders</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>PrevDay</td>
+                      <td>MarketSummary</td>
+                      <td>percentChange</td>
+                      <td>In v3 the <code>PrevDay</code> value has been replaced with a rolling 24hr <code>percentChange</code></td>
+                    </tr>
+                    <tr>
+                      <td>Created</td>
+                      <td>Market</td>
+                      <td>createdAt</td>
+                      <td>Retrieve from
+                        <a href="../../../api/v3/#operation--markets-get">GET /markets</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <div id="method-SubscribeToExchangeDeltas" class="operation panel" data-traverse-target="method-SubscribeToExchangeDeltas">
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-path">SubscribeToExchangeDeltas</span>
+            </span>
+          </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 SubscribeToExchangeDeltas operation has been replaced in v3 by subscribing to the
+                  <a href="../../../api/v3/#method-Orderbook">Orderbook</a> and
+                  <a href="../../../api/v3/#method-Trade">Trade</a> streams. One advantage of the v3 Orderbook stream is that it allows some control over the depth of the orderbook about which to receive updates. Refer to the stream&#39;s documentation for details.</p>
+                <p>
+                  <strong>Market Delta - uE</strong>
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Stream</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>MarketName</td>
+                      <td>Orderbook
+                        <br>&amp; Trade</td>
+                      <td>marketSymbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>Nonce</td>
+                      <td>Orderbook
+                        <br>&amp; Trade</td>
+                      <td>sequence</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Buys</td>
+                      <td>OrderBook</td>
+                      <td>bidDeltas</td>
+                      <td>Array of OrderBookEntry objects</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Type</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated.</em> In v3 <code>quantity</code> equal to 0 indicates the entry should be removed.</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Quantity</td>
+                      <td>OrderBook</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Rate</td>
+                      <td>OrderBook</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Sells</td>
+                      <td>OrderBook</td>
+                      <td>askDeltas</td>
+                      <td>Array of OrderBookEntry objects</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Type</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated.</em> In v3 <code>quantity</code> equal to 0 indicates the entry should be removed.</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Quantity</td>
+                      <td>OrderBook</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Rate</td>
+                      <td>OrderBook</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Fills</td>
+                      <td></td>
+                      <td></td>
+                      <td>Array of Trade objects</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;FillId</td>
+                      <td>Trade</td>
+                      <td>id</td>
+                      <td>In v1 this was an int. In v3 it is a uuid.</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;TimeStamp</td>
+                      <td>Trade</td>
+                      <td>executedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Quantity</td>
+                      <td>Trade</td>
+                      <td>quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;Rate</td>
+                      <td>Trade</td>
+                      <td>rate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;OrderType</td>
+                      <td>Trade</td>
+                      <td>takerSide</td>
+                      <td>In v1 this was an enum (BUY, SELL). In v3 it is a boolean flag.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <div id="method-SubscribeToSummaryDeltas" class="operation panel" data-traverse-target="method-SubscribeToSummaryDeltas">
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-path">SubscribeToSummaryDeltas</span>
+            </span>
+          </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v1 SubscribeToSummaryDeltas operation has been replaced in v3 by subscribing to the
+                  <a href="../../../api/v3/#method-Market-Summaries">Market Summaries</a> and
+                  <a href="../../../api/v3/#method-Tickers">Tickers</a> streams. These streams will return data for all markets. Additionally in v3 it is possible to subscribe for updates about individual markets by using the
+                  <a href="../../../api/v3/#method-Market-Summary">Market Summary</a> and
+                  <a href="../../../api/v3/#method-Ticker">Ticker</a> streams.</p>
+                <p>
+                  <strong>Summary Delta - uS</strong>
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Stream</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Nonce</td>
+                      <td>MarketSummaries
+                        <br>&amp; Tickers</td>
+                      <td>sequence</td>
+                      <td>In v3 <code>sequence</code> is only included with Market Summaries and Tickers subscriptions. Individual Market Summary and Ticker subscriptions do not include a sequence number because each message is a full snapshot.</td>
+                    </tr>
+                    <tr>
+                      <td>MarketName</td>
+                      <td>MarketSummaries
+                        <br>&amp; Tickers</td>
+                      <td>symbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>High</td>
+                      <td>MarketSummaries</td>
+                      <td>high</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Low</td>
+                      <td>MarketSummaries</td>
+                      <td>low</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Volume</td>
+                      <td>MarketSummaries</td>
+                      <td>volume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Last</td>
+                      <td>Tickers</td>
+                      <td>lastTradeRate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>BaseVolume</td>
+                      <td>MarketSummaries</td>
+                      <td>quoteVolume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>TimeStamp</td>
+                      <td>MarketSummaries</td>
+                      <td>updatedAt</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Bid</td>
+                      <td>Tickers</td>
+                      <td>bidRate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Ask</td>
+                      <td>Tickers</td>
+                      <td>askRate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>OpenBuyOrders</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>OpenSellOrders</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <em>Deprecated</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>PrevDay</td>
+                      <td>MarketSummaries</td>
+                      <td>percentChange</td>
+                      <td>In v3 the <code>PrevDay</code> value has been replaced with a rolling 24hr <code>percentChange</code></td>
+                    </tr>
+                    <tr>
+                      <td>Created</td>
+                      <td></td>
+                      <td></td>
+                      <td>Not available via websocket. Use <code>createdAt</code> from
+                        <a href="../../../api/v3/#operation--markets-get">GET /markets</a> instead.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+        <div id="method-SubscribeToSummaryLiteDeltas" class="operation panel" data-traverse-target="method-SubscribeToSummaryLiteDeltas">
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-path">SubscribeToSummaryLiteDeltas</span>
+            </span>
+          </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>The v3 websocket does not have lighter versions of its summary delta equivalents: the Market Summary and Ticker streams. Instead it offers the ability to subscribe to them on a market by market basis using the
+                  <a href="../../../api/v3/#method-Market-Summary">Market Summary</a> and
+                  <a href="../../../api/v3/#method-Ticker">Ticker</a> streams.</p>
+                <p>
+                  <strong>Lite Summary Delta - uL</strong>
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>v1&nbsp;Field</th>
+                      <th>v3&nbsp;Stream</th>
+                      <th>v3&nbsp;Field</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>MarketName</td>
+                      <td>MarketSummary
+                        <br>&amp; Ticker</td>
+                      <td>symbol</td>
+                      <td>Market symbols are reversed in v3 to align with standard forex conventions</td>
+                    </tr>
+                    <tr>
+                      <td>Last</td>
+                      <td>Ticker</td>
+                      <td>lastTradeRate</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>BaseVolume</td>
+                      <td>MarketSummary</td>
+                      <td>quoteVolume</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>PrevDay</td>
+                      <td>MarketSummaries</td>
+                      <td>percentChange</td>
+                      <td>In v3 the <code>PrevDay</code> value has been replaced with a rolling 24hr <code>percentChange</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy"> </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>

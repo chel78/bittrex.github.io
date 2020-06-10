@@ -1,31 +1,34 @@
 <header class="page-header">
     <nav class="page-nav">
-        <a href="/" class="page-title">
-            <img src="/assets/img/bittrex-logo-mark.svg" alt="Bittrex Logo Mark"/>
-            <img src="/assets/img/bittrex-word-mark.svg" alt="Bittrex Word Mark"/>
+        <a href="https://bittrex.com" class="page-title">
+            <img src="/assets/img/bittrex-logo-mark.svg" alt="Bittrex Logo Mark" />
+            <img src="/assets/img/bittrex-word-mark.svg" alt="Bittrex Word Mark" />
             <!-- <span style="font-size: 12px;">Developers</span> -->
         </a>
 
         <a href="/api" class="nav-link hide-for-small-only">API Reference</a>
 
+        {% if page.version != 'n/a' %}
         {% if page.version == 'v1.1' %}
-            {% assign v1LinkClass = 'active' %}
+        {% assign v1LinkClass = 'active' %}
         {% endif %}
         {% if page.version == 'v3' %}
-            {% assign v3LinkClass = 'active' %}
+        {% assign v3LinkClass = 'active' %}
         {% endif %}
 
         <a href="/api/v1-1" class="nav-link show-for-small-only">v1.1</a>
         <a href="/api/v3" class="nav-link show-for-small-only">v3</a>
 
-        <div class="nav-link hide-for-small-only"> 
+        <div class="nav-link hide-for-small-only">
             {{page.version}}<i class="arrow down"></i>
             <ul class="dropdown">
                 <li><a href="/api/v1-1" class="nav-link version-link {{v1LinkClass}}">v1.1</a></li>
                 <li><a href="/api/v3" class="nav-link version-link {{v3LinkClass}}">v3</a></li>
             </ul>
         </div>
- 
+        {% endif %}
+
+        <a href="/guides/v3/upgrade" class="nav-link hide-for-small-only">How-To Guide: Upgrading to v3</a>
+
     </nav>
-    <a href="https://bittrex.com" target="_blank" class="external-link hidden-sm">Go to Bittrex.com</a>
 </header>
