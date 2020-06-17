@@ -96,7 +96,7 @@
               <ol>
                 <li>Read through the
                   <a href="#topic-New-Features">New Features</a> and
-                  <a href="#topic-General-Changes">General Information</a> sections of this guide to gain a high level familiarity with what is new and different in v3.</li>
+                  <a href="#topic-General-Information">General Information</a> sections of this guide to gain a high level familiarity with what is new and different in v3.</li>
                 <li>Take an inventory of your usage of the v1 API in your existing code base.
                   <ul>
                     <li>Identify operations and data used from v1.</li>
@@ -146,17 +146,18 @@
                   <a href="../../../api/v3/#operation--orders-post">Placing an order</a> returns the current state of the order when it hit the book</li>
                 <li>
                   <a href="../../../api/v3/#operation--orders--orderId--delete">Cancelling an order</a> returns the order&#39;s final state</li>
-                <li>Ability to specify a key to ensure idempotency of
+                <li>Specify a key to ensure idempotency of
                   <a href="../../../api/v3/#topic-Placing-Orders">order placement</a>
                 </li>
-                <li>Ability to
-                  <a href="../../../api/v3/#topic-Pagination">page</a> through historical results</li>
+                <li>
+                  <a href="../../../api/v3/#topic-Pagination">Page</a> through historical results</li>
                 <li>Access to more
                   <a href="../../../api/v3/#operation--deposits-closed-get">deposit</a>,
                   <a href="../../../api/v3/#operation--withdrawals-closed-get">withdrawal</a>, and
                   <a href="../../../api/v3/#operation--orders-closed-get">order</a> history</li>
-                <li>Ability to view your orders&#39; executions</li>
-                <li>Ability to get
+                <li>Get the list of
+                  <a href="../../../api/v3/#operation--orders--orderId--executions-get">executed trades</a> related to your orders</li>
+                <li>Get
                   <a href="../../../api/v3/#operation--markets--marketSymbol--candles--candleInterval--recent-get">recent</a> and
                   <a href="../../../api/v3/#operation--markets--marketSymbol--candles--candleInterval--historical--year---month---day--get">historical</a> candles</li>
               </ul>
@@ -167,7 +168,7 @@
                 <li>Faster updates</li>
                 <li>Live
                   <a href="../../../api/v3/#method-Candle">candle websocket</a> stream</li>
-                <li>Ability to subscribe for
+                <li>Subscribe for
                   <a href="../../../api/v3/#method-Deposit">deposit</a> updates</li>
                 <li>Easier to consume messages designed to match the REST API</li>
                 <li>Greater control over websocket subscription granularity and the ability to
@@ -271,7 +272,7 @@
                   <tr>
                     <td></td>
                     <td>type</td>
-                    <td>In v1 only limit orders were supported. In v3 <code>type</code> must be set to LIMIT for a limit order</td>
+                    <td>In v1 only limit orders were supported. In v3 there are a number of different order types. Set <code>type</code> to LIMIT for a limit order.</td>
                   </tr>
                   <tr>
                     <td>market</td>
@@ -291,7 +292,7 @@
                   <tr>
                     <td>timeInForce</td>
                     <td>timeInForce</td>
-                    <td>In v1 this could be GTC or IOC. In v3 the equivalent values are GOOD_TIL_CANCELLED and IMMEDIATE_OR_CANCEL.</td>
+                    <td>In v1 this could be GTC or IOC. In v3 the equivalent values are GOOD_TIL_CANCELLED and IMMEDIATE_OR_CANCEL. FILL_OR_KILL is also supported in v3.</td>
                   </tr>
                 </tbody>
               </table>
