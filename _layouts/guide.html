@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charSet="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Bittrex Developers</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+    <link rel="stylesheet" href="{{ page.directory }}/stylesheets/foundation.min.css">
+    <link rel="stylesheet" href="{{ page.directory }}/stylesheets/spectacle.min.css">
+    <link rel="stylesheet" href="/assets/style/main.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="{{ page.directory }}/javascripts/spectacle.min.js"></script>
+    <style type="text/css">
+        #spectacle .doc-examples { 
+            display: none; 
+        }
+        #spectacle .large-6, #spectacle article .doc-copy, #spectacle article .panel>h2, #spectacle article .panel>h3, #spectacle article h1.doc-title, #spectacle article>h1, #spectacle article>h2 {
+            width: 90%;
+        }
+        #spectacle .doc-content {
+            width: 10%;
+        }
+        #spectacle .operation-tags {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    {% include header.html version=page.version %}
+    <div class="page-content">
+        {{ content }}
+    </div>
+</body>
+
+</html>
