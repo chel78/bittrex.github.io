@@ -90,12 +90,14 @@
         {{/each}}
         {{/if}}
 
+        {{#if definitions}}
         <h5>Schema Definitions</h5>
         {{#each definitions}}
         <a href="#definition-{{htmlId @key}}" title="{{@key}}">
             {{@key}}
         </a>
         {{/each}}
+        {{/if}}
 
 
     </nav>
