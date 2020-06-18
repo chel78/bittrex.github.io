@@ -6,11 +6,12 @@
     "dev": "concurrently \"npm run serve\" \"npm run watch\"",
     "dev:v3": "concurrently \"npm run serve\" \"npm run watch build:spectacle:v3\"",
     "serve": "jekyll serve",
-    "build": "npm run build:spectacle:v1 && npm run build:v3",
+    "build": "npm run build:spectacle:v1 && npm run build:v3 && npm run build:v3upgrade",
     "build:spectacle:v1": "node ./spectacle/bin/spectacle -e -t api/v1-1/assets _data/api-spec-v1-1.json",
     "build:v3": "npm run build:json:v3 && npm run build:spectacle:v3",
     "build:json:v3": "npm run gulp -- build-v3-spec",
     "build:spectacle:v3": "node ./spectacle/bin/spectacle -e -t api/v3/assets _data/api-spec-v3.json",
+    "build:v3upgrade": "node ./spectacle/bin/spectacle -e -t guides/v3/upgrade/assets _data/guide-v3-upgrade.json",
     "clean:json:v3": "rm ./_data/api-spec-v3.json",
     "watch": "npm-watch",
     "gulp": "./node_modules/.bin/gulp"
