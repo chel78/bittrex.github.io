@@ -7,15 +7,12 @@
       <nav id="nav" role="navigation">
         <h5>Topics</h5>
         <a href="#introduction">Introduction</a>
-        <a href="#topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</a>
         <a href="#topic-Change-Log">Change Log</a>
+        <a href="#topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</a>
         <a href="#topic-Known-Issues">Known Issues</a>
         <section>
           <a href="#topic-REST-API-Overview">REST API Overview</a>
           <ul>
-            <li>
-              <a href="#topic-Pre-Release-Warning">Pre-Release Warning</a>
-            </li>
             <li>
               <a href="#topic-Best-Practices">Best Practices</a>
             </li>
@@ -37,13 +34,8 @@
           </ul>
         </section>
         <section>
-          <a href="#topic-Websocket-Overview">Websocket Overview
-            <span class="badge">Beta</span>
-          </a>
+          <a href="#topic-Websocket-Overview">Websocket Overview</a>
           <ul>
-            <li>
-              <a href="#topic-Pre-Release--Warning">Pre-Release Warning</a>
-            </li>
             <li>
               <a href="#topic-Connecting">Connecting</a>
             </li>
@@ -225,6 +217,9 @@
               <a href="#operation--orders--orderId--delete" title="/orders/{orderId}"> DELETE /orders/{orderId} </a>
             </li>
             <li>
+              <a href="#operation--orders--orderId--executions-get" title="/orders/{orderId}/executions"> GET /orders/{orderId}/executions </a>
+            </li>
+            <li>
               <a href="#operation--orders-post" title="/orders"> POST /orders </a>
             </li>
           </ul>
@@ -333,6 +328,7 @@
         <a href="#definition-Trade" title="Trade"> Trade </a>
         <a href="#definition-Candle" title="Candle"> Candle </a>
         <a href="#definition-Order" title="Order"> Order </a>
+        <a href="#definition-Execution" title="Execution"> Execution </a>
         <a href="#definition-ServicePing" title="ServicePing"> ServicePing </a>
         <a href="#definition-Subaccount" title="Subaccount"> Subaccount </a>
         <a href="#definition-NewSubaccount" title="NewSubaccount"> NewSubaccount </a>
@@ -381,32 +377,32 @@
             </div>
           </div>
         </div>
-        <h1 id="topic-Upcoming-Breaking-Changes" data-traverse-target="topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</h1>
-        <div class="panel">
-          <div class="doc-row">
-            <div class="doc-copy">
-              <p>The following breaking changes will be made on or after
-                <strong>06/10/2020</strong>:
-                <table>
-                  <tr>
-                    <th>Change</th>
-                    <th>Mitigation</th>
-                  </tr>
-                  <tbody>
-                    <tr>
-                      <td>The BaseVolume property on MarketSummary and Candle responses will be removed</td>
-                      <td>The BaseVolume property has been reporting quote volume. If quote volume is desired, use the QuoteVolume property. If base volume is desired, use the Volume property.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </p>
-            </div>
-          </div>
-        </div>
         <h1 id="topic-Change-Log" data-traverse-target="topic-Change-Log">Change Log</h1>
         <div class="panel">
           <div class="doc-row">
             <div class="doc-copy">
+              <p>
+                <strong>06/17/2020</strong>
+              </p>
+              <ul>
+                <li>
+                  <p>The v3 API has reached generally availability and is ready for production use!</p>
+                </li>
+                <li>
+                  <p>You can now get the list of executed trades related to your orders from
+                    <a href="../../../api/v3#operation--orders--orderId--executions-get">GET /orders/{orderId}/executions</a>
+                  </p>
+                </li>
+                <li>
+                  <p>End of life for the v1 api is planned for 9/30/2020</p>
+                </li>
+              </ul>
+              <p>
+                <strong>06/10/2020</strong>
+              </p>
+              <ul>
+                <li>The baseVolume property was removed from MarketSummary and Candle responses. Use the quoteVolume property for quote volume or the volume property for base volume.</li>
+              </ul>
               <p>
                 <strong>05/27/2020</strong>
               </p>
@@ -442,8 +438,16 @@
                   <p>The functionality of the existing candles endpoint has been duplicated into a candles/.../recent endpoint. The existing one will be retired in a future release. </p>
                 </li>
               </ul>
-              <p>To see all of the recent changes, please visit the
+              <p>To see changes from before this year, please visit the
                 <a href="https://bittrex.zendesk.com/hc/en-us/sections/200567324-Changelist">change list</a>.</p>
+            </div>
+          </div>
+        </div>
+        <h1 id="topic-Upcoming-Breaking-Changes" data-traverse-target="topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</h1>
+        <div class="panel">
+          <div class="doc-row">
+            <div class="doc-copy">
+              <p>There are no further breaking changes planned.</p>
             </div>
           </div>
         </div>
@@ -458,9 +462,6 @@
                 <li>
                   <p>A conditional order cancelled via OCO will not automatically be removed from the list of open conditional orders on the website despite being cancelled. Refreshing the page will correct the issue.</p>
                 </li>
-                <li>
-                  <p>The <code>baseVolume</code> under GET /markets/summaries and GET /markets/{marketSymbol}/candles is actually the quote volume. baseVolume will be removed in a future release. Use quoteVolume instead.</p>
-                </li>
               </ul>
             </div>
           </div>
@@ -474,16 +475,6 @@
                 <li>Enable 2FA on your account. API Keys cannot be generated unless 2FA is enabled and extended verification is done on the account.</li>
                 <li>All REST requests must be sent to <code>https://api.bittrex.com/v3</code> using the <code>application/json</code> content type. Non-HTTPS requests will be redirected to HTTPS, possibly causing functional or performance issues with your application.</li>
               </ul>
-            </div>
-          </div>
-        </div>
-        <h1 id="topic-Pre-Release-Warning" data-traverse-target="topic-Pre-Release-Warning">Pre-Release Warning</h1>
-        <div class="panel">
-          <div class="doc-row">
-            <div class="doc-copy">
-              <p>The v3-Beta APIs operate against production (live-site) data and accounts. We recommend testing with small-value transactions to validate your implementation.</p>
-              <p>The REST portions of the v3-Beta API are now stable with the exception of the items listed in the
-                <a href="#topic-Upcoming-Breaking-Changes">Upcoming Breaking Changes</a> section. There are currently no plans to make any further breaking changes to the REST portions of the v3 API other than those listed.</p>
             </div>
           </div>
         </div>
@@ -863,23 +854,13 @@
             </div>
           </div>
         </div>
-        <h1 id="topic-Websocket-Overview" data-traverse-target="topic-Websocket-Overview">Websocket Overview
-          <span class="badge">Beta</span>
-        </h1>
+        <h1 id="topic-Websocket-Overview" data-traverse-target="topic-Websocket-Overview">Websocket Overview</h1>
         <div class="panel">
           <div class="doc-row">
             <div class="doc-copy">
               <p>The v3 websocket is intended to allow a client to subscribe to a live stream of updates about things that are changing in the system instead of needing to poll the REST API looking for updates. It is designed to complement and be used in conjunction with the v3 REST API. As such the messages sent from the socket include payloads that are formatted to match the corresponding data models from the v3 REST API.</p>
               <p>Like the existing v1 socket, the v3 socket is based on
                 <a href="https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr">Microsoft ASP.net’s SignalR</a>. We are not using ASP.net Core’s SignalR implementation at this time. As such, any existing SignalR client implementation working with the v1 socket should be able to be modified to work with the new v3 socket. If working in the .Net environment, the Microsoft.AspNet.SignalR.Client NuGet package is the recommended basis for a client implementation. The remainder of this section assumes you are working in C# using that library.</p>
-            </div>
-          </div>
-        </div>
-        <h1 id="topic-Pre-Release--Warning" data-traverse-target="topic-Pre-Release--Warning">Pre-Release Warning</h1>
-        <div class="panel">
-          <div class="doc-row">
-            <div class="doc-copy">
-              <p>The websocket portions of the v3-Beta are subject to breaking changes, potentially without notice, until the final API is released. These APIs should only be used for testing and review. By using the v3-Beta APIs you understand and agree that issues may be encountered without warning, affecting your use of the website and API.</p>
             </div>
           </div>
         </div>
@@ -3150,7 +3131,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>List summaries of the last 24 hours of activity for all markets. ** Note: baseVolume is being deprecated and will be removed in favor of quoteVolume</p>
+                <p>List summaries of the last 24 hours of activity for all markets.</p>
               </section>
             </div>
           </div>
@@ -3205,7 +3186,6 @@
     <span class="hljs-attr">&quot;high&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;percentChange&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>
@@ -3623,7 +3603,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Retrieve summary of the last 24 hours of activity for a specific market. ** Note: baseVolume is being deprecated and will be removed in favor of quoteVolume</p>
+                <p>Retrieve summary of the last 24 hours of activity for a specific market.</p>
               </section>
             </div>
           </div>
@@ -3684,7 +3664,6 @@
   <span class="hljs-attr">&quot;high&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-  <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;percentChange&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>
@@ -4069,7 +4048,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Retrieve recent candles for a specific market and candle interval. The maximum age of the returned candles depends on the interval as follows: (MINUTE_1: 1 day, MINUTE_5: 1 day, HOUR_1: 31 days, DAY_1: 366 days). Candles for intervals without any trading activity are omitted. ** Note: baseVolume is being deprecated and will be removed in favor of quoteVolume</p>
+                <p>Retrieve recent candles for a specific market and candle interval. The maximum age of the returned candles depends on the interval as follows: (MINUTE_1: 1 day, MINUTE_5: 1 day, HOUR_1: 31 days, DAY_1: 366 days). Candles for intervals without any trading activity are omitted.</p>
               </section>
             </div>
           </div>
@@ -4164,7 +4143,6 @@
     <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;close&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>
   }
 ]
@@ -4279,7 +4257,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Retrieve recent candles for a specific market and candle interval. The date range of returned candles depends on the interval as follows: (MINUTE_1: 1 day, MINUTE_5: 1 day, HOUR_1: 31 days, DAY_1: 366 days). Candles for intervals without any trading activity are omitted. ** Note: baseVolume is being deprecated and will be removed in favor of quoteVolume</p>
+                <p>Retrieve recent candles for a specific market and candle interval. The date range of returned candles depends on the interval as follows: (MINUTE_1: 1 day, MINUTE_5: 1 day, HOUR_1: 31 days, DAY_1: 366 days). Candles for intervals without any trading activity are omitted.</p>
               </section>
             </div>
           </div>
@@ -4422,7 +4400,6 @@
     <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;close&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>
   }
 ]
@@ -4990,6 +4967,111 @@
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>
   }
 }
+</code></pre>
+                <!-- </div> -->
+              </section>
+            </div>
+          </div>
+        </div>
+        <div id="operation--orders--orderId--executions-get" class="operation panel" data-traverse-target="operation--orders--orderId--executions-get">
+          <!-- <section class="operation-tags row"> -->
+          <!-- <div class="doc-copy"> -->
+          <div class="operation-tags">
+            <a class="label alert" href="#topic-Authentication" title="Requires a properly signed request. Click for more.">Authenticated</a>
+            <a class="label" href="#tag-Orders">Orders</a>
+            <!---->
+          </div>
+          <!-- </div> -->
+          <!-- </section> -->
+          <h2 class="operation-title">
+            <span class="operation-name">
+              <span class="operation-name">GET</span>
+              <span class="operation-path">/orders/{orderId}/executions</span>
+            </span>
+          </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-operation-description">
+                <p>Retrieve executions for a specific order. Results are sorted in inverse order of execution time, and are limited to the first 1000. NOTE: Executions from before 5/27/2019 are not available. Also, there may be a delay before an executed trade is visible in this endpoint.</p>
+              </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-request-params">
+                <div class="prop-row prop-group">
+                  <div class="prop-name">
+                    <div class="prop-title">orderId:
+                      <span class="prop-type">
+                        <span class="json-property-type">string</span>
+                        <span class="json-property-format">(uuid)</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </span>
+                    </div>
+                    <span class="json-property-required"></span>
+                    <div class="prop-subtitle"> in path </div>
+                  </div>
+                  <div class="prop-value">
+                    <p>
+                      <em>(uuid-formatted string)</em> - ID of order to retrieve executions for</p>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div class="doc-examples">
+              <section> </section>
+            </div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="swagger-responses">
+                <div class="prop-row prop-group">
+                  <div class="prop-name">
+                    <div class="prop-title">200 OK</div>
+                    <div class="prop-ref">
+                      <span class="json-schema-ref-array">
+                        <a class="json-schema-ref" href="#/definitions/Execution">Execution</a>
+                      </span>
+                    </div>
+                    <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
+                  </div>
+                  <div class="prop-value">
+                    <p>OK</p>
+                  </div>
+                </div>
+                <div class="prop-row prop-inner">
+                  <div class="prop-name">type</div>
+                  <div class="prop-value">
+                    <span class="json-property-type">
+                      <span class="json-schema-ref-array">
+                        <a class="json-schema-ref" href="#/definitions/Execution">Execution</a>
+                      </span>
+                    </span>
+                    <span class="json-property-range" title="Value limits"></span>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div class="doc-examples">
+              <h5>Response Content-Types:
+                <span>application/json</span>
+              </h5>
+              <section>
+                <h5>Response Example
+                  <span>(200 OK)</span>
+                </h5>
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">[
+  {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>,
+    <span class="hljs-attr">&quot;marketSymbol&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;executedAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>,
+    <span class="hljs-attr">&quot;quantity&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
+    <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
+    <span class="hljs-attr">&quot;orderId&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>,
+    <span class="hljs-attr">&quot;commission&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
+    <span class="hljs-attr">&quot;isTaker&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+  }
+]
 </code></pre>
                 <!-- </div> -->
               </section>
@@ -7278,7 +7360,6 @@
     <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;close&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-    <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
     <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>
   }
 }
@@ -7546,7 +7627,6 @@
       <span class="hljs-attr">&quot;high&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
       <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
       <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-      <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
       <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
       <span class="hljs-attr">&quot;percentChange&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
       <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>
@@ -7624,7 +7704,6 @@
   <span class="hljs-attr">&quot;high&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-  <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;percentChange&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>
@@ -9377,15 +9456,6 @@
                   <dd>
                     <p>volume within the last 24 hours</p>
                   </dd>
-                  <dt data-property-name="baseVolume" class="has-description">
-                    <span class="json-property-name">baseVolume:</span>
-                    <span class="json-property-type">number</span>
-                    <span class="json-property-format">(double)</span>
-                    <span class="json-property-range" title="Value limits"></span>
-                  </dt>
-                  <dd>
-                    <p>base volume within the last 24 hours ** Note: This field is being deprecated and will be removed in favor of quoteVolume</p>
-                  </dd>
                   <dt data-property-name="quoteVolume" class="has-description">
                     <span class="json-property-name">quoteVolume:</span>
                     <span class="json-property-type">number</span>
@@ -9427,7 +9497,6 @@
   <span class="hljs-attr">&quot;high&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-  <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;percentChange&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>
@@ -9771,15 +9840,6 @@
                   <dd>
                     <p>volume</p>
                   </dd>
-                  <dt data-property-name="baseVolume" class="has-description">
-                    <span class="json-property-name">baseVolume:</span>
-                    <span class="json-property-type">number</span>
-                    <span class="json-property-format">(double)</span>
-                    <span class="json-property-range" title="Value limits"></span>
-                  </dt>
-                  <dd>
-                    <p>base volume ** Note: This field is being deprecated and will be removed in favor of quoteVolume</p>
-                  </dd>
                   <dt data-property-name="quoteVolume" class="has-description">
                     <span class="json-property-name">quoteVolume:</span>
                     <span class="json-property-type">number</span>
@@ -9803,7 +9863,6 @@
   <span class="hljs-attr">&quot;low&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;close&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;volume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
-  <span class="hljs-attr">&quot;baseVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
   <span class="hljs-attr">&quot;quoteVolume&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>
 }
 </code></pre>
@@ -10028,6 +10087,113 @@
     <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>
   }
+}
+</code></pre>
+                <!-- </div> -->
+              </section>
+            </div>
+          </div>
+        </div>
+        <div id="definition-Execution" class="definition panel" data-traverse-target="definition-Execution">
+          <h2 class="panel-title">
+            <a name="/definitions/Execution"></a>Execution </h2>
+          <div class="doc-row">
+            <div class="doc-copy">
+              <section class="json-schema-properties">
+                <dl>
+                  <dt data-property-name="id" class="has-description">
+                    <span class="json-property-name">id:</span>
+                    <span class="json-property-type">string</span>
+                    <span class="json-property-format">(uuid)</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                    <span class="json-property-required"></span>
+                  </dt>
+                  <dd>
+                    <p>unique ID of this execution, assigned by the service</p>
+                  </dd>
+                  <dt data-property-name="marketSymbol" class="has-description">
+                    <span class="json-property-name">marketSymbol:</span>
+                    <span class="json-property-type">string</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                    <span class="json-property-required"></span>
+                  </dt>
+                  <dd>
+                    <p>market symbol where this execution took place</p>
+                  </dd>
+                  <dt data-property-name="executedAt" class="has-description">
+                    <span class="json-property-name">executedAt:</span>
+                    <span class="json-property-type">string</span>
+                    <span class="json-property-format">(date-time)</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                    <span class="json-property-required"></span>
+                  </dt>
+                  <dd>
+                    <p>time when the execution was processed</p>
+                  </dd>
+                  <dt data-property-name="quantity" class="has-description">
+                    <span class="json-property-name">quantity:</span>
+                    <span class="json-property-type">number</span>
+                    <span class="json-property-format">(double)</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                    <span class="json-property-required"></span>
+                  </dt>
+                  <dd>
+                    <p>quantity traded during this execution</p>
+                  </dd>
+                  <dt data-property-name="rate" class="has-description">
+                    <span class="json-property-name">rate:</span>
+                    <span class="json-property-type">number</span>
+                    <span class="json-property-format">(double)</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                    <span class="json-property-required"></span>
+                  </dt>
+                  <dd>
+                    <p>rate at which this trade was executed</p>
+                  </dd>
+                  <dt data-property-name="orderId" class="has-description">
+                    <span class="json-property-name">orderId:</span>
+                    <span class="json-property-type">string</span>
+                    <span class="json-property-format">(uuid)</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                    <span class="json-property-required"></span>
+                  </dt>
+                  <dd>
+                    <p>order ID associated with this execution</p>
+                  </dd>
+                  <dt data-property-name="commission" class="has-description">
+                    <span class="json-property-name">commission:</span>
+                    <span class="json-property-type">number</span>
+                    <span class="json-property-format">(double)</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                    <span class="json-property-required"></span>
+                  </dt>
+                  <dd>
+                    <p>commission charged for this execution</p>
+                  </dd>
+                  <dt data-property-name="isTaker" class="has-description">
+                    <span class="json-property-name">isTaker:</span>
+                    <span class="json-property-type">boolean</span>
+                    <span class="json-property-range" title="Value limits"></span>
+                    <span class="json-property-required"></span>
+                  </dt>
+                  <dd>
+                    <p>true if the order ID specified was the taker for this execution, otherwise false</p>
+                  </dd>
+                </dl>
+              </section>
+            </div>
+            <div class="doc-examples">
+              <section>
+                <h5>Example</h5>
+                <!-- <div class="hljs"> --><pre><code class="hljs language-json">{
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>,
+  <span class="hljs-attr">&quot;marketSymbol&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;executedAt&quot;</span>: <span class="hljs-string">&quot;string (date-time)&quot;</span>,
+  <span class="hljs-attr">&quot;quantity&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
+  <span class="hljs-attr">&quot;rate&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
+  <span class="hljs-attr">&quot;orderId&quot;</span>: <span class="hljs-string">&quot;string (uuid)&quot;</span>,
+  <span class="hljs-attr">&quot;commission&quot;</span>: <span class="hljs-string">&quot;number (double)&quot;</span>,
+  <span class="hljs-attr">&quot;isTaker&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
 }
 </code></pre>
                 <!-- </div> -->
