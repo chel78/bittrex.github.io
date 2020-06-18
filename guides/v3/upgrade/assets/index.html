@@ -128,38 +128,38 @@
               </p>
               <ul>
                 <li>Support for more
-                  <a href="../../../api/v3/#topic-Placing-Orders">order types</a>
+                  <a href="../../../api/v3#topic-Placing-Orders">order types</a>
                   <ul>
                     <li>Market orders</li>
                     <li>Post-only orders</li>
                     <li>Stop and stop limit
-                      <a href="../../../api/v3/#topic-Placing-Conditional-Orders">conditional orders</a>
+                      <a href="../../../api/v3#topic-Placing-Conditional-Orders">conditional orders</a>
                     </li>
                     <li>One cancels the other
-                      <a href="../../../api/v3/#topic-Placing-Conditional-Orders">conditional orders</a>
+                      <a href="../../../api/v3#topic-Placing-Conditional-Orders">conditional orders</a>
                     </li>
                     <li>Fill or kill</li>
                     <li>Precise control over cost/proceeds with ceiling orders</li>
                   </ul>
                 </li>
                 <li>
-                  <a href="../../../api/v3/#operation--orders-post">Placing an order</a> returns the current state of the order when it hit the book</li>
+                  <a href="../../../api/v3#operation--orders-post">Placing an order</a> returns the current state of the order when it hit the book</li>
                 <li>
-                  <a href="../../../api/v3/#operation--orders--orderId--delete">Cancelling an order</a> returns the order&#39;s final state</li>
+                  <a href="../../../api/v3#operation--orders--orderId--delete">Cancelling an order</a> returns the order&#39;s final state</li>
                 <li>Specify a key to ensure idempotency of
-                  <a href="../../../api/v3/#topic-Placing-Orders">order placement</a>
+                  <a href="../../../api/v3#topic-Placing-Orders">order placement</a>
                 </li>
                 <li>
-                  <a href="../../../api/v3/#topic-Pagination">Page</a> through historical results</li>
+                  <a href="../../../api/v3#topic-Pagination">Page</a> through historical results</li>
                 <li>Access to more
-                  <a href="../../../api/v3/#operation--deposits-closed-get">deposit</a>,
-                  <a href="../../../api/v3/#operation--withdrawals-closed-get">withdrawal</a>, and
-                  <a href="../../../api/v3/#operation--orders-closed-get">order</a> history</li>
+                  <a href="../../../api/v3#operation--deposits-closed-get">deposit</a>,
+                  <a href="../../../api/v3#operation--withdrawals-closed-get">withdrawal</a>, and
+                  <a href="../../../api/v3#operation--orders-closed-get">order</a> history</li>
                 <li>Get the list of
-                  <a href="../../../api/v3/#operation--orders--orderId--executions-get">executed trades</a> related to your orders</li>
+                  <a href="../../../api/v3#operation--orders--orderId--executions-get">executed trades</a> related to your orders</li>
                 <li>Get
-                  <a href="../../../api/v3/#operation--markets--marketSymbol--candles--candleInterval--recent-get">recent</a> and
-                  <a href="../../../api/v3/#operation--markets--marketSymbol--candles--candleInterval--historical--year---month---day--get">historical</a> candles</li>
+                  <a href="../../../api/v3#operation--markets--marketSymbol--candles--candleInterval--recent-get">recent</a> and
+                  <a href="../../../api/v3#operation--markets--marketSymbol--candles--candleInterval--historical--year---month---day--get">historical</a> candles</li>
               </ul>
               <p>
                 <strong>Websocket:</strong>
@@ -167,15 +167,15 @@
               <ul>
                 <li>Faster updates</li>
                 <li>Live
-                  <a href="../../../api/v3/#method-Candle">candle websocket</a> stream</li>
+                  <a href="../../../api/v3#method-Candle">candle websocket</a> stream</li>
                 <li>Subscribe for
-                  <a href="../../../api/v3/#method-Deposit">deposit</a> updates</li>
+                  <a href="../../../api/v3#method-Deposit">deposit</a> updates</li>
                 <li>Easier to consume messages designed to match the REST API</li>
                 <li>Greater control over websocket subscription granularity and the ability to
-                  <a href="../../../api/v3/#method-Unsubscribe">unsuscribe</a>
+                  <a href="../../../api/v3#method-Unsubscribe">unsuscribe</a>
                 </li>
                 <li>Unified sequence numbers across the REST API and socket for easy
-                  <a href="../../../api/v3/#topic-Synchronizing">synchronization</a>
+                  <a href="../../../api/v3#topic-Synchronizing">synchronization</a>
                 </li>
               </ul>
             </div>
@@ -195,7 +195,7 @@
             <div class="doc-copy">
               <p>Authentication in the v3 API uses the same API keys as were used in the v1 API. Your existing keys will work with the v3 API. The mechanisms for their use are somewhat different.</p>
               <p>In the REST API the process for signing request is similar to that of v1, but now also requires a hash of the request body content where applicable. Refer to the
-                <a href="../../../#topic-Authentication">REST Authentication</a> documentation for details.</p>
+                <a href="../../../api/v3#topic-Authentication">REST Authentication</a> documentation for details.</p>
               <p>Authentication in the v3 websocket no longer requires getting an auth context prior to authenticating. Instead it uses a client-generated uuid in place of a server generated challenge. It also requires authentication to be renewed periodically for the client to remain subscribed to private streams.Refer to the
                 <a href="../../../api/v3#topic-Authenticating">Authenticating</a> topic in the v3 websocket documentation for additional information.</p>
             </div>
@@ -240,7 +240,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <p>The v1 API included a flag in response bodies indicating if there was an error along with an error code. Error handling in v3 uses HTTP error codes instead of a flag inside of the response body. Details may be found
-                <a href="../../../api/v3/#topic-Error-Codes">here</a>. In the case of an error, a detailed error code and potentially additional information will be included in the response body. In general, a 4XX series error indicates that the client was at fault (e.g. malformed request, insufficient balance, etc.) while a 5XX series error indicates a server-side issue.</p>
+                <a href="../../../api/v3#topic-Error-Codes">here</a>. In the case of an error, a detailed error code and potentially additional information will be included in the response body. In general, a 4XX series error indicates that the client was at fault (e.g. malformed request, insufficient balance, etc.) while a 5XX series error indicates a server-side issue.</p>
             </div>
           </div>
         </div>
@@ -249,12 +249,12 @@
           <div class="doc-row">
             <div class="doc-copy">
               <p>In v3 there are no longer separate endpoints for buy and sell orders. Order placement has been centralized into
-                <a href="../../../api/v3/#operation--orders-post">POST /orders</a> for orders that execute or are placed on the orderbook immediately and
-                <a href="../../../api/v3/#operation--conditional-orders-post">POST /conditional-orders</a> for orders that may execute later based on a condition being met (e.g. stop orders). Conditional orders do not currently have an equivalent in the v1 API so the remainder of this section is focused on regular orders.</p>
+                <a href="../../../api/v3#operation--orders-post">POST /orders</a> for orders that execute or are placed on the orderbook immediately and
+                <a href="../../../api/v3#operation--conditional-orders-post">POST /conditional-orders</a> for orders that may execute later based on a condition being met (e.g. stop orders). Conditional orders do not currently have an equivalent in the v1 API so the remainder of this section is focused on regular orders.</p>
               <p>Improvements to order placement and management are one area where the v3 API has significant advantages over the v1 API. In addition to supporting many more types of orders, the v3 API supports setting a <code>clientOrderId</code> when placing an order. This id is used as an idempotency key. If reused for order creation within 24 hours, the request will fail with a reference to the existing order. The <code>clientOrderId</code> is stored with created orders forever, but it is no longer enforced after 24 hours.</p>
               <p>Another important advantage of the v3 API is that when orders are created or cancelled, the response body will include the current state of the order. This means that it is no longer necessary in v3 to get the order state immediately after placement or cancellation to see what happened when the order hit the book or to get its final state after cancellation.</p>
               <p>The configuration options when placing an order have been moved into the body of the
-                <a href="../../../api/v3/#operation--orders-post">POST /orders</a> request. The table below contains a mapping of v1 query parameters to v3 order request fields.</p>
+                <a href="../../../api/v3#operation--orders-post">POST /orders</a> request. The table below contains a mapping of v1 query parameters to v3 order request fields.</p>
               <table>
                 <thead>
                   <tr>
@@ -298,7 +298,7 @@
               </table>
               <p>
                 <em>Additional fields are available in the v3 model that have no equivalent in v1. Refer to the
-                  <a href="../../../api/v3/#definition-NewOrder">NewOrder</a> schema definition for details.</em>
+                  <a href="../../../api/v3#definition-NewOrder">NewOrder</a> schema definition for details.</em>
               </p>
             </div>
           </div>
@@ -310,12 +310,12 @@
               <p>The technical underpinnings of the v3 socket are unchanged from v1. It is still based on
                 <a href="https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr">Microsoft ASP.net SignalR</a> which should make it easy to transition any existing v1 websocket client implementations to v3. However there are some conceptual differences around subscriptions and message handling.</p>
               <p>In v3, subsciptions are arranged around types of resources in the same way that the v3 REST API is organized. For example there is a
-                <a href="../../../api/v3/#tag-balances">/balances endpoint</a> that can be used to retrieve
-                <a href="../../../api/v3/#definition-Balance">Balance</a> objects. For live updates to balances, you subscribe to the
-                <a href="../../../api/v3/#method-Balance">Balance stream</a>. Once subscribed, when one of your currency balances changes, you will receive a message with a snapshot of the new balance for that currency. The schema of the payload of that update will be a
-                <a href="../../../api/v3/#definition-Balance">Balance</a> object just like what is retrieved from the REST API. It will also include a sequence number (the v3 equivalent of a nonce) that matches a sequence number returned in the <code>sequence</code> response header from the
-                <a href="../../../api/v3/#operation--balances-get">GET /balances</a>. This allows usage of the REST API and websocket in concert to maintain a local cache of balance data. All v3 websocket streams follow this general pattern for
-                <a href="../../../api/v3/#topic-Synchronizing">synchronization</a>.</p>
+                <a href="../../../api/v3#tag-balances">/balances endpoint</a> that can be used to retrieve
+                <a href="../../../api/v3#definition-Balance">Balance</a> objects. For live updates to balances, you subscribe to the
+                <a href="../../../api/v3#method-Balance">Balance stream</a>. Once subscribed, when one of your currency balances changes, you will receive a message with a snapshot of the new balance for that currency. The schema of the payload of that update will be a
+                <a href="../../../api/v3#definition-Balance">Balance</a> object just like what is retrieved from the REST API. It will also include a sequence number (the v3 equivalent of a nonce) that matches a sequence number returned in the <code>sequence</code> response header from the
+                <a href="../../../api/v3#operation--balances-get">GET /balances</a>. This allows usage of the REST API and websocket in concert to maintain a local cache of balance data. All v3 websocket streams follow this general pattern for
+                <a href="../../../api/v3#topic-Synchronizing">synchronization</a>.</p>
               <p>Additional in v3, websocket messages are no longer minified so there is no need for a mapping table in order to interpret them. Messages are compressed though so decompression is still required before consumption.</p>
             </div>
           </div>
@@ -341,7 +341,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--markets-get">GET /markets</a>
+                <a href="../../../api/v3#operation--markets-get">GET /markets</a>
               </p>
             </div>
           </div>
@@ -376,7 +376,7 @@
                       <td>Currency</td>
                       <td>name</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--currencies--symbol--get">GET /currencies/{baseCurrencySymbol}</a>
+                        <a href="../../../api/v3#operation--currencies--symbol--get">GET /currencies/{baseCurrencySymbol}</a>
                       </td>
                     </tr>
                     <tr>
@@ -384,7 +384,7 @@
                       <td>Currency</td>
                       <td>name</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--currencies--symbol--get">GET /currencies/{quoteCurrencySymbol}</a>
+                        <a href="../../../api/v3#operation--currencies--symbol--get">GET /currencies/{quoteCurrencySymbol}</a>
                       </td>
                     </tr>
                     <tr>
@@ -436,7 +436,7 @@
                       <td>Currency</td>
                       <td>LogoUrl</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--currencies--symbol--get">GET /currencies/{baseCurrencySymbol}</a>
+                        <a href="../../../api/v3#operation--currencies--symbol--get">GET /currencies/{baseCurrencySymbol}</a>
                       </td>
                     </tr>
                   </tbody>
@@ -471,7 +471,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--currencies-get">GET /currencies</a>
+                <a href="../../../api/v3#operation--currencies-get">GET /currencies</a>
               </p>
             </div>
           </div>
@@ -577,7 +577,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
+                <a href="../../../api/v3#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
               </p>
             </div>
           </div>
@@ -585,7 +585,7 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>The v1 getticker request has been replaced with the market ticker endpoint in v3. In v3 it is also possible to get the tickers for all markets with a single
-                  <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a> request. Note that when getting a single ticker, the market symbol parameter is reversed in v3 to align with standard forex conventions.</p>
+                  <a href="../../../api/v3#operation--markets-tickers-get">GET /markets/tickers</a> request. Note that when getting a single ticker, the market symbol parameter is reversed in v3 to align with standard forex conventions.</p>
                 <table>
                   <thead>
                     <tr>
@@ -646,7 +646,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--markets-summaries-get">GET /markets/summaries</a>
+                <a href="../../../api/v3#operation--markets-summaries-get">GET /markets/summaries</a>
               </p>
             </div>
           </div>
@@ -693,7 +693,7 @@
                       <td>Ticker</td>
                       <td>lastTradeRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                        <a href="../../../api/v3#operation--markets-tickers-get">GET /markets/tickers</a>
                       </td>
                     </tr>
                     <tr>
@@ -713,7 +713,7 @@
                       <td>Ticker</td>
                       <td>bidRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                        <a href="../../../api/v3#operation--markets-tickers-get">GET /markets/tickers</a>
                       </td>
                     </tr>
                     <tr>
@@ -721,7 +721,7 @@
                       <td>Ticker</td>
                       <td>askRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                        <a href="../../../api/v3#operation--markets-tickers-get">GET /markets/tickers</a>
                       </td>
                     </tr>
                     <tr>
@@ -751,7 +751,7 @@
                       <td>Market</td>
                       <td>createdAt</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets-get">GET /markets</a>
+                        <a href="../../../api/v3#operation--markets-get">GET /markets</a>
                       </td>
                     </tr>
                   </tbody>
@@ -786,7 +786,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--markets--marketSymbol--summary-get">GET /markets/{marketSymbol}/summary</a>
+                <a href="../../../api/v3#operation--markets--marketSymbol--summary-get">GET /markets/{marketSymbol}/summary</a>
               </p>
             </div>
           </div>
@@ -833,7 +833,7 @@
                       <td>Ticker</td>
                       <td>lastTradeRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
+                        <a href="../../../api/v3#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
                       </td>
                     </tr>
                     <tr>
@@ -853,7 +853,7 @@
                       <td>Ticker</td>
                       <td>bidRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
+                        <a href="../../../api/v3#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
                       </td>
                     </tr>
                     <tr>
@@ -861,7 +861,7 @@
                       <td>Ticker</td>
                       <td>askRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
+                        <a href="../../../api/v3#operation--markets--marketSymbol--ticker-get">GET /markets/{marketSymbol}/ticker</a>
                       </td>
                     </tr>
                     <tr>
@@ -891,7 +891,7 @@
                       <td>Market</td>
                       <td>createdAt</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets--marketSymbol--get">GET /markets/{marketSymbol}</a>
+                        <a href="../../../api/v3#operation--markets--marketSymbol--get">GET /markets/{marketSymbol}</a>
                       </td>
                     </tr>
                   </tbody>
@@ -926,7 +926,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--markets--marketSymbol--orderbook-get">GET /markets/{marketSymbol}/orderbook</a>
+                <a href="../../../api/v3#operation--markets--marketSymbol--orderbook-get">GET /markets/{marketSymbol}/orderbook</a>
               </p>
             </div>
           </div>
@@ -1012,7 +1012,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--markets--marketSymbol--trades-get">GET /markets/{marketSymbol}/trades</a>
+                <a href="../../../api/v3#operation--markets--marketSymbol--trades-get">GET /markets/{marketSymbol}/trades</a>
               </p>
             </div>
           </div>
@@ -1116,7 +1116,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--orders-post">POST /orders</a>
+                <a href="../../../api/v3#operation--orders-post">POST /orders</a>
               </p>
             </div>
           </div>
@@ -1177,7 +1177,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--orders-post">POST /orders</a>
+                <a href="../../../api/v3#operation--orders-post">POST /orders</a>
               </p>
             </div>
           </div>
@@ -1238,7 +1238,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--orders--orderId--delete">DELETE /orders/{orderId}</a>
+                <a href="../../../api/v3#operation--orders--orderId--delete">DELETE /orders/{orderId}</a>
               </p>
             </div>
           </div>
@@ -1299,7 +1299,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--orders-open-get">GET /orders/open</a>
+                <a href="../../../api/v3#operation--orders-open-get">GET /orders/open</a>
               </p>
             </div>
           </div>
@@ -1407,7 +1407,7 @@
                       <td></td>
                       <td></td>
                       <td>Conditional orders are a separate concept from orders in v3. Refer to
-                        <a href="../../../api/v3/#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
+                        <a href="../../../api/v3#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
                       </td>
                     </tr>
                     <tr>
@@ -1462,7 +1462,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--balances-get">GET /balances</a>
+                <a href="../../../api/v3#operation--balances-get">GET /balances</a>
               </p>
             </div>
           </div>
@@ -1511,7 +1511,7 @@
                       <td>Address</td>
                       <td>cryptoAddress</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a>
+                        <a href="../../../api/v3#operation--addresses-get">GET /addresses</a>
                       </td>
                     </tr>
                     <tr>
@@ -1519,7 +1519,7 @@
                       <td>Address</td>
                       <td>status</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a>. This boolean flag has been replaced by an enum (REQUESTED, PROVISIONED) in v3.</td>
+                        <a href="../../../api/v3#operation--addresses-get">GET /addresses</a>. This boolean flag has been replaced by an enum (REQUESTED, PROVISIONED) in v3.</td>
                     </tr>
                     <tr>
                       <td>Uuid</td>
@@ -1565,7 +1565,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--balances--currencySymbol--get">GET /balances/{currencySymbol}</a>
+                <a href="../../../api/v3#operation--balances--currencySymbol--get">GET /balances/{currencySymbol}</a>
               </p>
             </div>
           </div>
@@ -1614,7 +1614,7 @@
                       <td>Address</td>
                       <td>cryptoAddress</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>
+                        <a href="../../../api/v3#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>
                       </td>
                     </tr>
                     <tr>
@@ -1622,7 +1622,7 @@
                       <td>Address</td>
                       <td>status</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>. This boolean flag has been replaced by an enum (REQUESTED, PROVISIONED) in v3.</td>
+                        <a href="../../../api/v3#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>. This boolean flag has been replaced by an enum (REQUESTED, PROVISIONED) in v3.</td>
                     </tr>
                     <tr>
                       <td>Uuid</td>
@@ -1668,7 +1668,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>
+                <a href="../../../api/v3#operation--addresses--currencySymbol--get">GET /addresses/{currencySymbol}</a>
               </p>
             </div>
           </div>
@@ -1676,8 +1676,8 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>The v1 getdespositaddress request has been replaced by the addresses endpoint in v3. One key difference in v3 is that to create a desposit address, you must explicitly send a
-                  <a href="../../../api/v3/#operation--addresses-post">POST /addresses</a> request for the currency. Another difference is that in v3 it is possible to get your deposit addresses for all currencies with a single
-                  <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a> request. The v3 version of the API also supports address memos/tags. </p>
+                  <a href="../../../api/v3#operation--addresses-post">POST /addresses</a> request for the currency. Another difference is that in v3 it is possible to get your deposit addresses for all currencies with a single
+                  <a href="../../../api/v3#operation--addresses-get">GET /addresses</a> request. The v3 version of the API also supports address memos/tags. </p>
                 <table>
                   <thead>
                     <tr>
@@ -1736,7 +1736,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--withdrawals-post">POST /withdrawals</a>
+                <a href="../../../api/v3#operation--withdrawals-post">POST /withdrawals</a>
               </p>
             </div>
           </div>
@@ -1744,8 +1744,8 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>The v1 withdraw request has been replaced by
-                  <a href="../../../api/v3/#operation--withdrawals-post">POST /withdrawals</a> in v3. As with all similar requests, the parameters have been moved into the request body. Additionally, in v3 the response model echos all of the information about the withdrawal. Refer to the
-                  <a href="../../../api/v3/#operation--withdrawals-post">POST /withdrawals</a> for details. It is also possible in v3 to attempt to cancel a withdrawal using
+                  <a href="../../../api/v3#operation--withdrawals-post">POST /withdrawals</a> in v3. As with all similar requests, the parameters have been moved into the request body. Additionally, in v3 the response model echos all of the information about the withdrawal. Refer to the
+                  <a href="../../../api/v3#operation--withdrawals-post">POST /withdrawals</a> for details. It is also possible in v3 to attempt to cancel a withdrawal using
                   <a href="../../../api/v3#operation--withdrawals--withdrawalId--delete">DELETE /withdrawal/{withdrawalId}</a>.</p>
                 <table>
                   <thead>
@@ -1799,7 +1799,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--orders--orderId--get">GET /orders/{orderId}</a>
+                <a href="../../../api/v3#operation--orders--orderId--get">GET /orders/{orderId}</a>
               </p>
             </div>
           </div>
@@ -1807,7 +1807,7 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>The v1 getorder request has been replaced by
-                  <a href="../../../api/v3/#operation--orders--orderId--get">GET /orders/{orderId}</a> in v3.</p>
+                  <a href="../../../api/v3#operation--orders--orderId--get">GET /orders/{orderId}</a> in v3.</p>
                 <table>
                   <thead>
                     <tr>
@@ -1914,7 +1914,7 @@
                       <td></td>
                       <td></td>
                       <td>Conditional orders are a separate concept from orders in v3. Refer to
-                        <a href="../../../api/v3/#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
+                        <a href="../../../api/v3#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
                       </td>
                     </tr>
                   </tbody>
@@ -1953,7 +1953,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--orders-closed-get">GET /orders/closed</a>
+                <a href="../../../api/v3#operation--orders-closed-get">GET /orders/closed</a>
               </p>
             </div>
           </div>
@@ -1961,9 +1961,9 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>The v1 getorderhistory request has been replaced by
-                  <a href="../../../api/v3/#operation--orders-closed-get">GET /orders/closed</a> in v3. Like the v1 version, in v3 you can filter down to a specific market using a query parameter. In v3 this query parameter is called marketSymbol as opposed to market in v1. Also note that the market symbol in v3 has been reversed to align with standard forex conventions. Additionally, in v3 it is possible to retrieve more history than was possible in v1 by paging back in time. It is also possible filter by the results by date. Refer to the
-                  <a href="../../../api/v3/#operation--orders-closed-get">GET /orders/closed</a> documenation and the
-                  <a href="../../../api/v3/#topic-Pagination">pagination</a> topic for details. </p>
+                  <a href="../../../api/v3#operation--orders-closed-get">GET /orders/closed</a> in v3. Like the v1 version, in v3 you can filter down to a specific market using a query parameter. In v3 this query parameter is called marketSymbol as opposed to market in v1. Also note that the market symbol in v3 has been reversed to align with standard forex conventions. Additionally, in v3 it is possible to retrieve more history than was possible in v1 by paging back in time. It is also possible filter by the results by date. Refer to the
+                  <a href="../../../api/v3#operation--orders-closed-get">GET /orders/closed</a> documenation and the
+                  <a href="../../../api/v3#topic-Pagination">pagination</a> topic for details. </p>
                 <table>
                   <thead>
                     <tr>
@@ -2070,7 +2070,7 @@
                       <td></td>
                       <td></td>
                       <td>Conditional orders are a separate concept from orders in v3. Refer to
-                        <a href="../../../api/v3/#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
+                        <a href="../../../api/v3#topic-Placing-Conditional-Orders">Placing Conditional Orders</a>
                       </td>
                     </tr>
                   </tbody>
@@ -2109,7 +2109,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--withdrawals-closed-get">GET /withdrawals/closed</a>
+                <a href="../../../api/v3#operation--withdrawals-closed-get">GET /withdrawals/closed</a>
               </p>
             </div>
           </div>
@@ -2119,13 +2119,13 @@
                 <p>The v3 api offers many more options for retrieving withdrawals than were offered by v1. In v3 you can:</p>
                 <ul>
                   <li>Get a list of all requested, pending, etc. withdrawals using
-                    <a href="../../../api/v3/#operation--withdrawals-open-get">GET /withdrawals/open</a>. This operation may be filtered by specific state and currency.</li>
+                    <a href="../../../api/v3#operation--withdrawals-open-get">GET /withdrawals/open</a>. This operation may be filtered by specific state and currency.</li>
                   <li>Get completed and cancelled withdrawals from
-                    <a href="../../../api/v3/#operation--withdrawals-closed-get">GET /withdrawals/closed</a>. In addition to being able to filter by specific state and currency, you can also retrieve a significantly longer history than in v1 by paging back in time. Refer to the
-                    <a href="../../../api/v3/#topic-Pagination">pagination</a> topic for details.</li>
+                    <a href="../../../api/v3#operation--withdrawals-closed-get">GET /withdrawals/closed</a>. In addition to being able to filter by specific state and currency, you can also retrieve a significantly longer history than in v1 by paging back in time. Refer to the
+                    <a href="../../../api/v3#topic-Pagination">pagination</a> topic for details.</li>
                   <li>Get withdrawals by
-                    <a href="../../../api/v3/#operation--withdrawals--withdrawalId--get">withdawal id</a> or by
-                    <a href="../../../api/v3/#operation--withdrawals-ByTxId--txId--get">blockchain transaction id</a>.</li>
+                    <a href="../../../api/v3#operation--withdrawals--withdrawalId--get">withdawal id</a> or by
+                    <a href="../../../api/v3#operation--withdrawals-ByTxId--txId--get">blockchain transaction id</a>.</li>
                 </ul>
                 <p>In all cases, the response model for an individual withdrawal will be the same. The fields from the v1 getwithdrawalhistory operation map to the v3 model as shown below.</p>
                 <table>
@@ -2219,7 +2219,7 @@
             <div class="doc-copy">
               <p>
                 <strong>Equivalent in v3:</strong>
-                <a href="../../../api/v3/#operation--deposits-closed-get">GET /deposits/closed</a>
+                <a href="../../../api/v3#operation--deposits-closed-get">GET /deposits/closed</a>
               </p>
             </div>
           </div>
@@ -2229,13 +2229,13 @@
                 <p>The v3 api offers many more options for retrieving deposits than were offered by v1. In v3 you can:</p>
                 <ul>
                   <li>Get a list of all deposits pending confirmation using
-                    <a href="../../../api/v3/#operation--deposits-open-get">GET /deposits/open</a>. This operation may be filtered by currency.</li>
+                    <a href="../../../api/v3#operation--deposits-open-get">GET /deposits/open</a>. This operation may be filtered by currency.</li>
                   <li>Get completed, orphaned, or invalidated deposits from
-                    <a href="../../../api/v3/#operation--deposits-closed-get">GET /deposits/closed</a>. In addition to being able to filter by specific state and currency, you can also retrieve a significantly longer history than in v1 by paging back in time. Refer to the
-                    <a href="../../../api/v3/#topic-Pagination">pagination</a> topic for details.</li>
+                    <a href="../../../api/v3#operation--deposits-closed-get">GET /deposits/closed</a>. In addition to being able to filter by specific state and currency, you can also retrieve a significantly longer history than in v1 by paging back in time. Refer to the
+                    <a href="../../../api/v3#topic-Pagination">pagination</a> topic for details.</li>
                   <li>Get deposits by
-                    <a href="../../../api/v3/#operation--deposits--depositId--get">deposit id</a> or by
-                    <a href="../../../api/v3/#operation--deposits-ByTxId--txId--get">blockchain transaction id</a>.</li>
+                    <a href="../../../api/v3#operation--deposits--depositId--get">deposit id</a> or by
+                    <a href="../../../api/v3#operation--deposits-ByTxId--txId--get">blockchain transaction id</a>.</li>
                 </ul>
                 <p>In all cases, the response model for an individual deposit will be the same. The fields from the v1 getdeposithistory operation map to the v3 model as shown below.</p>
                 <table>
@@ -2338,11 +2338,11 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>Like v1, the v3 websocket contains an
-                  <a href="../../../api/v3/#method-Authenticate">Authenticate</a> method that must be called prior to receiving user specific updates. Unlike the v1 version, the v3 version uses a client-generated uuid instead of a server generated challenge. Additionally, in v3 authenticating does not automatically subscribe the client for any updates. After authenticating, the client can subscribe authenticated streams as desired. Finally, in v3 authentication must be renewed periodically or the client will be unsubscribed from any authenticated streams. Refer to the
+                  <a href="../../../api/v3#method-Authenticate">Authenticate</a> method that must be called prior to receiving user specific updates. Unlike the v1 version, the v3 version uses a client-generated uuid instead of a server generated challenge. Additionally, in v3 authenticating does not automatically subscribe the client for any updates. After authenticating, the client can subscribe authenticated streams as desired. Finally, in v3 authentication must be renewed periodically or the client will be unsubscribed from any authenticated streams. Refer to the
                   <a href="../../../api/v3#topic-Authenticating">Authenticating</a> topic in the v3 websocket documentation for additional information.</p>
                 <p>The <code>uB</code> and <code>uO</code> messages that resulted from authenticating in v1 have been replaced by the
-                  <a href="../../../api/v3/#method-Balance">Balance</a> and
-                  <a href="../../../api/v3/#method-Order">Order</a> streams in v3, respectively. For a field by field comparison of messages, refer to the two tables below.</p>
+                  <a href="../../../api/v3#method-Balance">Balance</a> and
+                  <a href="../../../api/v3#method-Order">Order</a> streams in v3, respectively. For a field by field comparison of messages, refer to the two tables below.</p>
                 <p>
                   <strong>Balance Delta - uB</strong>
                 </p>
@@ -2407,14 +2407,14 @@
                       <td></td>
                       <td></td>
                       <td>Not available via websocket. Use <code>cryptoAddress</code> from
-                        <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a> instead.</td>
+                        <a href="../../../api/v3#operation--addresses-get">GET /addresses</a> instead.</td>
                     </tr>
                     <tr>
                       <td>Requested</td>
                       <td></td>
                       <td></td>
                       <td>Not available via websocket. Use <code>status</code> from
-                        <a href="../../../api/v3/#operation--addresses-get">GET /addresses</a> instead.</td>
+                        <a href="../../../api/v3#operation--addresses-get">GET /addresses</a> instead.</td>
                     </tr>
                     <tr>
                       <td>Updated</td>
@@ -2624,7 +2624,7 @@
                 <p>The v3 websocket does not support querying. Use the v3 REST API operations for
                   <a href="../../../api/v3#operation--markets--marketSymbol--orderbook-get">getting the orderbook</a> and
                   <a href="../../../api/v3#operation--markets--marketSymbol--trades-get">getting trades</a> instead. These operations return a sequence number in a header (the v3 equivalent of a nonce) so they can be used for synchronizing state with the server. For more information about synchronizing state in v3, refer to
-                  <a href="../../../api/v3/#topic-Synchronizing">this topic</a>. For a field by field comparison of responses, refer to the below table.</p>
+                  <a href="../../../api/v3#topic-Synchronizing">this topic</a>. For a field by field comparison of responses, refer to the below table.</p>
                 <table>
                   <thead>
                     <tr>
@@ -2748,7 +2748,7 @@
               <section class="swagger-operation-description">
                 <p>The v3 websocket does not support querying. Use the v3 REST API&#39;s
                   <a href="../../../api/v3#operation--markets-summaries-get">GET /markets/summaries</a> operation instead. This operation returns a sequence number in a header (the v3 equivalent of a nonce) so it can be used for synchronizing state with the server. For more information about synchronizing state in v3, refer to
-                  <a href="../../../api/v3/#topic-Synchronizing">this topic</a>. For a field by field comparison of responses, refer to the below table.</p>
+                  <a href="../../../api/v3#topic-Synchronizing">this topic</a>. For a field by field comparison of responses, refer to the below table.</p>
                 <table>
                   <thead>
                     <tr>
@@ -2788,7 +2788,7 @@
                       <td>Ticker</td>
                       <td>lastTradeRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                        <a href="../../../api/v3#operation--markets-tickers-get">GET /markets/tickers</a>
                       </td>
                     </tr>
                     <tr>
@@ -2808,7 +2808,7 @@
                       <td>Ticker</td>
                       <td>bidRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                        <a href="../../../api/v3#operation--markets-tickers-get">GET /markets/tickers</a>
                       </td>
                     </tr>
                     <tr>
@@ -2816,7 +2816,7 @@
                       <td>Ticker</td>
                       <td>askRate</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets-tickers-get">GET /markets/tickers</a>
+                        <a href="../../../api/v3#operation--markets-tickers-get">GET /markets/tickers</a>
                       </td>
                     </tr>
                     <tr>
@@ -2846,7 +2846,7 @@
                       <td>Market</td>
                       <td>createdAt</td>
                       <td>Retrieve from
-                        <a href="../../../api/v3/#operation--markets-get">GET /markets</a>
+                        <a href="../../../api/v3#operation--markets-get">GET /markets</a>
                       </td>
                     </tr>
                   </tbody>
@@ -2871,8 +2871,8 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>The v1 SubscribeToExchangeDeltas operation has been replaced in v3 by subscribing to the
-                  <a href="../../../api/v3/#method-Orderbook">Orderbook</a> and
-                  <a href="../../../api/v3/#method-Trade">Trade</a> streams. One advantage of the v3 Orderbook stream is that it allows some control over the depth of the orderbook about which to receive updates. Refer to the stream&#39;s documentation for details.</p>
+                  <a href="../../../api/v3#method-Orderbook">Orderbook</a> and
+                  <a href="../../../api/v3#method-Trade">Trade</a> streams. One advantage of the v3 Orderbook stream is that it allows some control over the depth of the orderbook about which to receive updates. Refer to the stream&#39;s documentation for details.</p>
                 <p>
                   <strong>Market Delta - uE</strong>
                 </p>
@@ -3008,10 +3008,10 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>The v1 SubscribeToSummaryDeltas operation has been replaced in v3 by subscribing to the
-                  <a href="../../../api/v3/#method-Market-Summaries">Market Summaries</a> and
-                  <a href="../../../api/v3/#method-Tickers">Tickers</a> streams. These streams will return data for all markets. Additionally in v3 it is possible to subscribe for updates about individual markets by using the
-                  <a href="../../../api/v3/#method-Market-Summary">Market Summary</a> and
-                  <a href="../../../api/v3/#method-Ticker">Ticker</a> streams.</p>
+                  <a href="../../../api/v3#method-Market-Summaries">Market Summaries</a> and
+                  <a href="../../../api/v3#method-Tickers">Tickers</a> streams. These streams will return data for all markets. Additionally in v3 it is possible to subscribe for updates about individual markets by using the
+                  <a href="../../../api/v3#method-Market-Summary">Market Summary</a> and
+                  <a href="../../../api/v3#method-Ticker">Ticker</a> streams.</p>
                 <p>
                   <strong>Summary Delta - uS</strong>
                 </p>
@@ -3114,7 +3114,7 @@
                       <td></td>
                       <td></td>
                       <td>Not available via websocket. Use <code>createdAt</code> from
-                        <a href="../../../api/v3/#operation--markets-get">GET /markets</a> instead.</td>
+                        <a href="../../../api/v3#operation--markets-get">GET /markets</a> instead.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -3138,8 +3138,8 @@
             <div class="doc-copy">
               <section class="swagger-operation-description">
                 <p>The v3 websocket does not have lighter versions of its summary delta equivalents: the Market Summary and Ticker streams. Instead it offers the ability to subscribe to them on a market by market basis using the
-                  <a href="../../../api/v3/#method-Market-Summary">Market Summary</a> and
-                  <a href="../../../api/v3/#method-Ticker">Ticker</a> streams.</p>
+                  <a href="../../../api/v3#method-Market-Summary">Market Summary</a> and
+                  <a href="../../../api/v3#method-Ticker">Ticker</a> streams.</p>
                 <p>
                   <strong>Lite Summary Delta - uL</strong>
                 </p>
