@@ -51,6 +51,10 @@ Renders the responses section of an operation
 
     {{! Print examples without whitespace. }}
     <div class="doc-examples">
+        {{#if x-btx-response-payload-example}}
+          <h5>Response Payload Example</h5>
+          <pre><code>{{x-btx-response-payload-example}}</code></pre>
+        {{/if}}
         {{#if produces}}
         <h5>Response Content-Types:
             <span>{{#each produces}}{{.}}{{#unless @last}}, {{/unless}}{{/each}}</span>
