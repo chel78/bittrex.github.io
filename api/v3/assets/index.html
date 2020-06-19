@@ -6982,8 +6982,8 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Authenticates the current connection using an API key. Refer to the
-                  <a href="#topic-Authenticating">websocket authentication</a> topic for additional information.</p>
+                <p>Authenticates the current connection using an API key. Note that after authenticating, the client must periodically renew its authentication. Refer to the
+                  <a href="#topic-Authenticating">websocket authentication</a> topic for additional information. In the example, the API key used was &quot;your_api_key_goes_here&quot; and the secret was &quot;secret&quot;. The example response shows this request failing because &quot;your_api_key_goes_here&quot; is not a valid value for an API key.</p>
               </section>
             </div>
           </div>
@@ -7050,7 +7050,8 @@
               </section>
             </div>
             <div class="doc-examples">
-              <section> </section>
+              <section>
+                <h5>Request Payload Example</h5> <pre><code>{&quot;H&quot;:&quot;c3&quot;,&quot;M&quot;:&quot;Authenticate&quot;,&quot;A&quot;:[&quot;your_api_key_goes_here&quot;,1592524115500,&quot;e758c9d0-7603-4c8d-9ad3-3ce0141c576b&quot;,&quot;BFBD98224D5720C4F51DC30BF6B5035800A92B3B5E3124D8E2A69F6299A49D3C6AA428947693B470851AB736996A57C6A11FB60517AB24B5E3379C386688C973&quot;],&quot;I&quot;:1}</code></pre> </section>
             </div>
           </div>
           <div class="doc-row">
@@ -7068,7 +7069,8 @@
                 </div>
               </section>
             </div>
-            <div class="doc-examples"> </div>
+            <div class="doc-examples">
+              <h5>Response Payload Example</h5> <pre><code>{&quot;R&quot;:{&quot;Success&quot;:false,&quot;ErrorCode&quot;:&quot;INVALID_APIKEY&quot;},&quot;I&quot;:1}</code></pre> </div>
           </div>
         </div>
         <div id="method-IsAuthenticated" class="operation panel" data-traverse-target="method-IsAuthenticated">
@@ -7080,14 +7082,15 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Determines if the current connection is authenticated</p>
+                <p>Determines if the current connection is authenticated. In the example, the client is not currently authenticated.</p>
               </section>
             </div>
           </div>
           <div class="doc-row">
             <div class="doc-copy"> </div>
             <div class="doc-examples">
-              <section> </section>
+              <section>
+                <h5>Request Payload Example</h5> <pre><code>{&quot;H&quot;:&quot;c3&quot;,&quot;M&quot;:&quot;IsAuthenticated&quot;,&quot;A&quot;:[],&quot;I&quot;:1}</code></pre> </section>
             </div>
           </div>
           <div class="doc-row">
@@ -7103,7 +7106,8 @@
                 </div>
               </section>
             </div>
-            <div class="doc-examples"> </div>
+            <div class="doc-examples">
+              <h5>Response Payload Example</h5> <pre><code>{&quot;R&quot;:false,&quot;I&quot;:1}</code></pre> </div>
           </div>
         </div>
         <div id="method-Subscribe" class="operation panel" data-traverse-target="method-Subscribe">
@@ -7115,7 +7119,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Subscribes to one or more data streams</p>
+                <p>Subscribes to one or more data streams. In the example, the client successfully subscribes from the heartbeat stream and the ticker stream for BTC/USD.</p>
               </section>
             </div>
           </div>
@@ -7139,7 +7143,8 @@
               </section>
             </div>
             <div class="doc-examples">
-              <section> </section>
+              <section>
+                <h5>Request Payload Example</h5> <pre><code>{&quot;H&quot;:&quot;c3&quot;,&quot;M&quot;:&quot;Subscribe&quot;,&quot;A&quot;:[[&quot;heartbeat&quot;,&quot;ticker_BTC-USD&quot;]],&quot;I&quot;:1}</code></pre> </section>
             </div>
           </div>
           <div class="doc-row">
@@ -7156,7 +7161,8 @@
                 </div>
               </section>
             </div>
-            <div class="doc-examples"> </div>
+            <div class="doc-examples">
+              <h5>Response Payload Example</h5> <pre><code>{&quot;R&quot;:[{&quot;Success&quot;:true,&quot;ErrorCode&quot;:null},{&quot;Success&quot;:true,&quot;ErrorCode&quot;:null}],&quot;I&quot;:1}</code></pre> </div>
           </div>
         </div>
         <div id="method-Unsubscribe" class="operation panel" data-traverse-target="method-Unsubscribe">
@@ -7168,7 +7174,7 @@
           <div class="doc-row">
             <div class="doc-copy">
               <section class="swagger-operation-description">
-                <p>Unsubscribes from one or more data streams</p>
+                <p>Unsubscribes from one or more data streams. In the example, the client successfully unsubscribes from the ticker stream for BTC/USD.</p>
               </section>
             </div>
           </div>
@@ -7192,7 +7198,8 @@
               </section>
             </div>
             <div class="doc-examples">
-              <section> </section>
+              <section>
+                <h5>Request Payload Example</h5> <pre><code>{&quot;H&quot;:&quot;c3&quot;,&quot;M&quot;:&quot;Unsubscribe&quot;,&quot;A&quot;:[[&quot;ticker_BTC-USD&quot;]],&quot;I&quot;:1}</code></pre> </section>
             </div>
           </div>
           <div class="doc-row">
@@ -7209,7 +7216,8 @@
                 </div>
               </section>
             </div>
-            <div class="doc-examples"> </div>
+            <div class="doc-examples">
+              <h5>Response Payload Example</h5> <pre><code>{&quot;R&quot;:[{&quot;Success&quot;:true,&quot;ErrorCode&quot;:null}],&quot;I&quot;:1}</code></pre> </div>
           </div>
         </div>
         <h1>Websocket Streams</h1>
