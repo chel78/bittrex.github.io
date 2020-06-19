@@ -104,7 +104,7 @@ function websocketApi(json) {
             "Authenticate": {
                 "operationId": "ws-authenticate",
                 "summary": "",
-                "description": "Authenticates the current connection using an API key. Refer to the [websocket authentication](#topic-Authenticating) topic for additional information.",
+                "description": "Authenticates the current connection using an API key. Note that after authenticating, the client must periodically renew its authentication. Refer to the [websocket authentication](#topic-Authenticating) topic for additional information. In the example, the API key used was \"your_api_key_goes_here\" and the secret was \"secret\". The example response shows this request failing because \"your_api_key_goes_here\" is not a valid value for an API key.",
                 "deprecated": false,
                 "parameters": [
                     {
@@ -140,23 +140,27 @@ function websocketApi(json) {
                     "Response": {
                         "description": "[SocketResponse](#definition-SocketResponse)",
                     }
-                }
+                },
+                "x-btx-request-payload-example": "{\"H\":\"c3\",\"M\":\"Authenticate\",\"A\":[\"your_api_key_goes_here\",1592524115500,\"e758c9d0-7603-4c8d-9ad3-3ce0141c576b\",\"BFBD98224D5720C4F51DC30BF6B5035800A92B3B5E3124D8E2A69F6299A49D3C6AA428947693B470851AB736996A57C6A11FB60517AB24B5E3379C386688C973\"],\"I\":1}",
+                "x-btx-response-payload-example": "{\"R\":{\"Success\":false,\"ErrorCode\":\"INVALID_APIKEY\"},\"I\":1}",
             },
             "IsAuthenticated": {
                 "operationId": "ws-isauthenticated",
                 "summary": "",
-                "description": "Determines if the current connection is authenticated",
+                "description": "Determines if the current connection is authenticated. In the example, the client is not currently authenticated.",
                 "deprecated": false,
                 "responses": {
                     "Response": {
                         "description": "True if the connection is authenticated, false otherwise"
                     }
-                }
+                },
+                "x-btx-request-payload-example": "{\"H\":\"c3\",\"M\":\"IsAuthenticated\",\"A\":[],\"I\":1}",
+                "x-btx-response-payload-example": "{\"R\":false,\"I\":1}"
             },
             "Subscribe": {
                 "operationId": "ws-subscribe",
                 "summary": "",
-                "description": "Subscribes to one or more data streams",
+                "description": "Subscribes to one or more data streams. In the example, the client successfully subscribes from the heartbeat stream and the ticker stream for BTC/USD.",
                 "deprecated": false,
                 "parameters": [{
                     "name": "channels",
@@ -169,12 +173,14 @@ function websocketApi(json) {
                     "Response": {
                         "description": "Array<[SocketResponse](#definition-SocketResponse)>",
                     }
-                }
+                },
+                "x-btx-request-payload-example": "{\"H\":\"c3\",\"M\":\"Subscribe\",\"A\":[[\"heartbeat\",\"ticker_BTC-USD\"]],\"I\":1}",
+                "x-btx-response-payload-example": "{\"R\":[{\"Success\":true,\"ErrorCode\":null},{\"Success\":true,\"ErrorCode\":null}],\"I\":1}"
             },
             "Unsubscribe": {
                 "operationId": "ws-unsubscribe",
                 "summary": "",
-                "description": "Unsubscribes from one or more data streams",
+                "description": "Unsubscribes from one or more data streams. In the example, the client successfully unsubscribes from the ticker stream for BTC/USD.",
                 "deprecated": false,
                 "parameters": [{
                     "name": "channels",
@@ -187,8 +193,10 @@ function websocketApi(json) {
                     "Response": {
                         "description": "Array<[SocketResponse](#definition-SocketResponse)>",
                     }
-                }
-            }
+                },
+                "x-btx-request-payload-example": "{\"H\":\"c3\",\"M\":\"Unsubscribe\",\"A\":[[\"ticker_BTC-USD\"]],\"I\":1}",
+                "x-btx-response-payload-example": "{\"R\":[{\"Success\":true,\"ErrorCode\":null}],\"I\":1}"
+            },
         }
     });
 }

@@ -15,6 +15,10 @@
             <h5>Request Url Example</h5>
             <pre><code>{{x-btx-request-example}}</code></pre>
             {{/if}}
+            {{#if x-btx-request-payload-example}}
+            <h5>Request Payload Example</h5>
+            <pre><code>{{x-btx-request-payload-example}}</code></pre>
+            {{/if}}
             {{#if consumes}}
             <h5>Request Content-Types:
                 <span>{{#each consumes}}{{.}}{{#unless @last}}, {{/unless}}{{/each}}</span>
