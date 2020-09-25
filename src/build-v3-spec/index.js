@@ -6,7 +6,7 @@ function spectacleTopics(json) {
 
     var topics = {
         "Change Log": {
-            "description": "__06/17/2020__ \n- The v3 API has reached generally availability and is ready for production use!\n- You can now get the list of executed trades related to your orders from [GET /orders/{orderId}/executions](../../../api/v3#operation--orders--orderId--executions-get)\n\n- End of life for the v1 api is planned for 9/30/2020\n\n__06/10/2020__ \n\n- The baseVolume property was removed from MarketSummary and Candle responses. Use the quoteVolume property for quote volume or the volume property for base volume.\n\n__05/27/2020__ \n\n- Successful cancel withdrawal response will change from 204 with no content in the response body to a 200 with the cancelled withdrawal in the response body\n- Historical candles endpoint will no longer allow you to specify more portions of the date parameters than are necessary for the selected candle interval. Specify only year for day candles. Specify only year and month for hour candles.\n- GET /candles endpoint is deprecated and has been removed from the documentation. Use GET /candles/{interval}/recent instead. The response model is the same.\n\n__05/15/2020__ \n\n- v3 socket is now in public beta\n- May now trigger ceiling orders from conditional orders\n-Order object now includes the order's OCO partner (if applicable)\n- May now get whitelisted withdrawal addresses from `/withdrawals/whitelistAddresses`\n-Balance object now has an updatedAt timestamp\n-Markets and currencies now indicate if they are prohibited from use by US customers\n-You can now get your accountId from the account endpoint\n-Deposit object now includes whether a deposit source was blockchain, wire transfer, or credit card\n\n__01/27/2020__ \n\n - Conditional orders (e.g. stop loss) have been added to the V3 API Beta. See the new Placing Conditinal Orders section below for additional information.\n\n - Historical candles are now available in the API\n\n - The functionality of the existing candles endpoint has been duplicated into a candles/.../recent endpoint. The existing one will be retired in a future release. \n\nTo see changes from before this year, please visit the [change list](https://bittrex.zendesk.com/hc/en-us/sections/200567324-Changelist)."
+            "description": "__09/23/2020__ \n- You now cancel all of your open orders or all of your open orders on a market with [DELETE /orders/open](#operation--orders-open-delete)\n- Websocket stream for [conditional orders](#method-Conditional-Order) is now available\n- Withdrawal requests can now be made idempotent by specifying a clientWithdrawalId\n- Simple examples of authenticating and subscribing to the websocket in C#, Node.js, Python, and Java may be found in the [Examples](#topic-Example-Socket-Clients) section\n- Currency model now contains Bittrex's blockchain base address\n-Currency and Market models now reference any additional required terms of service agreeements\n\n__06/17/2020__ \n- The v3 API has reached generally availability and is ready for production use!\n- You can now get the list of executed trades related to your orders from [GET /orders/{orderId}/executions](../../../api/v3#operation--orders--orderId--executions-get)\n\n- End of life for the v1 api is planned for 9/30/2020\n\n__06/10/2020__ \n\n- The baseVolume property was removed from MarketSummary and Candle responses. Use the quoteVolume property for quote volume or the volume property for base volume.\n\n__05/27/2020__ \n\n- Successful cancel withdrawal response will change from 204 with no content in the response body to a 200 with the cancelled withdrawal in the response body\n- Historical candles endpoint will no longer allow you to specify more portions of the date parameters than are necessary for the selected candle interval. Specify only year for day candles. Specify only year and month for hour candles.\n- GET /candles endpoint is deprecated and has been removed from the documentation. Use GET /candles/{interval}/recent instead. The response model is the same.\n\n__05/15/2020__ \n\n- v3 socket is now in public beta\n- May now trigger ceiling orders from conditional orders\n-Order object now includes the order's OCO partner (if applicable)\n- May now get whitelisted withdrawal addresses from `/withdrawals/whitelistAddresses`\n-Balance object now has an updatedAt timestamp\n-Markets and currencies now indicate if they are prohibited from use by US customers\n-You can now get your accountId from the account endpoint\n-Deposit object now includes whether a deposit source was blockchain, wire transfer, or credit card\n\n__01/27/2020__ \n\n - Conditional orders (e.g. stop loss) have been added to the V3 API Beta. See the new Placing Conditinal Orders section below for additional information.\n\n - Historical candles are now available in the API\n\n - The functionality of the existing candles endpoint has been duplicated into a candles/.../recent endpoint. The existing one will be retired in a future release. \n\nTo see changes from before this year, please visit the [change list](https://bittrex.zendesk.com/hc/en-us/sections/200567324-Changelist)."
         },
         "Upcoming Breaking Changes": {
             "description": "There are no further breaking changes planned."
@@ -22,7 +22,7 @@ function spectacleTopics(json) {
             "childOf": "REST API Overview"
         },
         "Authentication": {
-            "description": "### Overview\n In order to properly sign an authenticated request for the Bittrex v3 API, the following headers must be included:\n\n- `Api-Key`\n\n- `Api-Timestamp`\n\n- `Api-Content-Hash`\n\n- `Api-Signature`\n\n- `Api-Subaccount-Id (optional)`\n\n\nThe following sections are instructions for properly populating these headers.\n\n---\n #### Api-Key\nPopulate this header with your API key.\n\nExample Value:\n\n`4894xxxxxxxx407e827d05xxxxxxxxxx`\n\n---\n #### Api-Timestamp\nPopulate this header with the current time as a UNIX timestamp, in epoch-millisecond format.\n\nSample JS Code Snippet:\n\n``` javascript\nvar timestamp = new Date().getTime();\n```\n\nExample Value:\n\n`1542323450016`\n\n---\n #### Api-Content-Hash\nPopulate this header with a SHA512 hash of the request contents, Hex-encoded. If there are no request contents, populate this header with a SHA512 hash of an empty string.\n\nSample JS Code Snippet:\n\n``` javascript\nvar contentHash = CryptoJS.SHA512(content).toString(CryptoJS.enc.Hex);\n```\n\nExample Value:\n\n``` markdown\ncf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\n```\n\n---\n #### Api-Subaccount-Id (Only for subaccount feature) \n(NOTE: This functionality is limited to partners and unavailable to general traders.)\n\nIf you wish to make a request on behalf of a subaccount, you will need to:\n\n1. Authenticate using all 4 of the headers above referring to your master account.\n2. Populate the Api-Subaccount-Id header with the UUID of the subaccount you wish to impersonate for this request. The specified subaccount *must* be a subaccount of the master account used to authenticate the request.\n3. Include the Api-Subaccount-Id header at the end of the pre-signed signature, as indicated in the next section.\n\nExample Value:\n\n`x111x11x-8968-48ac-b956-x1x11x111111`\n\n---\n #### Api-Signature\nCreate a pre-sign string formed from the following items and concatenating them together:\n1. Contents of your `Api-Timestamp` header\n2. The full URI you are using to make the request (including query string)\n3. The HTTP method of the request, in all caps (GET, POST, DELETE, etc.)  \n4. Contents of your `Api-Content-Hash` header \n5. Content of your `Api-Subaccount-Id` header (or an empty string if not present) \n\n\nOnce you have created this pre-sign string, sign it via HmacSHA512, using your API secret as the signing secret. Hex-encode the result of this operation and populate the `Api-Signature` header with it.\n\n\nSample JS Code Snippet:\n\n``` javascript\nvar uri = 'https://api.bittrex.com/v3/balances';\nvar preSign = [timestamp, uri, method, contentHash, subaccountId].join('');\nvar signature = CryptoJS.HmacSHA512(preSign, apiSecret).toString(CryptoJS.enc.Hex);\n```\n\nExample Pre-Signed Value (no subaccount)\n\n``` markdown\n1542323450016https://api.bittrex.com/v3/balancesGETcf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\n```\n\nExample Pre-Signed Value (with subaccount)\n\n``` markdown\n1542323450016https://api.bittrex.com/v3/balancesGETcf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3ex111x11x-8968-48ac-b956-x1x11x111111\n```\n\nExample Post-Signed Value:\n\n``` markdown\n939047623f0efbe10bfbb32f18e5d8885b2a91be3c3cea82adf0dd2d20892b20bcb6a10a91fec3afcedcc009f2b2a86c5366974cfadcf671fe0490582568f51f\n```\n\n\n",
+            "description": "### Overview\n In order to properly sign an authenticated request for the Bittrex v3 API, the following headers must be included:\n\n- `Api-Key`\n\n- `Api-Timestamp`\n\n- `Api-Content-Hash`\n\n- `Api-Signature`\n\n- `Api-Subaccount-Id (optional)`\n\n\nThe following sections are instructions for properly populating these headers.\n\n---\n #### Api-Key\nPopulate this header with your API key.\n\nExample Value:\n\n`4894xxxxxxxx407e827d05xxxxxxxxxx`\n\n---\n #### Api-Timestamp\nPopulate this header with the current time as a UNIX timestamp, in epoch-millisecond format.\n\nSample JS Code Snippet:\n\n``` javascript\nvar timestamp = new Date().getTime();\n```\n\nExample Value:\n\n`1542323450016`\n\n---\n #### Api-Content-Hash\nPopulate this header with a SHA512 hash of the request body, Hex-encoded. If there is no request body, populate this header with a SHA512 hash of an empty string.\n\nSample JS Code Snippet:\n\n``` javascript\nvar contentHash = CryptoJS.SHA512(content).toString(CryptoJS.enc.Hex);\n```\n\nExample Value:\n\n``` markdown\ncf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\n```\n\n---\n #### Api-Subaccount-Id (Only for subaccount feature) \n(NOTE: This functionality is limited to partners and unavailable to general traders.)\n\nIf you wish to make a request on behalf of a subaccount, you will need to:\n\n1. Authenticate using all 4 of the headers above referring to your master account.\n2. Populate the Api-Subaccount-Id header with the UUID of the subaccount you wish to impersonate for this request. The specified subaccount *must* be a subaccount of the master account used to authenticate the request.\n3. Include the Api-Subaccount-Id header at the end of the pre-signed signature, as indicated in the next section.\n\nExample Value:\n\n`x111x11x-8968-48ac-b956-x1x11x111111`\n\n---\n #### Api-Signature\nCreate a pre-sign string formed from the following items and concatenating them together:\n1. Contents of your `Api-Timestamp` header\n2. The full URI you are using to make the request (including query string)\n3. The HTTP method of the request, in all caps (GET, POST, DELETE, etc.)  \n4. Contents of your `Api-Content-Hash` header \n5. Content of your `Api-Subaccount-Id` header (or an empty string if not present) \n\n\nOnce you have created this pre-sign string, sign it via HmacSHA512, using your API secret as the signing secret. Hex-encode the result of this operation and populate the `Api-Signature` header with it.\n\n\nSample JS Code Snippet:\n\n``` javascript\nvar uri = 'https://api.bittrex.com/v3/balances';\nvar preSign = [timestamp, uri, method, contentHash, subaccountId].join('');\nvar signature = CryptoJS.HmacSHA512(preSign, apiSecret).toString(CryptoJS.enc.Hex);\n```\n\nExample Pre-Signed Value (no subaccount)\n\n``` markdown\n1542323450016https://api.bittrex.com/v3/balancesGETcf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\n```\n\nExample Pre-Signed Value (with subaccount)\n\n``` markdown\n1542323450016https://api.bittrex.com/v3/balancesGETcf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3ex111x11x-8968-48ac-b956-x1x11x111111\n```\n\nExample Post-Signed Value:\n\n``` markdown\n939047623f0efbe10bfbb32f18e5d8885b2a91be3c3cea82adf0dd2d20892b20bcb6a10a91fec3afcedcc009f2b2a86c5366974cfadcf671fe0490582568f51f\n```\n\n\n",
             "childOf": "REST API Overview"
         },
         "Pagination": {
@@ -43,7 +43,11 @@ function spectacleTopics(json) {
             "childOf": "REST API Overview"
         },
         "Websocket Overview": {
-            "description": "The v3 websocket is intended to allow a client to subscribe to a live stream of updates about things that are changing in the system instead of needing to poll the REST API looking for updates. It is designed to complement and be used in conjunction with the v3 REST API. As such the messages sent from the socket include payloads that are formatted to match the corresponding data models from the v3 REST API.\n\nLike the existing v1 socket, the v3 socket is based on [Microsoft ASP.net’s SignalR](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr). We are not using ASP.net Core’s SignalR implementation at this time. As such, any existing SignalR client implementation working with the v1 socket should be able to be modified to work with the new v3 socket. If working in the .Net environment, the Microsoft.AspNet.SignalR.Client NuGet package is the recommended basis for a client implementation. The remainder of this section assumes you are working in C# using that library.",
+            "description": "The v3 websocket is intended to allow a client to subscribe to a live stream of updates about things that are changing in the system instead of needing to poll the REST API looking for updates. It is designed to complement and be used in conjunction with the v3 REST API. As such the messages sent from the socket include payloads that are formatted to match the corresponding data models from the v3 REST API.\n\nLike the existing v1 socket, the v3 socket is based on [Microsoft ASP.net’s SignalR](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr). We are not using ASP.net Core’s SignalR implementation at this time. As such, any existing SignalR client implementation working with the v1 socket should be able to be modified to work with the new v3 socket. If working in the .Net environment, the Microsoft.AspNet.SignalR.Client NuGet package is the recommended basis for a client implementation. The code snippets in the remainder of this section assume you are working in C# using that library. Refer to the [Example Socket Clients](#topic-Example-Socket-Clients) section for examples in other languages.",
+        },
+        "Example Socket Clients": {
+            "description": "This section includes simple examples of how to subscribe and receive messages in a few popular languages. All of these examples follow the same basic pattern. They will connect to the socket server, authenticate if an API key and secret are provided, attempt to subscribe to a few streams, and finally print messages received on those streams to console.\n\n- C#: [V3WebsocketExample.cs](../../samples/V3WebsocketExample.cs)\n- Java: [V3WebsocketExample.java](../../samples/V3WebsocketExample.java)\n- Node.js: [V3WebsocketExample.js](../../samples/V3WebsocketExample.js)\n-Python: [V3WebsocketExample.py](../../samples/V3WebsocketExample.py)",
+            "childOf": "Websocket Overview"
         },
         "Connecting": {
             "description": "To connect to the v3 socket, create a HubConnection to the socket URL (https://socket-v3.bittrex.com/signalr) and create a hub proxy. The hub name to use when creating the proxy is \"c3\". Once these objects are created, you can start the HubConnection to connect to the socket. There are no streams of data sent automatically based solely on being connected. To get data, you must [subscribe](#topic-Subscribing) to one or more streams. The available streams are discussed in the Websocket Streams section of this site.",
@@ -76,7 +80,7 @@ function spectacleTopics(json) {
         },
         "Subaccounts": {
             "description": "(NOTE: This functionality is limited to partners and unavailable to general traders.)\n\nSubaccounts provide a way for partners to model their users without needing to create individual user accounts. Each subaccount has its own deposit addresses, balances, desposits and withdrawals, orders, etc. Partners control all actions of their subaccounts via the v3 REST API and may use the v3 websocket to be notified of any updates to their balances, deposits, and orders.\n\nIn order to work with subaccounts, you must be using an API key that has subaccount permissions. Partners who are part of this program can work with their Bittrex representative to get their API key enabled.\n\nTo create a subaccount, POST to the [subaccounts](#operation--subaccounts-post) endpoint. This will create a new subaccount and return its id. Once you have a subaccount id, you can transfer funds between it and your main (master) account using the [transfers](#operation--transfers-post) endpoint. In order to place orders, view history, or take other actions in the context of a subaccount using the REST API, add the `Api-subaccount-ID` header to the request and adjust your [request signature](#topic-Authentication) as needed.\n\nTo be notified of updates to subaccount data, use a websocket connection authenticated with a subaccount enabled API key and subscribe to the subaccount streams for the types of data you care about. A single subscription will receive data from all subaccounts the API key is authorized to manage. Messaages will include an accountId field which can be used to associate them with the correct subaccount. For subaccount streams that include a sequence number for synchronizing with the server, the sequence number is independent for each subaccount."
-        },
+        }
     };
 
     // Looks for topics claiming to be children of other topics and then marks them as such on that topic
@@ -293,6 +297,41 @@ function websocketStreams(json) {
                     }
                 }
             },
+            "Conditional Order": {
+                "operationId": "conditionalOrder",
+                "summary": "",
+                "description": "Sends a message when one of your conditional orders is created, modified, or triggered",
+                "stream-details": {
+                    "subscription": "conditional_order",
+                    "message-name": "conditionalOrder",
+                    "unique-key": "id",
+                    "restApi": "[GET /conditional-orders/open](#operation--conditional-orders-open-get)",
+                    "subaccountStream": "subaccounts_conditional_order"
+                },
+                "deprecated": false,
+                "parameters": [],
+                "message-schema": {
+                    "conditionalOrder": {
+                        "description": "conditionalOrder",
+                        "schema": {
+                            "type": "ConditionalOrderUpdate",
+                            "properties": {
+                                "accountId": {
+                                    "type": "string",
+                                    "example": "string (uuid)"
+                                },
+                                "sequence": {
+                                    "type": "int",
+                                    "example": "int"
+                                },
+                                "delta": {
+                                    "$ref": "#/definitions/ConditionalOrder"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "Deposit": {
                 "operationId": "deposit",
                 "summary": "",
@@ -355,7 +394,7 @@ function websocketStreams(json) {
                 "deprecated": false,
                 "stream-details": {
                     "subscription": "market_summaries",
-                    "message-name": "marketsummaries",
+                    "message-name": "marketSummaries",
                     "unique-key": "symbol",
                     "restApi": "[GET /markets/summaries](#operation--markets-summaries-get)"
                 },
@@ -387,7 +426,7 @@ function websocketStreams(json) {
                 "deprecated": false,
                 "stream-details": {
                     "subscription": "market_summary_{marketSymbol}",
-                    "message-name": "marketsummary",
+                    "message-name": "marketSummary",
                     "unique-key": "symbol",
                     "restApi": "[GET /markets/{marketSymbol}/summary](#operation--markets--marketSymbol--summary-get)",
                     "notes": "This stream does not include a sequence number because each message received is a full snapshot of the current state."
@@ -449,7 +488,7 @@ function websocketStreams(json) {
                 "description": "Sends a message when there are changes to the order book within the subscribed depth.",
                 "stream-details": {
                     "subscription": "orderbook_{marketSymbol}_{depth}",
-                    "message-name": "orderbook",
+                    "message-name": "orderBook",
                     "unique-key": "marketSymbol, depth, \"bid\" | \"ask\", rate",
                     "restApi": "[GET /markets/{marketSymbol}/orderbook?depth={depth}](#operation--markets--marketSymbol--orderbook-get)",
                     "notes": "An update with quantity 0 means that there is no longer any liquidity available at that rate or that this rate is no longer within the subscribed depth. For example, if subscribed to a depth of 25, if an order is placed at a new rate somewhere in the middle of the top 25, the entry that was formerly the 25th, and is now 26th, will get an update with quantity 0.\n\nFor this reason, depth is included as part of the key defined above. The first 25 levels of the depth 25 and depth 500 orderbooks will be identical, but updates for level 26 of the depth 25 order book (always 0) must be kept separate from updates for the depth 500 orderbook if you are subscribed to both.\n\n__Note:__ You must get the orderbook snapshot from the same depth as you are subscribed to on the websocket. Sequence numbers are not the same for different depths."
@@ -621,14 +660,14 @@ function websocketStreams(json) {
 function customSchemaDefinitions(json) {
     console.log('Adding custom schema definitions...');
     return _.set(json, 'definitions.SocketResponse', {
-        "required": ["success"],
+        "required": ["Success"],
         "type": "object",
         "properties": {
-            "success": {
+            "Success": {
                 "description": "true if the operation was successful, false otherwise",
                 "type": "boolean"
             },
-            "errorCode": {
+            "ErrorCode": {
                 "description": "failure reason",
                 "type": "string"
             }
