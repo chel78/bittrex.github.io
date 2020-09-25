@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"npm run serve\" \"npm run watch\"",
     "dev:v3": "concurrently \"npm run serve\" \"npm run watch build:spectacle:v3\"",
-    "serve": "jekyll serve",
+    "serve": "bundle exec jekyll serve",
     "build": "npm run build:spectacle:v1 && npm run build:v3 && npm run build:v3upgrade",
     "build:spectacle:v1": "node ./spectacle/bin/spectacle -e -t api/v1-1/assets _data/api-spec-v1-1.json",
     "build:v3": "npm run build:json:v3 && npm run build:spectacle:v3",
